@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.gdu.petmall.dao.EventMapper">
+      <resultMap type="EventDto" id="EventMap">
+      <id     column="EVENT_NO"               property="eventNo"/>
+      <result column="TITLE"                  property="title"/>
+      <result column="CONTENTS"               property="contents"/>
+      <result column="HIT"                    property="hit"/>
+      <result column="EVENT_THUMNAIL_URL"     property="eventThumnailUrl"/>
+      <result column="DISCOUNT_PERCENT"       property="discountPercent"/>
+      <result column="DISCOUNT_PRICE"         property="discountPrice"/>
+      <result column="START_AT"               property="startAt"/>
+      <result column="END_AT"                 property="endAt"/>
+      <association javaType="EventImageDto"   property="eventImageDto">
+        <result    column="EVENT_NO"          property="eventNo"/>
+        <result    column="PATH"              property="path" />
+        <result    column="ORIGINAL_FILENAME" property="originalFilename" />
+        <result    column="FILESYSTEM_NAME"   property="FilesystemName" />
+      </association>
+   </resultMap> 
+ 
+  <select id="getEventList" resultMap="EventMap">
+    SELECT EVENT_NO,EVENT_THUMNAIL_URL,TITLE,CONTENTS
+      FROM EVENT_T
+     ORDER BY EVENT_NO DESC
+  </select>
+  
+  <select id="getEventDetailList" parameterType="int"  resultMap="EventMap">
+      SELECT EVENT_NO,EVENT_THUMNAIL_URL,TITLE,CONTENTS,HIT
+        FROM EVENT_T
+       WHERE EVENT_NO = #{eventNo}
+  </select>
+  
+  
+  
+ 
+  
+</mapper>
