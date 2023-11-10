@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.gdu.petmall.dao.QnaMapper">
+
+  <resultMap type="com.gdu.petmall.dto.QnaDto" id="QnaMap">
+    <id column="QNA_NO" property="qnaNo" />
+    <result column="TITLE" property="title" />
+    <result column="CONTENTS" property="contents" />
+    <result column="CREATED_AT" property="createdAt" />
+    <result column="MODIFIED_AT" property="modifiedAt" />
+    <result column="TEXT_PW" property="textPw" />
+	<association javaType="UserDto"      property="userDto">
+      <id column="USER_NO" property="userNo" />
+    </association>
+  </resultMap>
+
+<insert id="insertQna" parameterType="com.gdu.petmall.dto.QnaDto">
+    <selectKey keyProperty="qnaNo" resultType="int" order="BEFORE">
+        SELECT QATTACH_SEQ.NEXTVAL AS FROM DUAL
+    </selectKey>
+    INSERT INTO QNA_T (
+        QNA_NO
+        , TITLE
+        , CONTENTS
+        , USER_NO
+        , CREATED_AT
+        , TEXT_PW
+        , PRODUCT_NO
+        , STATUS
+        , DEPTH
+        , GROUP_NO
+        , CHECK_FLAG
+    ) VALUES (
+        #{qnaNo}
+        , #{title}
+        , #{contents}
+        , #{userNo}
+        , TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS')
+        , #{textPw}
+        , #{productNo}
+        , 1
+        , 0
+        , 0
+        , #{checkFlag}
+    )
+</insert>
+
+<insert id="insertQattach" parameterType="com.gdu.petmall.dto.QattachDto">
+    INSERT INTO QATTACH_T (
+        QATTACH_NO
+        , QNA_NO
+        , PATH
+        , ORIGINAL_FILENAME
+        , FILESYSTEM_NAME
+    ) VALUES (
+         QATTACH_SEQ.NEXTVAL
+        , #{qnaNo}
+        , #{path}
+        , #{originalFilename}
+        , #{filesystemName}
+    )
+</insert>
+
+  
+  
+</mapper>
+
+  
