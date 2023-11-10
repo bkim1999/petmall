@@ -47,14 +47,13 @@ public class EventServiceImpl implements EventService {
   
   @Override
   public EventDto loaddetailEventList(int eventNo) {
-    
-    
-    
-    
-    
     return eventMapper.getEventDetailList(eventNo);
   }
   
+  @Override
+  public int increaseHit(int eventNo) {
+    return eventMapper.updateHit(eventNo);
+  }
   
-  
+ 
 }

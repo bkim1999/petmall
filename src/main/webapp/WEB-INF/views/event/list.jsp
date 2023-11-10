@@ -24,7 +24,7 @@
        <a href="${contextPath}/event/detail.do?eventNo=${event.eventNo}"><img src="${event.eventThumnailUrl}" width=300px height=300px></a>
       </c:if>
       <c:if test="${sessionScope.user.userNo == null}">
-       <a href="${contextPath}/event/detail.do?eventNo=${event.eventNo}"><img src="${event.eventThumnailUrl}" width=300px height=300px></a>
+       <a href="${contextPath}/event/increase.do?eventNo=${event.eventNo}"><img src="${event.eventThumnailUrl}" width=300px height=300px></a>
       </c:if>
     </div>
    </c:forEach>

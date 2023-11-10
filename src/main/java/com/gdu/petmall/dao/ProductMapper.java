@@ -1,12 +1,5 @@
 package com.gdu.petmall.dao;
 
-<<<<<<< HEAD
-import org.apache.ibatis.annotations.Mapper;
-
-@Mapper
-public interface ProductMapper {
-
-=======
 import java.util.List;
 import java.util.Map;
 
@@ -24,5 +17,4 @@ public interface ProductMapper {
   public ProductDto getProduct(int productNo);
   public List<ProductOptionDto> getOptionList(int productNo);
   public List<ReviewDto> getReviewList(int productNo);
->>>>>>> master
 }

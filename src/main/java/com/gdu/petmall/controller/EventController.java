@@ -33,5 +33,10 @@ public class EventController {
     return "event/detail";
   }
   
+  @GetMapping("/increase.do")
+  public String increaseHit(@RequestParam(value="eventNo", required = false , defaultValue = "0") int eventNo) {
+    eventService.increaseHit(eventNo);
+    return "event/detail";
+  }
   
 }

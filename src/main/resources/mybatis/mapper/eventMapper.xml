@@ -41,6 +41,12 @@
      WHERE E.EVENT_NO = #{eventNo}
   </select>
   
+  <update id="updateHit" parameterType="int">
+    UPDATE EVENT_T
+       SET HIT = HIT +1
+     WHERE EVENT_NO = #{eventNo}
+  </update>
+  
   
   
  

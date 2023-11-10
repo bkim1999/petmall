@@ -10,5 +10,5 @@ public interface EventService {
   
   public void loadEventList(HttpServletRequest request, Model model);
   public EventDto loaddetailEventList(int eventNo);
-  
+  public int increaseHit(int eventNo);  
 }
