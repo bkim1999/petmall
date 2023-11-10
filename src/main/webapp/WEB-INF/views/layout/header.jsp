@@ -32,13 +32,22 @@
 
    <div class="collapse navbar-collapse menu-ui-design" id="navbar-menu">
       <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
+      
+          <!-- 로그인 여부에 따라 바뀔것-->
+        <c:if test="${sessionScope.user == null}">
+           <li><a href="${contextPath}/user/login.form">login</a></li>
+           <li><a href="${contextPath}/user/join_option.form">join</a></li>       
+        </c:if>
+        <c:if test="${sessionScope.user != null}">      
+          <li><a href="${contextPath}/user/mypage">mypage</a></li>
+          <li><a href="${contextPath}/user/logout.do">logout</a></li>
+          <li class="scroll"><a href="${contextPath}/order/cart.go">장바구니</a></li>
+        </c:if>
+      
         <li class="scroll"><a href="${contextPath}/product/list.do">상품</a></li>
         <li class="scroll"><a href="${contextPath}/event/list.do">이벤트</a></li>
         <li class="scroll"><a href="${contextPath}/qna/list.do">고객센터</a></li>
         <li class="scroll"><a href="${contextPath}/inquiry/list.do">문의</a></li>
-        <li class="scroll"><a href="${contextPath}/user/login.form">로그인</a></li>
-        <li class="scroll"><a href="${contextPath}/user/join-option.form">회원가입</a></li>
-        <li class="scroll"><a href="${contextPath}/order/cart.go">장바구니</a></li>
       </ul>
      </div>
    </div>
