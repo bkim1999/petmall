@@ -34,7 +34,7 @@
        FROM EVENT_T
    </select>
   
-  <select id="getEventDetailList" parameterType="Map"  resultMap="EventMap">
+  <select id="getEventDetailList" parameterType="int"  resultMap="EventMap">
     SELECT E.EVENT_NO,E.EVENT_THUMNAIL_URL,E.TITLE,E.CONTENTS,E.HIT,E.START_AT,E.END_AT, I.PATH
       FROM EVENT_T E LEFT OUTER JOIN EVENT_IMAGE_T I
         ON E.EVENT_NO = I.EVENT_NO

@@ -13,14 +13,19 @@
 
   <div>EVENT</div>
   <hr>
-  <div>${eventDetailList.title}</div>
-  <div>${eventDetailList.startAt} ~ ${eventDetailList.endAt}</div>
+  <div>${event.title}</div>
+  <div>${event.startAt} ~ ${event.endAt}</div>
   <hr>
-  <div>조회수 ${eventDetailList.hit}</div>
+    <div>조회수 ${event.hit}</div>
   <hr>
-  <div>${eventDetailList.contents}</div>
-    <div>${eventDetailList.eventImageDto.path}</div>
-    <img src="${eventDetailList.eventImageDto.path}" width = "500px" height = "300px">
+  <div>${event.contents}</div>
+    <div>${event.eventImageDto.path}</div>
+    <c:if test="${event.eventImageDto.path != null}">
+      <img src="${event.eventImageDto.path}" width = "500px" height = "300px">   
+    </c:if>
+    <c:if test="${event.eventImageDto.path == null}">
+     <div></div>
+    </c:if>
 
 
 <%@ include file="../layout/footer.jsp" %>

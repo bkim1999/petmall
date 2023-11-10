@@ -12,6 +12,6 @@ public interface EventMapper {
   
   public List<EventDto> getEventList(Map<String, Object> map);
   public int getEventCount();
-  public List<EventDto> getEventDetailList(Map<String, Object> map);
+  public EventDto getEventDetailList(int blogNo);
   
 }

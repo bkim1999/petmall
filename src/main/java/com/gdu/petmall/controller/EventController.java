@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.gdu.petmall.dto.EventDto;
 import com.gdu.petmall.service.EventService;
 
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,8 @@ public class EventController {
   
   @GetMapping("/detail.do")
   public String loadeventdetail(@RequestParam(value="eventNo", required = false , defaultValue = "0") int eventNo, Model model) {
-    eventService.loaddetailEventList(eventNo, model);
+    EventDto event = eventService.loaddetailEventList(eventNo);
+    model.addAttribute("event",event);
     return "event/detail";
   }
   

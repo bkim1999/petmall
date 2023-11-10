@@ -46,13 +46,15 @@ public class EventServiceImpl implements EventService {
     }
   
   @Override
-  public void loaddetailEventList(int eventNo , Model model) {
+  public EventDto loaddetailEventList(int eventNo) {
     
-    Map<String, Object> map = Map.of("eventNo", eventNo); 
     
-    List<EventDto> eventDetailList = eventMapper.getEventDetailList(map);
     
-    model.addAttribute("eventDetailList",eventDetailList);
+    
+    
+    return eventMapper.getEventDetailList(eventNo);
   }
+  
+  
   
 }
