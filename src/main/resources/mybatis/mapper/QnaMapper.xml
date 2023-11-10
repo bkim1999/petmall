@@ -37,14 +37,14 @@
         #{qnaNo}
         , #{title}
         , #{contents}
-        , 1
+        , #{userNo}
         , TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS')
         , #{textPw}
         , #{productNo}
         , 1
         , 0
         , 0
-        , 0
+        , #{checkFlag}
     )
 </insert>
 
