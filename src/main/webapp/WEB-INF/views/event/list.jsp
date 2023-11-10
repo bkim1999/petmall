@@ -24,6 +24,7 @@
     </div>
    </c:forEach>
   </div>
+  <div>${paging}</div>
   
   <div>
     <table border="1">

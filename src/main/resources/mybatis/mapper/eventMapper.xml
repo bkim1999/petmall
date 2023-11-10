@@ -4,7 +4,7 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
 <mapper namespace="com.gdu.petmall.dao.EventMapper">
-      <resultMap type="EventDto" id="EventMap">
+   <resultMap type="EventDto" id="EventMap">
       <id     column="EVENT_NO"               property="eventNo"/>
       <result column="TITLE"                  property="title"/>
       <result column="CONTENTS"               property="contents"/>
@@ -22,16 +22,23 @@
       </association>
    </resultMap> 
  
-  <select id="getEventList" resultMap="EventMap">
-    SELECT EVENT_NO,EVENT_THUMNAIL_URL,TITLE,CONTENTS
-      FROM EVENT_T
-     ORDER BY EVENT_NO DESC
+  <select id="getEventList" parameterType="Map" resultMap="EventMap">
+   SELECT A.EVENT_NO, A.EVENT_THUMNAIL_URL, A.TITLE, A.CONTENTS
+     FROM (SELECT ROW_NUMBER() OVER(ORDER BY EVENT_NO DESC) AS RN, EVENT_NO,EVENT_THUMNAIL_URL,TITLE,CONTENTS
+             FROM EVENT_T) A
+    WHERE A.RN BETWEEN #{begin} AND #{end}
   </select>
   
-  <select id="getEventDetailList" parameterType="int"  resultMap="EventMap">
-      SELECT EVENT_NO,EVENT_THUMNAIL_URL,TITLE,CONTENTS,HIT
-        FROM EVENT_T
-       WHERE EVENT_NO = #{eventNo}
+   <select id="getEventCount" resultType="int">
+     SELECT COUNT(*)
+       FROM EVENT_T
+   </select>
+  
+  <select id="getEventDetailList" parameterType="Map"  resultMap="EventMap">
+    SELECT E.EVENT_NO,E.EVENT_THUMNAIL_URL,E.TITLE,E.CONTENTS,E.HIT,E.START_AT,E.END_AT, I.PATH
+      FROM EVENT_T E LEFT OUTER JOIN EVENT_IMAGE_T I
+        ON E.EVENT_NO = I.EVENT_NO
+     WHERE E.EVENT_NO = #{eventNo}
   </select>
   
   

@@ -10,20 +10,17 @@
   <jsp:param value="이벤트상세게시판" name="title"/>
 </jsp:include>
 
-<style>
- div {
-  color: #255255255;
- }
-</style>
 
+  <div>EVENT</div>
   <hr>
-  <div>${detailResult.title}</div>
-  <div>매월 5명</div>
+  <div>${eventDetailList.title}</div>
+  <div>${eventDetailList.startAt} ~ ${eventDetailList.endAt}</div>
   <hr>
-  <div>${detailResult.hit}</div>
+  <div>조회수 ${eventDetailList.hit}</div>
   <hr>
-  <div></div>
-
+  <div>${eventDetailList.contents}</div>
+    <div>${eventDetailList.eventImageDto.path}</div>
+    <img src="${eventDetailList.eventImageDto.path}" width = "500px" height = "300px">
 
 
 <%@ include file="../layout/footer.jsp" %>
