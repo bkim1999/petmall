@@ -14,7 +14,7 @@ public class QnaDto {
     private int qnaNo;
     private UserDto userDto; 
     private int productNo;
-    private String title; 
+    private int title; 
     private String contents;
     private String createdAt;
     private int checkFlag;
@@ -22,4 +22,5 @@ public class QnaDto {
     private int status;
     private int depth;
     private int groupNo;
+    private int userNo;
 }
