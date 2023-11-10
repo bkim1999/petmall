@@ -34,10 +34,10 @@
       <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
         <li class="scroll"><a href="${contextPath}/product/list.do">상품</a></li>
         <li class="scroll"><a href="${contextPath}/event/list.do">이벤트</a></li>
-        <li class="scroll"><a href="${contextPath}/css/list.do">고객센터</a></li>
+        <li class="scroll"><a href="${contextPath}/qna/list.do">고객센터</a></li>
         <li class="scroll"><a href="${contextPath}/inquiry/list.do">문의</a></li>
-        <li class="scroll"><a href="${contextPath}/user/login.do">로그인</a></li>
-        <li class="scroll"><a href="${contextPath}/user/join.do">회원가입</a></li>
+        <li class="scroll"><a href="${contextPath}/user/login.form">로그인</a></li>
+        <li class="scroll"><a href="${contextPath}/user/join-option.form">회원가입</a></li>
         <li class="scroll"><a href="${contextPath}/order/cart.go">장바구니</a></li>
       </ul>
      </div>
