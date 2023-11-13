@@ -32,7 +32,9 @@
 
    <div class="collapse navbar-collapse menu-ui-design" id="navbar-menu">
       <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
-      
+        <c:if test="${sessionScope.user.state == 1}">
+          <li><a href="${contextPath}/admin/admin.go">관리자페이지</a></li>
+        </c:if>
           <!-- 로그인 여부에 따라 바뀔것-->
         <c:if test="${sessionScope.user == null}">
            <li><a href="${contextPath}/user/login.form">login</a></li>
