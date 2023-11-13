@@ -42,21 +42,6 @@
 
 <script>
   const fnAddOption = () => {
-<<<<<<< HEAD
-	  $('#option_list').change(function() {
-        var optionNo = $(this).val();
-        if(optionNo === '0'){
-        	return;
-        }
-        var selected_optionNo_list = [];
-        $.each($('#selected_option_list').children(), function(i, option) {
-      		selected_optionNo_list[i] = $(option).data('option-no');
-        });
-        if ($.inArray(parseInt(optionNo), selected_optionNo_list) !== -1){
-        	alert('이미 추가된 옵션입니다.');
-          $(this).val("0");
-        	return;
-=======
     $('#option_list').change(function() {
         var optionNo = $(this).val();
         if(optionNo === '0'){
@@ -70,7 +55,6 @@
           alert('이미 추가된 옵션입니다.');
           $(this).val("0");
           return;
->>>>>>> product
         }
         var optionName = $("#option_list option:selected").text();
         var addPrice = $("#option_list option:selected").data('add-price');
@@ -88,27 +72,6 @@
   }
   
   const fnDecreaseCount = () => {
-<<<<<<< HEAD
-	  $(document).on('click', '.minus_count', function(){
-		  var count = $(this).siblings('.count');
-		  if(count.val() === '1'){
-			  alert('too less')
-			  return;
-		  }
-	      count.val(parseInt(count.val()) - 1);
-	  });
-  }
-  
-  const fnIncreaseCount = () => {
-	  $(document).on('click', '.plus_count', function(){
-	      var count = $(this).siblings('.count');
-	      if(count.val() === '999'){
-	        alert('too much')
-	        return;
-	      }
-	        count.val(parseInt(count.val()) + 1);
-	  });
-=======
     $(document).on('click', '.minus_count', function(){
       var count = $(this).siblings('.count');
       if(count.val() === '1'){
@@ -128,7 +91,6 @@
         }
           count.val(parseInt(count.val()) + 1);
     });
->>>>>>> product
   }
   
   

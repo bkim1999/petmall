@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import com.gdu.petmall.dao.ProductMapper;
 import com.gdu.petmall.dto.ProductDto;
 import com.gdu.petmall.dto.ProductOptionDto;
+import com.gdu.petmall.dto.ReviewDto;
 import com.gdu.petmall.util.MyPageUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -34,11 +35,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     opt = Optional.ofNullable(request.getParameter("page"));
-<<<<<<< HEAD
-    int page = Integer.parseInt( opt.orElse("1"));
-=======
     int page = Integer.parseInt(opt.orElse("1"));
->>>>>>> product
     int display = 10;
     myPageUtils.setPaging(page, productCount, display);
     int begin = myPageUtils.getBegin();
@@ -67,23 +64,28 @@ public class ProductServiceImpl implements ProductService {
     int productNo = Integer.parseInt(request.getParameter("productNo"));
     ProductDto product = productMapper.getProduct(productNo);
     List<ProductOptionDto> optionList = productMapper.getOptionList(productNo);
+    
     model.addAttribute("product", product);
     model.addAttribute("optionList", optionList);
+    
   }
   
-<<<<<<< HEAD
-=======
   @Override
   public void addProduct(ProductDto product, Model model) {
     int addProductResult = productMapper.insertProduct(product);
     model.addAttribute("addProductResult", addProductResult);
   }
   
-  @Override
-  public Map<String, Object> loadReviewList(HttpServletRequest request) {
-    int productNo = Integer.parseInt(request.getParameter("productNo"));
-    return null;
-  }
+//  public Map<String, Object> loadReviewList(HttpServletRequest request) {
+//    Optional opt = Optional.ofNullable(request.getParameter("page"));
+//    int page = Integer.parseInt(opt.orElse("1"));
+//    //int reviewCount = productMapper.getProductReviewCount(productNo);
+//    int display = 10;
+//    myPageUtils.setPaging(page, reviewCount, display);
+//    
+//    
+//    //List<ReviewDto> reviewList = productMapper.getProductReviewList(productNo, page);
+//    return null;
+//  }
   
->>>>>>> product
 }
