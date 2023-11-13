@@ -11,26 +11,46 @@
 </jsp:include>
 
 <style>
- div {
-  color: #255255255;
- }
+
+  .Middle {
+   margin : 20px;
+   border-radius: 10px;
+   background-color: white;
+  }
+  
+  .top{
+    padding: 30px;
+    background-color: #23919770;
+  }
+  
+  .bottom{
+    margin : 20px;
+    background-color: white;
+  }
+  
+  img {
+    width: 600px;
+    height: 200px;
+    border-radius: 10px;
+  }
 </style>
 
-  <div>나는야 이벤트 게시판</div>
-  <div>
+
+  
+  <div class="top">
    <c:forEach items="${eventList}" var="event" varStatus="vs">
-    <div>
+    <div class="Middle">
       <c:if test="${sessionScope.user.userNo != null}">
-       <a href="${contextPath}/event/detail.do?eventNo=${event.eventNo}"><img src="${event.eventThumnailUrl}" width=300px height=300px></a>
+       <a href="${contextPath}/event/increase.do?eventNo=${event.eventNo}"><img src="${event.eventThumnailUrl}" width=300px height=300px></a>
       </c:if>
       <c:if test="${sessionScope.user.userNo == null}">
-       <a href="${contextPath}/event/increase.do?eventNo=${event.eventNo}"><img src="${event.eventThumnailUrl}" width=300px height=300px></a>
+       <a href="${contextPath}/event/detail.do?eventNo=${event.eventNo}"><img src="${event.eventThumnailUrl}" width=300px height=300px></a>
       </c:if>
     </div>
    </c:forEach>
   </div>
   
-  <div>${paging}</div>
+  <div class="bottom">${paging}</div>
   
   <div>
     <table border="1">
