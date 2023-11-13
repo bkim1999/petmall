@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
 	private final MySecurityUtils mySecurityUtils;
 	 private final MyJavaMailUtils myJavaMailUtils;
 	
-	/*로그인*/
+/*로그인*/
 @Override
 public void login(HttpServletRequest request, HttpServletResponse response) throws Exception {
 	 
@@ -123,7 +123,7 @@ public ResponseEntity<Map<String, Object>> checkEmail(String email) {
 @Override
 public ResponseEntity<Map<String, Object>> sendCode(String email) {
   
-  // RandomString 생성(6자리, 문자 사용, 숫자 사용)
+  // RandomString 생성(n자리, 문자 사용, 숫자 사용)
   String code = mySecurityUtils.getRandomString(8, true, true);
   
   // 메일 전송
