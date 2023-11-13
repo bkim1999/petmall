@@ -22,7 +22,7 @@
     <select id="option_list">
       <option value="0">(필수)옵션을 선택해주세요</option>
       <c:forEach var="option" items="${optionList}">
-        <option value="${option.optionNo}">
+        <option value="${option.optionNo}" data-add-price="${option.addPrice}">
           ${product.productName} ${option.optionName}
           <c:if test="${option.addPrice > 0}">
             (+${option.addPrice})
@@ -34,7 +34,7 @@
   <div></div>
   <div></div>
   
-  <form method="post" action="${contextPath}/order/order.do">
+  <form method="post" action="${contextPath}/order/cart.go">
     <div id="selected_option_list"></div>
   </form>
 
@@ -47,16 +47,56 @@
         if(optionNo === '0'){
         	return;
         }
+        var selected_optionNo_list = [];
+        $.each($('#selected_option_list').children(), function(i, option) {
+      		selected_optionNo_list[i] = $(option).data('option-no');
+        });
+        if ($.inArray(parseInt(optionNo), selected_optionNo_list) !== -1){
+        	alert('이미 추가된 옵션입니다.');
+          $(this).val("0");
+        	return;
+        }
         var optionName = $("#option_list option:selected").text();
-        var str = '<div>';
+        var addPrice = $("#option_list option:selected").data('add-price');
+        var str = '<div class="selected_option" data-option-no="' + optionNo + '">';
         str += optionName + '  ';
-        str += '  <a>-</a>';
-        str += '  <input type="text" class="quantity" data-option_no="' + optionNo + '"value="1" readonly>'
-        str += '  <a>+</a>';
+        str += '  <a class="minus_count">-</a>';
+        str += '  <input type="hidden" class="option_no" value="' + optionNo + '">'
+        str += '  <input type="text" class="count" value="1" readonly>'
+        str += '  <a class="plus_count">+</a>';
+        str += '  <input type="text" class="option_price" value="' + (${product.productPrice} + addPrice) + '" readonly>원';
+        str += '</div>';
         $('#selected_option_list').append(str);
+        //$(this).val("0");
     });
   }
+  
+  const fnDecreaseCount = () => {
+	  $(document).on('click', '.minus_count', function(){
+		  var count = $(this).siblings('.count');
+		  if(count.val() === '1'){
+			  alert('too less')
+			  return;
+		  }
+	      count.val(parseInt(count.val()) - 1);
+	  });
+  }
+  
+  const fnIncreaseCount = () => {
+	  $(document).on('click', '.plus_count', function(){
+	      var count = $(this).siblings('.count');
+	      if(count.val() === '999'){
+	        alert('too much')
+	        return;
+	      }
+	        count.val(parseInt(count.val()) + 1);
+	  });
+  }
+  
+  
   fnAddOption();
+  fnDecreaseCount();
+  fnIncreaseCount();
 </script>
 
 <%@ include file="../layout/footer.jsp" %>
