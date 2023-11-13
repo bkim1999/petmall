@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
 	private final MySecurityUtils mySecurityUtils;
 	 private final MyJavaMailUtils myJavaMailUtils;
 	
-/*로그인*/
+	/*로그인*/
 @Override
 public void login(HttpServletRequest request, HttpServletResponse response) throws Exception {
 	 
@@ -76,7 +76,7 @@ public void login(HttpServletRequest request, HttpServletResponse response) thro
 }
 	
 	
-	// 회원정보 가져와
+// 회원정보 가져와
 @Override
 public UserDto getUser(String email) {
   return userMapper.getUser(Map.of("email", email));
@@ -123,7 +123,7 @@ public ResponseEntity<Map<String, Object>> checkEmail(String email) {
 @Override
 public ResponseEntity<Map<String, Object>> sendCode(String email) {
   
-  // RandomString 생성(n자리, 문자 사용, 숫자 사용)
+  // RandomString 생성(6자리, 문자 사용, 숫자 사용)
   String code = mySecurityUtils.getRandomString(8, true, true);
   
   // 메일 전송
@@ -212,9 +212,128 @@ public void join(HttpServletRequest request, HttpServletResponse response) {
 
 
 
+/*회원탈퇴*/
+@Override
+public void leave(HttpServletRequest request, HttpServletResponse response) {
 
+  Optional<String> opt = Optional.ofNullable(request.getParameter("userNo"));
+  int userNo = Integer.parseInt(opt.orElse("0"));
+  
+  UserDto user = userMapper.getUser(Map.of("userNo", userNo));
+  
+  if(user == null) {
+    try {
+      response.setContentType("text/html; charset=UTF-8");
+      PrintWriter out = response.getWriter();
+      out.println("<script>");
+      out.println("alert('회원 탈퇴를 수행할 수 없습니다.')");
+      out.println("location.href='" + request.getContextPath() + "/main.do'");
+      out.println("</script>");
+      out.flush();
+      out.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  
+  int insertLeaveUserResult = userMapper.insertLeaveUser(user);
+  int deleteUserResult = userMapper.deleteUser(user);
+  
+ try {
+    
+    response.setContentType("text/html; charset=UTF-8");
+    PrintWriter out = response.getWriter();
+    out.println("<script>");
+    if(insertLeaveUserResult == 1 && deleteUserResult == 1) {
+      HttpSession session = request.getSession();
+      session.invalidate();
+      out.println("alert('회원 탈퇴되었습니다. 그 동안 이용해 주셔서 감사합니다.')");
+      out.println("location.href='" + request.getContextPath() + "/main.do'");
+    } else {
+      out.println("alert('회원 탈퇴되지 않았습니다.')");
+      out.println("history.back()");
+    }
+    out.println("</script>");
+    out.flush();
+    out.close();
+    
+  } catch (Exception e) {
+    e.printStackTrace();
+  }
+  
+}
+	
 
-
+/*회원정보수정*/
+@Override
+public ResponseEntity<Map<String, Object>> modify(HttpServletRequest request) {
+	  String email = mySecurityUtils.preventXSS(request.getParameter("email"));
+	  String pw = mySecurityUtils.getSHA256(request.getParameter("pw"));
+	  String name = mySecurityUtils.preventXSS(request.getParameter("name"));
+	  String gender = request.getParameter("gender");
+	  
+	  String[] arrMobile = request.getParameterValues("mobile");
+	  StringBuilder mobile =new StringBuilder();
+	  for(int i=0;i<arrMobile.length;i++){mobile.append(arrMobile[i]);}
+	  
+	  String postcode = request.getParameter("postcode");
+	  String roadAddress = request.getParameter("roadAddress");
+	  String jibunAddress = request.getParameter("jibunAddress");
+	  String detailAddress = mySecurityUtils.preventXSS(request.getParameter("detailAddress"));
+	  
+	  int userNo = Integer.parseInt(request.getParameter("userNo"));
+	  
+	  
+	  
+	 // 이벤트 수신 동의 체크 안돼있으면 null 전달됨. null 처리 해야함
+	  String event = request.getParameter("event");
+	  Optional<String> opt = Optional.ofNullable(event);
+	   event = opt.orElse("off"); 
+	   
+	  int agree = event.equals("on") ? 1 : 0;
+	  
+	  
+	  
+	  
+	  UserDto user = UserDto.builder()
+	      .email(email)
+	      .pw(pw)
+	      .name(name)
+	      .gender(gender)
+	      .mobile(mobile.toString())
+	      .postcode(postcode)
+	      .roadAddress(roadAddress)
+	      .jibunAddress(jibunAddress)
+	      .detailAddress(detailAddress)
+	      .agree(agree)
+	      .userNo(userNo)
+	      .build();
+	  
+   int modifyResult = userMapper.updateUser(user);
+   
+   if(modifyResult == 1) {
+     HttpSession session = request.getSession();
+     UserDto sessionUser = (UserDto)session.getAttribute("user");
+     sessionUser.setEmail(email);
+     sessionUser.setPw(pw);
+     sessionUser.setName(name);
+     sessionUser.setGender(gender);
+     sessionUser.setMobile(mobile.toString());
+     sessionUser.setPostcode(postcode);
+     sessionUser.setRoadAddress(roadAddress);
+     sessionUser.setJibunAddress(jibunAddress);
+     sessionUser.setDetailAddress(detailAddress);
+     sessionUser.setAgree(agree);
+   }
+   
+   return new ResponseEntity<>(Map.of("modifyResult", modifyResult), HttpStatus.OK);
+}
 
 
 }
+
+
+
+
+
+

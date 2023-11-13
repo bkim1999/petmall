@@ -89,6 +89,41 @@
   </insert>
     
     
+ <!-- 회원 정보 수정  -->   
+   <update id="updateUser" parameterType="UserDto">
+    UPDATE USER_T
+       SET NAME = #{name}
+         , GENDER = #{gender}
+         , MOBILE = #{mobile}
+         , POSTCODE = #{postcode}
+         , ROAD_ADDRESS = #{roadAddress}
+         , JIBUN_ADDRESS = #{jibunAddress}
+         , DETAIL_ADDRESS = #{detailAddress}
+         , AGREE = #{agree}
+     WHERE USER_NO = #{userNo}
+  </update>   
+    
+    
+  <!--회원탈퇴 기록 -->
+    <insert id="insertLeaveUser" parameterType="UserDto">
+    INSERT INTO LEAVE_USER_T (
+        EMAIL
+      , JOINED_AT
+      , LEAVED_AT
+    ) VALUES (
+        #{email}
+      , #{joinedAt}
+      , TO_CHAR(SYSDATE,'YYYY-MM-DD_HH24:MI:SS')
+    ) 
+  </insert> 
+  
+ <!-- 회원 삭제  --> 
+   <delete id="deleteUser" parameterType="UserDto">
+    DELETE
+      FROM USER_T
+     WHERE USER_NO = #{userNo}
+  </delete>
+    
 </mapper>
 
  

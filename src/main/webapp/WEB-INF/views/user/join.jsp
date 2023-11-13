@@ -180,7 +180,7 @@
       <button type="button">약관 보기</button>
     </div>
   
-  <div><label for="event"><input type="checkbox" id="event" name="event" class="chk_each" value="off">[선택]광고성 정보 이메일 수신 동의</label></div>
+  <div><label for="event"><input type="checkbox" id="event" name="event" class="chk_each" >[선택]광고성 정보 이메일 수신 동의</label></div>
 
 
 <!-- 버튼  -->

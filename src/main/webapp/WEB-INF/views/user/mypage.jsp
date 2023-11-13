@@ -10,31 +10,18 @@
   <jsp:param value="마이페이지" name="title"/>
 </jsp:include>
 
-
-<!-- 임시 스타일 -->
-<style>
-.mypage_nav ul li{display: inline-block;}
-
-
-</style>
+<!-- 마이페이지 네비게이션  -->
+<h1>MY PAGE</h1>
+<jsp:include page="mypage_nav.jsp"></jsp:include>
 
 
-<div class="mypage_nav">
-  <ul>
-    <li><a href="${contextPath}/user/">MyShop</a></li>
-    <li><a href="${contextPath}/user/">Order</a></li>
-    <li><a href="${contextPath}/user/">Profile</a></li>
-    <li><a href="${contextPath}/user/">Point</a></li>
-    <li><a href="${contextPath}/user/myPostList">MyPosts</a></li>
-    <li><a href="${contextPath}/user/">Address</a></li>
-
-  </ul>
-</div>
+<!-- 본문  -->
+<div>
 
 
-<div >
 
 </div>
+
 
 <%@ include file="../layout/footer.jsp" %>
 
