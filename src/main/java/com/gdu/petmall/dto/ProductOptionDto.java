@@ -9,11 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Builder
-public class CartDto {
-
-  private int count;
-  private ProductOptionDto productOptionDto;
-  private ProductDto productDto;
-  private UserDto userDto;
-  
+public class ProductOptionDto {
+  private int optionNo;
+  private int productNo;
+  private String optionName;
+  private int addPrice;
+  private int optionCount;
 }

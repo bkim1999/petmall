@@ -9,11 +9,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Builder
-public class CartDto {
-
-  private int count;
-  private ProductOptionDto productOptionDto;
+public class AdminDto {
+  
   private ProductDto productDto;
   private UserDto userDto;
-  
+  private LeaveUserDto leaveUserDto;
+  private InactiveUserDto inactiveUserDto;
+  private QnaDto qnaDto;
+  private OrderDto orderDto;
+  private InquiryDto inquiryDto;
+  private ProductOptionDto productOptionDto;
+
 }
