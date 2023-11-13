@@ -48,22 +48,71 @@
     )
 </insert>
 
-<insert id="insertQattach" parameterType="com.gdu.petmall.dto.QattachDto">
-    INSERT INTO QATTACH_T (
-        QATTACH_NO
-        , QNA_NO
-        , PATH
-        , ORIGINAL_FILENAME
-        , FILESYSTEM_NAME
-    ) VALUES (
-         QATTACH_SEQ.NEXTVAL
-        , #{qnaNo}
-        , #{path}
-        , #{originalFilename}
-        , #{filesystemName}
-    )
-</insert>
+	<insert id="insertQattach" parameterType="com.gdu.petmall.dto.QattachDto">
+	    INSERT INTO QATTACH_T (
+	        QATTACH_NO
+	        , QNA_NO
+	        , PATH
+	        , ORIGINAL_FILENAME
+	        , FILESYSTEM_NAME
+	    ) VALUES (
+	         QATTACH_SEQ.NEXTVAL
+	        , #{qnaNo}
+	        , #{path}
+	        , #{originalFilename}
+	        , #{filesystemName}
+	    )
+	</insert>
 
+	<select id="getQnaList" resultType="int">
+	 SELECT COUNT (*)
+	  FROM QNA_T
+	</select>
+	
+	<select id="getMyPostList" parameterType="java.util.Map" resultType="com.gdu.petmall.dto.QnaDto">
+	    SELECT *
+	    FROM QNA_T
+	    WHERE USER_NO = #{userNo}
+	</select>
+	
+	<select id="getQna" parameterType="int" resultMap="QnaMap">
+	    SELECT Q.QNA_NO, Q.TITLE, Q.CONTENTS, Q.CREATED_AT, Q.PRODUCT_NO, Q.STATUS, Q.USER_NO
+	    FROM USER_T U, QNA_T Q
+	    WHERE U.USER_NO = Q.USER_NO
+	    AND Q.QNA_NO = #{qnaNo}
+	</select>
+	
+	<delete id="deleteQna" parameterType="int">
+	    <![CDATA[
+	    DELETE FROM QNA_T WHERE QNA_NO = #{qnaNo}
+	    ]]>
+	</delete>
+
+
+	<insert id="insertReply" parameterType="QnaDto">
+    <selectKey keyProperty="qnaNo" resultType="int" order="BEFORE">
+        SELECT QATTACH_SEQ.NEXTVAL AS FROM DUAL
+    </selectKey>
+	    INSERT INTO QNA_T(
+	        USER_NO,
+	        QNA_NO,
+	        CONTENTS,
+	        CREATED_AT,
+	        STATUS,
+	        DEPTH,
+	        GROUP_NO
+	    )VALUES(
+	    	#{userNo},
+	        #{qnaNo},
+	        #{contents},
+	        TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'),
+	        1,
+	        #{depth},
+	        #{groupNo}
+	    )  
+    </insert>
+  
+  
   
   
 </mapper>

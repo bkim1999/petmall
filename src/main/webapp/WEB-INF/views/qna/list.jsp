@@ -16,7 +16,7 @@
   </div>
   
   <div class="text-center">	
-  	<a href='${contextPath}/petmall/myhome/mylist.do'>
+    <a href="${contextPath}/petmall/user/myPostList">
   		<button type="button" class="btn-outline-primary">작성한 문의글 보러가기</button>
   	</a>
   </div>

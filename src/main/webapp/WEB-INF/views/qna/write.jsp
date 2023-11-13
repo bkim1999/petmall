@@ -42,12 +42,12 @@
 	      <label for="files" class="form-label">첨부</label>
 	      <input type="file" name="files" id="files" class="form-control" multiple>
 	    </div>
-	    
+	    		
 	    <div class="mt-3">
 	      <label for="textPw" class="form-label">비밀번호</label>
 	      <input type="text" name="textPw" id="textPw" class="form-control" multiple>
 	    </div>    
-	
+																	
 	    <div class="attached_list mt-2" id="attached_list"></div>
 	    <div class="text-center mt-5">
 	      <a href="${contextPath}/petmall/qna/list.do">
