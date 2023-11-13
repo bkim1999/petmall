@@ -34,7 +34,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     opt = Optional.ofNullable(request.getParameter("page"));
+<<<<<<< HEAD
     int page = Integer.parseInt( opt.orElse("1"));
+=======
+    int page = Integer.parseInt(opt.orElse("1"));
+>>>>>>> product
     int display = 10;
     myPageUtils.setPaging(page, productCount, display);
     int begin = myPageUtils.getBegin();
@@ -67,4 +71,19 @@ public class ProductServiceImpl implements ProductService {
     model.addAttribute("optionList", optionList);
   }
   
+<<<<<<< HEAD
+=======
+  @Override
+  public void addProduct(ProductDto product, Model model) {
+    int addProductResult = productMapper.insertProduct(product);
+    model.addAttribute("addProductResult", addProductResult);
+  }
+  
+  @Override
+  public Map<String, Object> loadReviewList(HttpServletRequest request) {
+    int productNo = Integer.parseInt(request.getParameter("productNo"));
+    return null;
+  }
+  
+>>>>>>> product
 }

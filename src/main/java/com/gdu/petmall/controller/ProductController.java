@@ -7,9 +7,18 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+<<<<<<< HEAD
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+=======
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.gdu.petmall.dto.ProductDto;
+>>>>>>> product
 import com.gdu.petmall.service.ProductService;
 
 import lombok.RequiredArgsConstructor;
@@ -38,4 +47,18 @@ public class ProductController {
     return "/product/detail";
   }
   
+<<<<<<< HEAD
+=======
+  @GetMapping(value="/addProduct.form")
+  public String addProductForm() {
+    return "/product/add_product";
+  }
+  
+  @PostMapping(value="/addProduct.do")
+  public String addProduct(@ModelAttribute ProductDto product, Model model) {
+    productService.addProduct(product, model);
+    return "redirect:product/list.do";
+  }
+  
+>>>>>>> product
 }
