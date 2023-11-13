@@ -1,9 +1,15 @@
 	package com.gdu.petmall.service;
 	
 	import java.io.File;
-	import java.util.List;
-	
-	import org.springframework.stereotype.Service;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.stereotype.Service;
 	import org.springframework.transaction.annotation.Transactional;
 	import org.springframework.web.multipart.MultipartFile;
 	import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -103,4 +109,74 @@
 	        return true;
 	
 	    }
-	}
+	    
+	    
+	    @Override
+	    public int getLoggedInUserNo(HttpServletRequest request) {
+	        HttpSession session = request.getSession();
+	        if (session.getAttribute("user") != null) {
+	            UserDto loggedInUser = (UserDto) session.getAttribute("user");
+	            return loggedInUser.getUserNo();
+	        } else {
+	            return -1;
+	        }
+	    }
+	    
+	    @Override
+	    public Map<String, Object> myPostList(HttpServletRequest request) {
+	        String loggedInUserNo = String.valueOf(getLoggedInUserNo(request));
+
+	        Map<String, Object> paramMap = new HashMap<>();
+	        paramMap.put("userNo", loggedInUserNo);
+
+	        List<QnaDto> myPostList = qnaMapper.getMyPostList(paramMap);
+
+	        Map<String, Object> resultMap = new HashMap<>();
+	        resultMap.put("myPostList", myPostList);
+
+	        return resultMap;
+	    }
+	    
+	    
+	    @Override
+	    public QnaDto getQna(int qnaNo) {
+	        return qnaMapper.getQna(qnaNo);
+	    }
+	    
+	    @Override
+	    public int removeQna(int qnaNo) {
+	    	return qnaMapper.deleteQna(qnaNo);
+	    }
+	    
+	    @Override
+	    public int addReply(HttpServletRequest request,MultipartHttpServletRequest multipartRequest) {
+	    	
+	        int userNo = 0;
+	        String userNoString = multipartRequest.getParameter("userNo");
+	        if (userNoString != null && !userNoString.isEmpty()) {
+	            userNo = Integer.parseInt(userNoString);
+	        }
+	    	
+	        int depth = Integer.parseInt(request.getParameter("depth"));
+	        int groupNo = Integer.parseInt(request.getParameter("groupNo"));
+	        String contents = request.getParameter("contents");
+	        
+	        UserDto userDto = UserDto.builder()
+	                .userNo(userNo)
+	                .build();
+	        
+	        QnaDto reply = QnaDto.builder()
+	        					 .contents(contents)
+	        					 .depth(depth + 1)
+	        		             .userNo(userNo)
+	        					 .groupNo(groupNo)
+	        					 .build();
+	        
+	        int addReplyResult = qnaMapper.insertReply(reply);
+
+	    	return addReplyResult;
+	    }
+
+
+ 
+}
