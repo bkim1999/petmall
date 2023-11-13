@@ -13,67 +13,66 @@
 <style>
 
   .Middle {
-   margin : 20px;
    border-radius: 10px;
    background-color: white;
+   margin :20px;
   }
   
   .top{
-    padding: 30px;
+    padding: 100px;
     background-color: #23919770;
   }
   
   .bottom{
     margin : 20px;
     background-color: white;
+    border-radius: 10px;
+    text-align: center;
   }
   
-  img {
-    width: 600px;
-    height: 200px;
+  .img1 {
+    width: 100%;
+    height: 100%;
     border-radius: 10px;
+    text-align: center;
+  }
+  .img2 {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    text-align: center;
+  }
+  .second_top {
+    background-color: white;
+    border-radius: 10px;
+    padding : 20px;
   }
 </style>
 
 
-  
-  <div class="top">
-   <c:forEach items="${eventList}" var="event" varStatus="vs">
-    <div class="Middle">
-      <c:if test="${sessionScope.user.userNo != null}">
-       <a href="${contextPath}/event/increase.do?eventNo=${event.eventNo}"><img src="${event.eventThumnailUrl}" width=300px height=300px></a>
-      </c:if>
-      <c:if test="${sessionScope.user.userNo == null}">
-       <a href="${contextPath}/event/detail.do?eventNo=${event.eventNo}"><img src="${event.eventThumnailUrl}" width=300px height=300px></a>
-      </c:if>
-    </div>
-   </c:forEach>
-  </div>
-  
-  <div class="bottom">${paging}</div>
-  
   <div>
-    <table border="1">
-     <thead>
-      <tr>
-        <td>번호</td>
-        <td>제목</td>
-        <td>내용</td>
-        <td>이미지</td>
-      </tr>
-     </thead>
-     <tbody>
-      <c:forEach items="${eventList}" var="event" varStatus="vs">
-        <tr>
-          <td>${event.eventNo}</td>
-          <td>${event.title}</td>
-          <td>${event.contents}</td>
-          <td>${event.eventThumnailUrl}</td>
-        </tr>
-      </c:forEach>
-     </tbody> 
-    </table>
-    
+   <div>페스룸 회원가입하고</div>
+   <div>첫 구매 100원</div>
+   <div>회원가입만 하면 프리미엄 휴먼그레이드 간식이 100원!</div>
+   <div>구매하로가기
+    <img class="cat1" src="https://pethroom.com/web/upload/NNEditor/page/event-alex.png" width=350px height=170px>
+    <img class="dog1" src="https://pethroom.com/web/upload/NNEditor/page/event-boss.png" width=350px height=170px>
+   </div>
+  </div>
+  <div class="top">
+   <div class ="second_top">
+    <c:forEach items="${eventList}" var="event" varStatus="vs">
+     <div class="Middle">
+       <c:if test="${sessionScope.user.userNo != null}">
+        <a href="${contextPath}/event/increase.do?eventNo=${event.eventNo}"><img class="img1" src="${event.eventThumnailUrl}" width=880px height=253px></a>
+       </c:if>
+       <c:if test="${sessionScope.user.userNo == null}">
+        <a href="${contextPath}/event/detail.do?eventNo=${event.eventNo}"><img class="img2" src="${event.eventThumnailUrl}" width=880px height=253px></a>
+       </c:if>
+     </div>
+    </c:forEach>
+    <div class="bottom">${paging}</div>
+    </div>
   </div>
 
 
