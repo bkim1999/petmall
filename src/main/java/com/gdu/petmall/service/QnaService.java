@@ -18,7 +18,8 @@ public interface QnaService {
   public QnaDto getQna(int QnaNo);
   public int removeQna(int qnaNo);
   
-  public int addReply(HttpServletRequest request, MultipartHttpServletRequest multipartRequest) throws Exception ;
+  public int addReply(HttpServletRequest request, MultipartHttpServletRequest multipartRequest) ;
+  
+  public Map<String, Object> loadCommentList(HttpServletRequest request);
 }
-
 

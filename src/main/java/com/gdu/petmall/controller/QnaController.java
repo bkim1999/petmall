@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -67,12 +68,17 @@ public class QnaController {
   }
   
   @PostMapping("/user/qnadetail/addReply.do")
-  public String addReply(HttpServletRequest request
-		  				, RedirectAttributes redirectAttributes
-		  				, MultipartHttpServletRequest multipartRequest) throws Exception {
-	  int addReplyResult = qnaService.addReply(request, multipartRequest) ;
+  public String addReply(HttpServletRequest request, RedirectAttributes redirectAttributes, MultipartHttpServletRequest multipartRequest) {
+	  int addReplyResult = qnaService.addReply(request, multipartRequest);
 	  redirectAttributes.addFlashAttribute("addReplyResult", addReplyResult);
 	  return "redirect:/user/myPostList";
+  }
+  
+  
+  @ResponseBody
+  @GetMapping(value="/user/qnadetail/commentList.do", produces="application/json")
+  public Map<String, Object> commentList(HttpServletRequest request){
+    return qnaService.loadCommentList(request);
   }
   
 
