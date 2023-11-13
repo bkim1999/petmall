@@ -86,7 +86,7 @@
     )
   </insert>
   
-  <select id="getProductReviewCount" parameterType="int" resultType="Count">
+  <select id="getProductReviewCount" parameterType="int" resultType="int">
     SELECT COUNT(*)
       FROM REVIEW_T
      WHERE OPTION_NO IN (SELECT OPTION_NO FROM PRODUCT_OPTION_T WHERE PRODUCT_NO = #{productNo})

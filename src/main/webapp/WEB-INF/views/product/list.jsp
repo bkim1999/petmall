@@ -57,19 +57,6 @@
       type: 'get',
       url: '${contextPath}/product/getList.do',
       data: {'categoryNo' : categoryNo,
-<<<<<<< HEAD
-    	       'page' : page,
-    	       'order' : order,
-    	       'ascDesc' : ascDesc
-    	      },
-      // 응답
-      dataType: 'json',
-      success: (resData) => {  // resData = {"uploadList": [], "totalPage": 10}
-    	  if(resData.productList === null){
-    		  alert(resData.message);
-    		  return;
-    	  }
-=======
              'page' : page,
              'order' : order,
              'ascDesc' : ascDesc
@@ -81,7 +68,6 @@
           alert(resData.message);
           return;
         }
->>>>>>> product
         totalPage = resData.totalPage;
         $.each(resData.productList, (i, product) => {
           let str = '<div class="product" data-product_no="' + product.productNo + '">';
@@ -122,20 +108,11 @@
     })
   }
 
-<<<<<<< HEAD
-  const fnAddResult = () => {
-    let addResult = '${addResult}';  // '', 'true', 'false'
-    if(addResult !== ''){
-      if(addResult === 'true'){
-        alert('성공적으로 업로드 되었습니다.');
-        $('#productList').empty();
-=======
   const fnAddProductResult = () => {
     let addProductResult = '${addProductResult}';  // '', 'true', 'false'
     if(addProductResult !== ''){
       if(addProductResult === '1'){
         alert('성공적으로 업로드 되었습니다.');
->>>>>>> product
       } else {
         alert('업로드가 실패하였습니다.');
       }
@@ -151,11 +128,7 @@
   
   fnGetProductList();
   fnScroll();
-<<<<<<< HEAD
-  fnAddResult();
-=======
   fnAddProductResult();
->>>>>>> product
   fnDetail();
   
 
