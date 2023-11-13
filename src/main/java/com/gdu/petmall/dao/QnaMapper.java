@@ -14,6 +14,7 @@ public interface QnaMapper {
 	public int insertQna(QnaDto qna);
 	public int insertQattach(QattachDto qattach);
 	
+	public int getQnaCount();
 	public List<QnaDto> getQnaList(Map<String, Object> map);
     public List<QnaDto> getMyPostList(Map<String, Object> paramMap);
     
