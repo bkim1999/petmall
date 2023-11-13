@@ -67,8 +67,10 @@ public class QnaController {
   }
   
   @PostMapping("/user/qnadetail/addReply.do")
-  public String addReply(HttpServletRequest request, RedirectAttributes redirectAttributes, MultipartHttpServletRequest multipartRequest) {
-	  int addReplyResult = qnaService.addReply(request, multipartRequest);
+  public String addReply(HttpServletRequest request
+		  				, RedirectAttributes redirectAttributes
+		  				, MultipartHttpServletRequest multipartRequest) throws Exception {
+	  int addReplyResult = qnaService.addReply(request, multipartRequest) ;
 	  redirectAttributes.addFlashAttribute("addReplyResult", addReplyResult);
 	  return "redirect:/user/myPostList";
   }

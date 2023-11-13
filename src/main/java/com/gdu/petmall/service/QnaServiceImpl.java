@@ -149,7 +149,7 @@ import org.springframework.stereotype.Service;
 	    }
 	    
 	    @Override
-	    public int addReply(HttpServletRequest request,MultipartHttpServletRequest multipartRequest) {
+	    public int addReply(HttpServletRequest request,MultipartHttpServletRequest multipartRequest) throws Exception {
 	    	
 	        int userNo = 0;
 	        String userNoString = multipartRequest.getParameter("userNo");
