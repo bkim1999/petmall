@@ -76,6 +76,7 @@ public class ProductServiceImpl implements ProductService {
   @Override
   public Map<String, Object> loadReviewList(HttpServletRequest request) {
     int productNo = Integer.parseInt(request.getParameter("productNo"));
+    return null;
   }
   
 }
