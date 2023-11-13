@@ -12,14 +12,17 @@
     <result column="CREATED_AT" property="createdAt" />
     <result column="MODIFIED_AT" property="modifiedAt" />
     <result column="TEXT_PW" property="textPw" />
-	<association javaType="UserDto"      property="userDto">
+    <result column="CHECK_FLAG" property="checkFlag"/>
+   <association javaType="UserDto"      property="userDto">
       <id column="USER_NO" property="userNo" />
+      <result column="EMAIL" property="email"/>
+      <result column="NAME"  property="name"/>
     </association>
   </resultMap>
 
 <insert id="insertQna" parameterType="com.gdu.petmall.dto.QnaDto">
     <selectKey keyProperty="qnaNo" resultType="int" order="BEFORE">
-        SELECT QATTACH_SEQ.NEXTVAL AS FROM DUAL
+        SELECT QNA_SEQ.NEXTVAL AS FROM DUAL
     </selectKey>
     INSERT INTO QNA_T (
         QNA_NO
@@ -43,7 +46,7 @@
         , #{productNo}
         , 1
         , 0
-        , 0
+        , QNA_SEQ.CURRVAL
         , #{checkFlag}
     )
 </insert>
@@ -80,6 +83,7 @@
 	    FROM USER_T U, QNA_T Q
 	    WHERE U.USER_NO = Q.USER_NO
 	    AND Q.QNA_NO = #{qnaNo}
+	    AND Q.DEPTH = #{depth}
 	</select>
 	
 	<delete id="deleteQna" parameterType="int">
@@ -91,7 +95,7 @@
 
 	<insert id="insertReply" parameterType="QnaDto">
     <selectKey keyProperty="qnaNo" resultType="int" order="BEFORE">
-        SELECT QATTACH_SEQ.NEXTVAL AS FROM DUAL
+        SELECT QNA_SEQ.NEXTVAL AS FROM DUAL
     </selectKey>
 	    INSERT INTO QNA_T(
 	        USER_NO,
@@ -112,7 +116,17 @@
 	    )  
     </insert>
   
-  
+  	<select id="getAllQnalist" resultType="map">
+	 SELECT QN.QNA_NO, QN.TITLE, QN.CONTENTS, QN.CREATED_AT, USR.USER_NO, USR.EMAIL, USR.NAME, QN.CHECK_FLAG
+	 FROM QNA_T QN LEFT OUTER JOIN USER_T USR
+	 ON QN.USER_NO = USR.USER_NO
+    </select>
+    
+    <select id="getQnaCount" parameterType="int" >
+	SELECT COUNT(CHECK_FLAG)
+	FROM QNA_T
+	WHERE CHECK_FLAG= #{CHECK_FLAG}
+    </select>
   
   
 </mapper>

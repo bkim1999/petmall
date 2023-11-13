@@ -41,6 +41,7 @@ import org.springframework.stereotype.Service;
 	        if (titleString != null && !titleString.isEmpty()) {
 	            title = Integer.parseInt(titleString);
 	        }
+	        
 	
 	        String contents = multipartRequest.getParameter("contents");
 	        String textPw = multipartRequest.getParameter("textPw");
@@ -55,6 +56,12 @@ import org.springframework.stereotype.Service;
 	        String productNoString = multipartRequest.getParameter("productNo");
 	        if (productNoString != null && !productNoString.isEmpty()) {
 	            productNo = Integer.parseInt(productNoString);
+	        }
+	        
+	        int depth = 0;
+	        String depthString = multipartRequest.getParameter("depth");
+	        if (depthString != null && !depthString.isEmpty()) {
+	        	depth = Integer.parseInt(depthString);
 	        }
 	
 	        UserDto userDto = UserDto.builder()
@@ -71,6 +78,7 @@ import org.springframework.stereotype.Service;
 	                .textPw(textPw)
 	                .userNo(userNo)
 	                .productNo(productNo)
+	                .depth(depth)
 	                .build();
 	
 	        qnaMapper.insertQna(qna);
@@ -129,6 +137,7 @@ import org.springframework.stereotype.Service;
 	        Map<String, Object> paramMap = new HashMap<>();
 	        paramMap.put("userNo", loggedInUserNo);
 
+	        paramMap.put("depth", 0);
 	        List<QnaDto> myPostList = qnaMapper.getMyPostList(paramMap);
 
 	        Map<String, Object> resultMap = new HashMap<>();
@@ -176,6 +185,15 @@ import org.springframework.stereotype.Service;
 
 	    	return addReplyResult;
 	    }
+
+	    
+	    @Override
+	    public Map<String, Object> loadCommentList(HttpServletRequest request) {
+	    	
+	    	
+	    	return null;
+	    }
+	    
 
 
  

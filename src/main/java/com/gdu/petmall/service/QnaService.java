@@ -19,6 +19,7 @@ public interface QnaService {
   public int removeQna(int qnaNo);
   
   public int addReply(HttpServletRequest request, MultipartHttpServletRequest multipartRequest) ;
+  
+  public Map<String, Object> loadCommentList(HttpServletRequest request);
 }
-
 

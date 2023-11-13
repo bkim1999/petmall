@@ -19,3 +19,6 @@ public interface ProductMapper {
   public int getProductReviewCount(int productNo);
   public List<ReviewDto> getProductReviewList(int productNo);
 }
+  public List<ReviewDto> getProductReviewList(Map<String, Object> map);
+}
+>>>>>>> master
