@@ -2,7 +2,8 @@ package com.gdu.petmall.service;
 
 import org.springframework.stereotype.Service;
 
-import com.gdu.petmall.dao.AdminMapper;
+import com.gdu.petmall.dao.ProductMapper;
+import com.gdu.petmall.util.MyPageUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -10,6 +11,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AdminServiceImpl implements AdminService {
   
-  private final AdminMapper adminMapper;
-
+  private final ProductMapper productMapper;
+  private final MyPageUtils myPageUtils;
+  
+  
+    
+    
+  
 }

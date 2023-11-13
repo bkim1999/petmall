@@ -29,6 +29,11 @@
     WHERE A.RN BETWEEN #{begin} AND #{end}
   </select>
   
+  <select id="getTotalList">
+    SELECT *
+      FROM EVENT_T;
+  </select>
+  
    <select id="getEventCount" resultType="int">
      SELECT COUNT(*)
        FROM EVENT_T

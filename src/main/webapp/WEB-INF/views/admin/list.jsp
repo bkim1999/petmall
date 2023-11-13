@@ -12,9 +12,9 @@
 
   <div>관리자 페이지에 오신것을 환영합니다.</div>
   
-  <div><a>제품 재고 관리하로가기</a></div>
+  <div><a href=${contextPath}/admin/product_list.go>제품 재고 관리하로가기</a></div>
   
-  <div><a>모든 문의글 관리하로가기</a></div>
+  <div><a href=${contextPath}/admin/qna_list.go>모든 문의글 관리하로가기</a></div>
   
   <div><a>총 주문현황 관리하로가기</a></div>
   
