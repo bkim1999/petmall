@@ -13,6 +13,6 @@ public interface ProductService {
   public Map<String, Object> loadProductList(HttpServletRequest request);
   public void loadProductInfo(HttpServletRequest request, Model model);
   public void addProduct(ProductDto product, Model model);
-//  public Map<String, Object> loadReviewList(HttpServletRequest request);
+  public Map<String, Object> loadReviewList(HttpServletRequest request);
   
 }

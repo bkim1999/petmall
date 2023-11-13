@@ -76,16 +76,27 @@ public class ProductServiceImpl implements ProductService {
     model.addAttribute("addProductResult", addProductResult);
   }
   
-//  public Map<String, Object> loadReviewList(HttpServletRequest request) {
-//    Optional opt = Optional.ofNullable(request.getParameter("page"));
-//    int page = Integer.parseInt(opt.orElse("1"));
-//    //int reviewCount = productMapper.getProductReviewCount(productNo);
-//    int display = 10;
-//    myPageUtils.setPaging(page, reviewCount, display);
-//    
-//    
-//    //List<ReviewDto> reviewList = productMapper.getProductReviewList(productNo, page);
-//    return null;
-//  }
+  public Map<String, Object> loadReviewList(HttpServletRequest request) {
+    int productNo = Integer.parseInt(request.getParameter("productNo"));
+    Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
+    int page = Integer.parseInt(opt.orElse("1"));
+    int reviewCount = productMapper.getProductReviewCount(productNo);
+    int display = 10;
+    myPageUtils.setPaging(page, reviewCount, display);
+    
+    opt = Optional.ofNullable(request.getParameter("order"));
+    String order = opt.orElse("");
+    
+    
+    Map<String, Object> map = Map.of("productNo", productNo
+                                   , "order", order
+                                   , "begin", myPageUtils.getBegin()
+                                   , "end", myPageUtils.getEnd());
+    
+    List<ReviewDto> reviewList = productMapper.getProductReviewList(map);
+    
+    return Map.of("reviewList", reviewList
+                , "paging", myPageUtils.getAjaxPaging());
+  }
   
 }

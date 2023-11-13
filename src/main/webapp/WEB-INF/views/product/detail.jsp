@@ -37,6 +37,8 @@
   <form method="post" action="${contextPath}/order/cart.go">
     <div id="selected_option_list"></div>
   </form>
+  
+  <div id="review_list"></div>
 
 </div>
 
@@ -94,9 +96,46 @@
   }
   
   
+  
+  
+  var page = 1;
+  var order = 'PRODUCT_NAME';
+
+  const fnGetReviewList = () => {
+    $.ajax({
+      // 요청
+      type: 'get',
+      url: '${contextPath}/product/getReviewList.do',
+      data: {'productNo' : '${product.productNo}'
+    	     , 'page' : page
+           , 'order' : order
+            },
+      // 응답
+      dataType: 'json',
+      success: (resData) => {  // resData = {"reviewList": [], paging: ""}
+        if(resData.reviewList === null){
+          alert('리뷰 목록 불러오기 실패');
+          return;
+        }
+        $.each(resData.reviewList, (i, review) => {
+          let str = '<div class="review" data-review-no="' + review.reviewNo + '">';
+          str += '<div>' + review.reviewRating + '</div>';
+          str += '<div class="review_thumbnail">사진';
+          str += '</div>';
+          str += '<div>' + review.reviewTitle+ '</div>'
+          str += '<div>' + review.reviewContents + '</div>';
+          str += '</div>';
+          $('#review_list').append(str);
+        });
+      }
+    })
+  }
+  
+  
   fnAddOption();
   fnDecreaseCount();
   fnIncreaseCount();
+  fnGetReviewList();
 </script>
 
 <%@ include file="../layout/footer.jsp" %>
