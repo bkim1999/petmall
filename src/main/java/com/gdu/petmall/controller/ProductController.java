@@ -31,7 +31,7 @@ public class ProductController {
   
   @ResponseBody
   @GetMapping(value="/getList.do", produces="application/json")
-  public Map<String, Object> getList(HttpServletRequest request) {
+  public Map<String, Object> loadList(HttpServletRequest request) {
     return productService.loadProductList(request);
   }
   
@@ -50,6 +50,12 @@ public class ProductController {
   public String addProduct(@ModelAttribute ProductDto product, Model model) {
     productService.addProduct(product, model);
     return "redirect:product/list.do";
+  }
+  
+  @ResponseBody
+  @GetMapping(value="/getReviewList.do", produces="application/json")
+  public Map<String, Object> loadReviewList(HttpServletRequest request){
+    return productService.loadReviewList(request);
   }
   
 }

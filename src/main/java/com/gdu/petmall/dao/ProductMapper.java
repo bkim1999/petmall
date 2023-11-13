@@ -17,5 +17,5 @@ public interface ProductMapper {
   public List<ProductOptionDto> getOptionList(int productNo);
   public int insertProduct (ProductDto product);
   public int getProductReviewCount(int productNo);
-  public List<ReviewDto> getProductReviewList(int productNo);
+  public List<ReviewDto> getProductReviewList(Map<String, Object> map);
 }
