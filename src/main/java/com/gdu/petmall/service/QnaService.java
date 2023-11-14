@@ -5,6 +5,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gdu.petmall.dto.QnaDto;
 
@@ -16,9 +17,8 @@ public interface QnaService {
   public Map<String, Object> myPostList(HttpServletRequest request);
   
   public QnaDto getQna(int QnaNo);
+  
   public int removeQna(int qnaNo);
   
-  public int addReply(HttpServletRequest request, MultipartHttpServletRequest multipartRequest) ;
+  public int addReply(HttpServletRequest request,  RedirectAttributes redirectAttributes) ;
 }
-
-
