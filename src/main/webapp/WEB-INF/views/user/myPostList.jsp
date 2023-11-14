@@ -23,7 +23,7 @@
         </thead>
         <tbody>
 			<c:forEach items="${myPostList}" var="post" varStatus="vs">
-			    <c:if test="${post.depth eq 0}">
+               <c:if test="${post.depth eq 0}">				
 			    <tr class="align-bottom">
 			        <td>${vs.index + 1}</td>
 			        <td><a href="${contextPath}/user/qnadetail.do?qnaNo=${post.qnaNo}">${post.qnaNo}</a></td>
