@@ -18,20 +18,22 @@
   <div>${product.productSize}</div>
   <div>${product.productWarning}</div>
   
-  <div>
-    <select id="option_list">
-      <option value="0">(필수)옵션을 선택해주세요</option>
-      <c:forEach var="option" items="${optionList}">
-        <option value="${option.optionNo}" data-add-price="${option.addPrice}">
-          ${product.productName} ${option.optionName}
-          <c:if test="${option.addPrice > 0}">
-            (+${option.addPrice})
-          </c:if>
-        </option>
-      </c:forEach>
-    </select>
-  </div>
-  <div></div>
+  <c:if test="${not empty optionList}">
+    <div>
+      <select id="option_list">
+        <option value="0">(필수)옵션을 선택해주세요</option>
+        <c:forEach var="option" items="${optionList}">
+          <option value="${option.optionNo}" data-add-price="${option.addPrice}">
+            ${product.productName} ${option.optionName}
+            <c:if test="${option.addPrice > 0}">
+              (+${option.addPrice})
+            </c:if>
+          </option>
+        </c:forEach>
+      </select>
+    </div>
+  </c:if>
+  <div>${product.productContents}</div>
   <div></div>
   
   <form method="post" action="${contextPath}/order/cart.go">

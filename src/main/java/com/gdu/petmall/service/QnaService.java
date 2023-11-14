@@ -17,6 +17,7 @@ public interface QnaService {
   public Map<String, Object> myPostList(HttpServletRequest request);
   
   public QnaDto getQna(int QnaNo);
+  
   public int removeQna(int qnaNo);
   
   public int addReply(HttpServletRequest request,  RedirectAttributes redirectAttributes) ;

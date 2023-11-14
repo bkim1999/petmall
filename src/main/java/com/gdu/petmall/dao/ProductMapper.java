@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.gdu.petmall.dto.ProductDto;
+import com.gdu.petmall.dto.ProductImageDto;
 import com.gdu.petmall.dto.ProductOptionDto;
 import com.gdu.petmall.dto.ReviewDto;
 
@@ -18,4 +19,6 @@ public interface ProductMapper {
   public int insertProduct (ProductDto product);
   public int getProductReviewCount(int productNo);
   public List<ReviewDto> getProductReviewList(Map<String, Object> map);
+  public List<ProductImageDto> getProductImageList(String imageCode);
+  public int insertProductImage(ProductImageDto productImage);
 }

@@ -146,18 +146,22 @@ import com.gdu.petmall.dao.QnaMapper;
        @Override
        public int addReply(HttpServletRequest request, RedirectAttributes redirectAttributes) {
            int userNo = getLoggedInUserNo(request);
-
            int depth = Integer.parseInt(request.getParameter("depth"));
            int groupNo = Integer.parseInt(request.getParameter("groupNo"));
+
            String contents = request.getParameter("contents");
+
+           qnaMapper.getQna(groupNo);
+
+           int replyDepth = depth + 1;
 
            QnaDto reply = QnaDto.builder()
                    .contents(contents)
-                   .depth(depth + 1)
+                   .depth(replyDepth)
                    .userDto(UserDto.builder()
                            .userNo(userNo)
                            .build())
-                   .groupNo(groupNo)
+                   .groupNo(groupNo)  
                    .build();
 
            int addReplyResult = qnaMapper.insertReply(reply);
@@ -166,4 +170,4 @@ import com.gdu.petmall.dao.QnaMapper;
        }
 
  
-}
+}	
