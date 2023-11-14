@@ -12,11 +12,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 
 import com.gdu.petmall.dao.UserMapper;
 import com.gdu.petmall.dto.InactiveUserDto;
 import com.gdu.petmall.dto.UserDto;
 import com.gdu.petmall.util.MyJavaMailUtils;
+import com.gdu.petmall.util.MyPointUtils;
 import com.gdu.petmall.util.MySecurityUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,7 @@ public class UserServiceImpl implements UserService {
 	private final UserMapper userMapper;
 	private final MySecurityUtils mySecurityUtils;
 	 private final MyJavaMailUtils myJavaMailUtils;
+	 private final MyPointUtils myPointUtils;
 	
 	/*로그인*/
 @Override
@@ -76,7 +79,7 @@ public void login(HttpServletRequest request, HttpServletResponse response) thro
 }
 	
 	
-	// 회원정보 가져와
+// 회원정보 가져와
 @Override
 public UserDto getUser(String email) {
   return userMapper.getUser(Map.of("email", email));
@@ -212,9 +215,171 @@ public void join(HttpServletRequest request, HttpServletResponse response) {
 
 
 
+/*회원탈퇴*/
+@Override
+public void leave(HttpServletRequest request, HttpServletResponse response) {
+
+  Optional<String> opt = Optional.ofNullable(request.getParameter("userNo"));
+  int userNo = Integer.parseInt(opt.orElse("0"));
+  
+  UserDto user = userMapper.getUser(Map.of("userNo", userNo));
+  
+  if(user == null) {
+    try {
+      response.setContentType("text/html; charset=UTF-8");
+      PrintWriter out = response.getWriter();
+      out.println("<script>");
+      out.println("alert('회원 탈퇴를 수행할 수 없습니다.')");
+      out.println("location.href='" + request.getContextPath() + "/main.do'");
+      out.println("</script>");
+      out.flush();
+      out.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  
+  int insertLeaveUserResult = userMapper.insertLeaveUser(user);
+  int deleteUserResult = userMapper.deleteUser(user);
+  
+ try {
+    
+    response.setContentType("text/html; charset=UTF-8");
+    PrintWriter out = response.getWriter();
+    out.println("<script>");
+    if(insertLeaveUserResult == 1 && deleteUserResult == 1) {
+      HttpSession session = request.getSession();
+      session.invalidate();
+      out.println("alert('회원 탈퇴되었습니다. 그 동안 이용해 주셔서 감사합니다.')");
+      out.println("location.href='" + request.getContextPath() + "/main.do'");
+    } else {
+      out.println("alert('회원 탈퇴되지 않았습니다.')");
+      out.println("history.back()");
+    }
+    out.println("</script>");
+    out.flush();
+    out.close();
+    
+  } catch (Exception e) {
+    e.printStackTrace();
+  }
+  
+}
+	
+
+/*회원정보수정*/
+@Override
+public ResponseEntity<Map<String, Object>> modify(HttpServletRequest request) {
+	  String email = mySecurityUtils.preventXSS(request.getParameter("email"));
+	  String pw = mySecurityUtils.getSHA256(request.getParameter("pw"));
+	  String name = mySecurityUtils.preventXSS(request.getParameter("name"));
+	  String gender = request.getParameter("gender");
+	  
+	  String[] arrMobile = request.getParameterValues("mobile");
+	  StringBuilder mobile =new StringBuilder();
+	  for(int i=0;i<arrMobile.length;i++){mobile.append(arrMobile[i]);}
+	  
+	  String postcode = request.getParameter("postcode");
+	  String roadAddress = request.getParameter("roadAddress");
+	  String jibunAddress = request.getParameter("jibunAddress");
+	  String detailAddress = mySecurityUtils.preventXSS(request.getParameter("detailAddress"));
+	  
+	  int userNo = Integer.parseInt(request.getParameter("userNo"));
+	  
+	  
+	  
+	 // 이벤트 수신 동의 체크 안돼있으면 null 전달됨. null 처리 해야함
+	  String event = request.getParameter("event");
+	  Optional<String> opt = Optional.ofNullable(event);
+	   event = opt.orElse("off"); 
+	   
+	  int agree = event.equals("on") ? 1 : 0;
+	  
+	  
+	  
+	  
+	  UserDto user = UserDto.builder()
+	      .email(email)
+	      .pw(pw)
+	      .name(name)
+	      .gender(gender)
+	      .mobile(mobile.toString())
+	      .postcode(postcode)
+	      .roadAddress(roadAddress)
+	      .jibunAddress(jibunAddress)
+	      .detailAddress(detailAddress)
+	      .agree(agree)
+	      .userNo(userNo)
+	      .build();
+	  
+   int modifyResult = userMapper.updateUser(user);
+   
+   if(modifyResult == 1) {
+     HttpSession session = request.getSession();
+     UserDto sessionUser = (UserDto)session.getAttribute("user");
+     sessionUser.setEmail(email);
+     sessionUser.setPw(pw);
+     sessionUser.setName(name);
+     sessionUser.setGender(gender);
+     sessionUser.setMobile(mobile.toString());
+     sessionUser.setPostcode(postcode);
+     sessionUser.setRoadAddress(roadAddress);
+     sessionUser.setJibunAddress(jibunAddress);
+     sessionUser.setDetailAddress(detailAddress);
+     sessionUser.setAgree(agree);
+   }
+   
+   return new ResponseEntity<>(Map.of("modifyResult", modifyResult), HttpStatus.OK);
+}
 
 
 
+/*포인트*/
+@Override
+public void getPoint(HttpServletRequest request, Model model) {
+
+	int userNo=Integer.parseInt(request.getParameter("userNo"));
+	Map<String,Object> map=Map.of("userNo",userNo);
+	
+	int  point=userMapper.getPoint(map);
+	
+	model.addAttribute("point",point);
+	model.addAttribute("userNo",userNo);
+	
+}
+
+
+/*포인트 테스트 (추후에 삭제해야함)
+@Override
+public void pointTest(HttpServletRequest request){
+	int userNo=Integer.parseInt(request.getParameter("userNo"));
+	int addPoint=Integer.parseInt(request.getParameter("addPoint"));
+	int subPoint=Integer.parseInt(request.getParameter("subPoint"));
+
+	myPointUtils.setPoint(addPoint, subPoint);
+	
+	
+	UserDto user=UserDto.builder()
+											.userNo(userNo)
+											.point(myPointUtils.getPoint())
+											.build();
+	
+	 userMapper.updatePoint(user);
+
+
+	
+}
+*/	
+
+	
+	
+	
 
 
 }
+
+
+
+
+
+

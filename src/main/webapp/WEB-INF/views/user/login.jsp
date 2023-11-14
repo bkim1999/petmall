@@ -35,7 +35,7 @@
 
 
 <div><input type="text"   id="email"  name="email"  placeholder="ID(Email)"></div>
-<div><input type="pw"  id="pw" name="pw"  placeholder="PASSWORD"></div>
+<div><input type="password"  id="pw" name="pw"  placeholder="PASSWORD"></div>
 
 
 <div>

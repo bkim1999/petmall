@@ -18,20 +18,22 @@
   <div>${product.productSize}</div>
   <div>${product.productWarning}</div>
   
-  <div>
-    <select id="option_list">
-      <option value="0">(필수)옵션을 선택해주세요</option>
-      <c:forEach var="option" items="${optionList}">
-        <option value="${option.optionNo}" data-add-price="${option.addPrice}">
-          ${product.productName} ${option.optionName}
-          <c:if test="${option.addPrice > 0}">
-            (+${option.addPrice})
-          </c:if>
-        </option>
-      </c:forEach>
-    </select>
-  </div>
-  <div></div>
+  <c:if test="${not empty optionList}">
+    <div>
+      <select id="option_list">
+        <option value="0">(필수)옵션을 선택해주세요</option>
+        <c:forEach var="option" items="${optionList}">
+          <option value="${option.optionNo}" data-add-price="${option.addPrice}">
+            ${product.productName} ${option.optionName}
+            <c:if test="${option.addPrice > 0}">
+              (+${option.addPrice})
+            </c:if>
+          </option>
+        </c:forEach>
+      </select>
+    </div>
+  </c:if>
+  <div>${product.productContents}</div>
   <div></div>
   
   <form method="post" action="${contextPath}/order/cart.go">
@@ -105,7 +107,7 @@
     $.ajax({
       // 요청
       type: 'get',
-      url: '${contextPath}/product/getReviewList.do',
+      url: '${contextPath}/review/getReviewList.do',
       data: {'productNo' : '${product.productNo}'
     	     , 'page' : page
            , 'order' : order
@@ -116,6 +118,9 @@
         if(resData.reviewList === null){
           alert('리뷰 목록 불러오기 실패');
           return;
+        }
+        if(resData.reviewList.length === 0){
+        	$('#review_list').text('아직 리뷰가 없습니다.');
         }
         $.each(resData.reviewList, (i, review) => {
           let str = '<div class="review" data-review-no="' + review.reviewNo + '">';
