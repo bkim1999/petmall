@@ -67,11 +67,6 @@
            , #{filesystemName}
        )
    </insert>
-
-   <select id="getQnaList" resultType="int">
-    SELECT COUNT (*)
-     FROM QNA_T
-   </select>
    
    <select id="getMyPostList" parameterType="java.util.Map" resultType="com.gdu.petmall.dto.QnaDto">
        SELECT *
@@ -112,6 +107,11 @@
            #{groupNo}
        )  
     </insert>
+    
+	   <select id="qnaTotalCount" resultType="int">
+	    SELECT COUNT (*)
+	     FROM QNA_T
+	   </select>    
   
 	  <select id="getAllQnalist" resultMap="QnaMap">
 	    SELECT QN.QNA_NO, QN.TITLE, QN.CONTENTS, QN.CREATED_AT, USR.USER_NO, USR.EMAIL, USR.NAME, QN.CHECK_FLAG
@@ -123,7 +123,7 @@
 	    SELECT COUNT(CHECK_FLAG)
 	     FROM QNA_T
 	    <if test="checkFlag != 0">
-	      WHERE CHECK_FLAG= #{CHECK_FLAG}
+	      WHERE CHECK_FLAG= #{checkFlag}
 	    </if>
 	  </select>
 
