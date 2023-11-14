@@ -19,6 +19,8 @@
   <div><a>총 주문현황 관리하로가기</a></div>
   
   <div><a>파트너십 제안 관리하로가기</a></div>
+  
+  <div><a>이벤트 작성하로가기</a></div>
 
 
 <%@ include file="../layout/footer.jsp" %>

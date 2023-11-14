@@ -12,8 +12,46 @@
 
   <div>Q&A 페이지에 오신것을 환영합니다.</div>
   
-  <div>${qnaList.qnaNo}</div>
+  <div>전체 문의글수 : ${qnaTotalCount}</div>
+  <div>답변 완료된 문의글 수 : ${qnaAnswerCount}</div>
+  <div>미답변된 문의글 수 : ${qnaNonAnswerCount}</div>
   
+  <table border=1>
+    <thead>
+      <tr>
+       <td>문의글 번호</td>
+       <td>제목</td>
+       <td>내용</td>
+       <td>문의일</td>
+       <td>문의자</td>
+       <td>답변여부</td>
+       <td>답변하로가기</td>
+      </tr>
+    </thead>
+    <tbody>
+     <c:forEach items="${qnaList}" var ="qna" varStatus="vs">
+      <tr>
+       <td>${qna.qnaNo}</td>
+       <td>${qna.title}</td>
+       <td>${qna.contents}</td>
+       <td>${qna.createdAt}</td>
+       <td>${qna.userDto.name}</td>
+       <c:if test="${qna.checkFlag == 1}">
+       <td>답변완료</td>
+       </c:if>
+       <c:if test="${qna.checkFlag == 0}">
+       <td>미답변</td>
+       </c:if>
+       <td><input type="button" name="" value=""></td>
+      </tr>
+     </c:forEach>
+    </tbody>
+  </table>
+  
+
+  
+  
+    
 
 
 <%@ include file="../layout/footer.jsp" %>

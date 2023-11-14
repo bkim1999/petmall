@@ -1,6 +1,7 @@
 package com.gdu.petmall.service;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -27,8 +28,16 @@ public class AdminServiceImpl implements AdminService {
     
     List<QnaDto> qnaList = qnaMapper.getAllQnalist();
     
+    int checkFlag = 1;
+    int qnaTotalCount = qnaMapper.getQnaCount();
+    int qnaAnswerCount = qnaMapper.getQnaCount(checkFlag);
+    int qnaNonAnswerCount = qnaTotalCount -qnaAnswerCount;
+    
     model.addAttribute("qnaList", qnaList);
+    model.addAttribute("qnaTotalCount", qnaTotalCount);
+    model.addAttribute("qnaNonAnswerCount", qnaNonAnswerCount);
   }
+  
     
     
   
