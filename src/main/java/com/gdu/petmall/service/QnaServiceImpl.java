@@ -74,7 +74,9 @@ import com.gdu.petmall.dao.QnaMapper;
                   .build();
 
            qnaMapper.insertQna(qna);
-
+           
+           int generatedQnaNo = qna.getQnaNo();
+           
            List<MultipartFile> files = multipartRequest.getFiles("files");
 
            for (MultipartFile multipartFile : files) {
@@ -95,7 +97,7 @@ import com.gdu.petmall.dao.QnaMapper;
                            .path(path)
                            .originalFilename(originalFilename)
                            .filesystemName(filesystemName)
-                           .qnaNo(qna.getQnaNo())
+                           .qnaNo(generatedQnaNo)
                            .build();
 
                    qnaMapper.insertQattach(attach);
@@ -170,4 +172,4 @@ import com.gdu.petmall.dao.QnaMapper;
        }
 
  
-}	
+}

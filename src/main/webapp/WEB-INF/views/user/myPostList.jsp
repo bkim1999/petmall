@@ -8,8 +8,7 @@
      <jsp:param value="Q&A 글작성" name="title"/>
    </jsp:include>
    
-	<h1>MY POSTS</h1>
-	<jsp:include page="mypage_nav.jsp"></jsp:include>
+
         
 	<div class="table-responsive">
 	    <table class="table align-middle">
