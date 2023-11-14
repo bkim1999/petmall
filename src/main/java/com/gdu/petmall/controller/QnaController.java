@@ -53,8 +53,10 @@ public class QnaController {
   
   @GetMapping("/user/qnadetail.do")
   public String detail(@RequestParam(value = "qnaNo", defaultValue = "0") int qnaNo, Model model) {
-      QnaDto qna = qnaService.getQna(qnaNo); 
+      QnaDto qna = qnaService.getQna(qnaNo);
       model.addAttribute("qna", qna);
+      model.addAttribute("groupNo", qna.getGroupNo()); 
+      
       return "user/qnadetail";
   }
 
@@ -68,9 +70,9 @@ public class QnaController {
   
   @PostMapping("/user/qnadetail/addReply.do")
   public String addReply(HttpServletRequest request, RedirectAttributes redirectAttributes) throws Exception {
-     int addReplyResult = qnaService.addReply(request, redirectAttributes);
-     redirectAttributes.addFlashAttribute("addReplyResult", addReplyResult);
-     return "redirect:/user/myPostList";
+      int addReplyResult = qnaService.addReply(request, redirectAttributes);
+      redirectAttributes.addFlashAttribute("addReplyResult", addReplyResult);
+      return "redirect:/user/myPostList";
   }
   
 
