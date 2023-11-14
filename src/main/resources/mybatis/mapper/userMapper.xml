@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.gdu.petmall.dao.UserMapper">
+	
+  
+<!-- 회원 조회  -->
+  
+  <select id="getUser"  parameterType="Map" resultType="UserDto">
+ SELECT USER_NO USER_NO,EMAIL,PW,NAME,GENDER,MOBILE,POSTCODE,ROAD_ADDRESS,JIBUN_ADDRESS,DETAIL_ADDRESS,AGREE,JOIN_STATE,PW_MODIFIED_AT,JOINED_AT,ADMIN_AUTHOR_STATE,POINT
+ FROM USER_T 
+ <where>
+      <if test="email != null">EMAIL = #{email}</if>
+      <if test="pw != null">AND PW = #{pw}</if>
+      <if test="userNo != null">AND USER_NO = #{userNo}</if>
+    </where>
+  </select>
+  
+  <!-- 접속 기록  -->
+   <insert id="insertAccess" parameterType="String">
+    INSERT INTO ACCESS_USER_T (
+        EMAIL
+      , LOGIN_AT
+    ) VALUES (
+        #{email}
+      , TO_CHAR(SYSDATE,'YYYY-MM-DD_HH24:MI:SS')
+    )
+    </insert>
+  
+  
+  
+  <!-- 휴면회원조회 -->  
+  <select id="getInactiveUser" parameterType="Map" resultType="InactiveUserDto">
+      SELECT USER_NO USER_NO,EMAIL,PW,NAME,GENDER,MOBILE,POSTCODE,ROAD_ADDRESS,JIBUN_ADDRESS,DETAIL_ADDRESS,AGREE,JOIN_STATE,PW_MODIFIED_AT,JOINED_AT,INACTIVED_AT,ADMIN_AUTHOR_STATE,POINT
+      FROM INACTIVE_USER_T
+    <where>
+      <if test="email != null">EMAIL = #{email}</if>
+      <if test="pw != null">AND PW = #{pw}</if>
+    </where>
+  </select>
+  
+  <!-- 탈퇴회원 조회  -->
+   <select id="getLeaveUser" parameterType="Map" resultType="LeaveUserDto">
+    SELECT EMAIL, JOINED_AT, LEAVED_AT
+      FROM LEAVE_USER_T
+     WHERE EMAIL = #{email}
+  </select>
+    
+    
+ <!-- 회원 정보 등록 (회원가입) -->   
+      <insert id="insertUser" parameterType="UserDto">
+    INSERT INTO USER_T (
+        USER_NO
+      , EMAIL
+      , PW
+      , NAME
+      , GENDER
+      , MOBILE
+      , POSTCODE
+      , ROAD_ADDRESS
+      , JIBUN_ADDRESS
+      , DETAIL_ADDRESS
+      , AGREE
+      , JOIN_STATE
+      , PW_MODIFIED_AT
+      , JOINED_AT
+      ,ADMIN_AUTHOR_STATE
+      ,POINT
+    ) VALUES (
+        USER_SEQ.NEXTVAL
+      , #{email}
+      , #{pw}
+      , #{name}
+      , #{gender}
+      , #{mobile}
+      , #{postcode}
+      , #{roadAddress}
+      , #{jibunAddress}
+      , #{detailAddress}
+      , #{agree}
+      , 0
+      , TO_CHAR(SYSDATE,'YYYY-MM-DD_HH24:MI:SS')
+      , TO_CHAR(SYSDATE,'YYYY-MM-DD_HH24:MI:SS')
+      ,#{adminAuthorState}
+      ,0
+    )
+  </insert>
+    
+    
+</mapper>
+
+ 

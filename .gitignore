@@ -3,6 +3,8 @@
 
 # CUSTOM
 email.properties
+pom.properties
+MANIFEST.MF
 
 ### Eclipse ###
 .metadata
