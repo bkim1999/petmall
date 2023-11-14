@@ -68,7 +68,7 @@
        )
    </insert>
 
-   <select id="getQnaList" resultType="int">
+   <select id="qnaTotalCount" resultType="int">
     SELECT COUNT (*)
      FROM QNA_T
    </select>
