@@ -24,11 +24,22 @@
     <li><a href="${contextPath}/user/mypage">MyPage</a></li>
     <li><a href="${contextPath}/user/">Order</a></li>
     <li><a href="${contextPath}/user/mypage/profile.form"">Profile</a></li>
-    <li><a href="${contextPath}/user/">Point</a></li>
+    <li>
+      <form action="${contextPath}/user/mypage/point" method="post">
+        <input type="hidden" name="userNo" value="${sessionScope.user.userNo}">
+        <button>Point</button>
+      </form>
+     </li>
     <li><a href="${contextPath}/user/myPostList">MyPosts</a></li>
     <li><a href="${contextPath}/user/">Address</a></li>
 
   </ul>
+</div>
+
+
+<div>
+   <div> 반가워요, <span> ${sessionScope.user.name} </span> 님</div>
+   <div> 적립금    <span>${user.point}</span>원</div>
 </div>
 
 </div>

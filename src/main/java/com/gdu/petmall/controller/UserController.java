@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.gdu.petmall.dto.UserDto;
 import com.gdu.petmall.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -65,7 +67,15 @@ public class UserController {
   public String mypageForm() {
     return "user/profile";
   }
-	
+  
+  
+  //포인트 확인 페이지로 이동
+  @PostMapping(value ={"/point","/mypage/point"})
+	public String myPoint(HttpServletRequest request,Model model ) { 
+  	userService.getPoint(request,model); 
+  	int userNo=Integer.parseInt(request.getParameter("userNo"));
+  	return "user/point";
+  }
 	
 	
 	
@@ -113,5 +123,14 @@ public class UserController {
   public ResponseEntity<Map<String, Object>> modify(HttpServletRequest request) {
     return userService.modify(request);
   }
+  
+  
+  //포인트 증감차감 테스트(추후에 삭제해야함) 
+  @PostMapping(value = "/point.do")
+  public void pointTest(HttpServletRequest request) {
+ 
+  }
+  
+  
 	
 }

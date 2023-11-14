@@ -30,7 +30,6 @@
     </insert>
   
   
-  
   <!-- 휴면회원조회 -->  
   <select id="getInactiveUser" parameterType="Map" resultType="InactiveUserDto">
       SELECT USER_NO USER_NO,EMAIL,PW,NAME,GENDER,MOBILE,POSTCODE,ROAD_ADDRESS,JIBUN_ADDRESS,DETAIL_ADDRESS,AGREE,JOIN_STATE,PW_MODIFIED_AT,JOINED_AT,INACTIVED_AT,ADMIN_AUTHOR_STATE,POINT
@@ -48,6 +47,13 @@
      WHERE EMAIL = #{email}
   </select>
     
+ 
+   <!--회원 포인트 조회 -->
+ <select id="getPoint" parameterType="Map" resultType="int">
+ SELECT POINT 
+ FROM USER_T
+ WHERE USER_NO = #{userNo}
+ </select>
     
  <!-- 회원 정보 등록 (회원가입) -->   
       <insert id="insertUser" parameterType="UserDto">
@@ -102,8 +108,18 @@
          , AGREE = #{agree}
      WHERE USER_NO = #{userNo}
   </update>   
+  
+  
+  
+   <!-- 포인트 증감 
+   <update id="updatePoint" parameterType="UserDto" >
+    UPDATE USER_T
+       SET POINT = #{point}
+     WHERE USER_NO = #{userNo}
+  </update>   
     
-    
+ -->   
+ 
   <!--회원탈퇴 기록 -->
     <insert id="insertLeaveUser" parameterType="UserDto">
     INSERT INTO LEAVE_USER_T (

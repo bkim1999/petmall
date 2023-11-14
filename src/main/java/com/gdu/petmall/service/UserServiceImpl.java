@@ -12,11 +12,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 
 import com.gdu.petmall.dao.UserMapper;
 import com.gdu.petmall.dto.InactiveUserDto;
 import com.gdu.petmall.dto.UserDto;
 import com.gdu.petmall.util.MyJavaMailUtils;
+import com.gdu.petmall.util.MyPointUtils;
 import com.gdu.petmall.util.MySecurityUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,7 @@ public class UserServiceImpl implements UserService {
 	private final UserMapper userMapper;
 	private final MySecurityUtils mySecurityUtils;
 	 private final MyJavaMailUtils myJavaMailUtils;
+	 private final MyPointUtils myPointUtils;
 	
 	/*로그인*/
 @Override
@@ -328,6 +331,49 @@ public ResponseEntity<Map<String, Object>> modify(HttpServletRequest request) {
    
    return new ResponseEntity<>(Map.of("modifyResult", modifyResult), HttpStatus.OK);
 }
+
+
+
+/*포인트*/
+@Override
+public void getPoint(HttpServletRequest request, Model model) {
+
+	int userNo=Integer.parseInt(request.getParameter("userNo"));
+	Map<String,Object> map=Map.of("userNo",userNo);
+	
+	int  point=userMapper.getPoint(map);
+	
+	model.addAttribute("point",point);
+	model.addAttribute("userNo",userNo);
+	
+}
+
+
+/*포인트 테스트 (추후에 삭제해야함)
+@Override
+public void pointTest(HttpServletRequest request){
+	int userNo=Integer.parseInt(request.getParameter("userNo"));
+	int addPoint=Integer.parseInt(request.getParameter("addPoint"));
+	int subPoint=Integer.parseInt(request.getParameter("subPoint"));
+
+	myPointUtils.setPoint(addPoint, subPoint);
+	
+	
+	UserDto user=UserDto.builder()
+											.userNo(userNo)
+											.point(myPointUtils.getPoint())
+											.build();
+	
+	 userMapper.updatePoint(user);
+
+
+	
+}
+*/	
+
+	
+	
+	
 
 
 }
