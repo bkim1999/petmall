@@ -18,6 +18,7 @@
 	                <input type="hidden" name="qnaNo" value="${qna.qnaNo}">
 	                <input type="hidden" name="title" value="${qna.title}">
 	                <input type="hidden" name="contents" value="${qna.contents}">
+	                <input type="hidden" name="groupNo" value="${qna.groupNo}">
 	            </form>
 	        </c:if>
 	    </div>
@@ -87,7 +88,7 @@
 	            </div>
 	            <div>
 	                <input type="hidden" name="depth" value="${qna.depth}">
-	                <input type="hidden" name="groupNo" value="${qna.groupNo}">
+	                <input type="hiddlen" name="groupNo" value="${qna.groupNo}">
 	                <input type="hidden" name="parentNo" value="${qna.qnaNo}">
 	            </div>
 	        </form>
@@ -96,6 +97,7 @@
 	
 	<hr>
 	
+
 
 	
 	<%@ include file="../layout/footer.jsp" %>

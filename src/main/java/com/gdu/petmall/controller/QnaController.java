@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class QnaController {
 
   private final QnaService qnaService;
-	
+   
   @GetMapping("/qna/list.do")
   public String list() {
     return "qna/list";
@@ -32,15 +32,15 @@ public class QnaController {
   
   @GetMapping("/qna/write.form")
   public String write() {
-	 return "qna/write";
+    return "qna/write";
   }
-	  
+     
   @PostMapping("/qna/add.do")
   public String add(MultipartHttpServletRequest multipartRequest
-		  		  , RedirectAttributes redirectAttributes) throws Exception{
-	 boolean addResult = qnaService.addQna(multipartRequest);
-	 redirectAttributes.addFlashAttribute("addResult", addResult);
-	 return "redirect:/qna/list.do";
+                , RedirectAttributes redirectAttributes) throws Exception{
+    boolean addResult = qnaService.addQna(multipartRequest);
+    redirectAttributes.addFlashAttribute("addResult", addResult);
+    return "redirect:/qna/list.do";
   }
   
   
@@ -60,17 +60,17 @@ public class QnaController {
 
   @PostMapping("/user/remove.do")
   public String remove(@RequestParam(value="qnaNo", required=false, defaultValue="0") int QnaNo
-  					,   RedirectAttributes redirectAttributes) {
-  	 int removeResult = qnaService.removeQna(QnaNo);
-  	 redirectAttributes.addFlashAttribute("removeResult", removeResult);
-  	 return "redirect:/user/myPostList";
+                 ,   RedirectAttributes redirectAttributes) {
+      int removeResult = qnaService.removeQna(QnaNo);
+      redirectAttributes.addFlashAttribute("removeResult", removeResult);
+      return "redirect:/user/myPostList";
   }
   
   @PostMapping("/user/qnadetail/addReply.do")
   public String addReply(HttpServletRequest request, RedirectAttributes redirectAttributes) throws Exception {
-	  int addReplyResult = qnaService.addReply(request, redirectAttributes);
-	  redirectAttributes.addFlashAttribute("addReplyResult", addReplyResult);
-	  return "redirect:/user/myPostList";
+     int addReplyResult = qnaService.addReply(request, redirectAttributes);
+     redirectAttributes.addFlashAttribute("addReplyResult", addReplyResult);
+     return "redirect:/user/myPostList";
   }
   
 

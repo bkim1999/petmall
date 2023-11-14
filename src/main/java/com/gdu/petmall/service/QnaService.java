@@ -21,4 +21,3 @@ public interface QnaService {
   
   public int addReply(HttpServletRequest request,  RedirectAttributes redirectAttributes) ;
 }
-

@@ -12,111 +12,122 @@
     <result column="CREATED_AT" property="createdAt" />
     <result column="MODIFIED_AT" property="modifiedAt" />
     <result column="TEXT_PW" property="textPw" />
-	<association javaType="UserDto"      property="userDto">
+    <result column="CHECK_FLAG" property="checkFlag"/>
+   <association javaType="UserDto"      property="userDto">
       <id column="USER_NO" property="userNo" />
+      <result column="EMAIL" property="email"/>
+      <result column="NAME"  property="name"/>
     </association>
   </resultMap>
 
-<insert id="insertQna" parameterType="com.gdu.petmall.dto.QnaDto">
-    INSERT INTO QNA_T (
-        QNA_NO
-        , TITLE
-        , CONTENTS
-        , USER_NO
-        , CREATED_AT
-        , TEXT_PW
-        , PRODUCT_NO
-        , STATUS
-        , DEPTH
-        , GROUP_NO
-        , CHECK_FLAG
-    ) VALUES (
-          QNA_SEQ.NEXTVAL
-        , #{title}
-        , #{contents}
-        , #{userDto.userNo}
-        , TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS')
-        , #{textPw}
-        , #{productNo}
-        , 1
-        , 0
-        , QNA_SEQ.CURRVAL
-        , #{checkFlag}
-    )
-</insert>
-
-	<insert id="insertQattach" parameterType="com.gdu.petmall.dto.QattachDto">
-	    INSERT INTO QATTACH_T (
-	        QATTACH_NO
-	        , QNA_NO
-	        , PATH
-	        , ORIGINAL_FILENAME
-	        , FILESYSTEM_NAME
-	    ) VALUES (
-	         QATTACH_SEQ.NEXTVAL
-	        , #{qnaNo}
-	        , #{path}
-	        , #{originalFilename}
-	        , #{filesystemName}
-	    )
-	</insert>
-
-	<select id="getQnaList" resultType="int">
-	 SELECT COUNT (*)
-	  FROM QNA_T
-	</select>
-	
-	<select id="getMyPostList" parameterType="java.util.Map" resultType="com.gdu.petmall.dto.QnaDto">
-	    SELECT *
-	    FROM QNA_T
-	    WHERE USER_NO = #{userNo}
-	</select>
-	
-	<select id="getQna" parameterType="int" resultMap="QnaMap">
-	    SELECT Q.QNA_NO, Q.TITLE, Q.CONTENTS, Q.CREATED_AT, Q.PRODUCT_NO, Q.STATUS, Q.USER_NO
-	    FROM USER_T U, QNA_T Q
-	    WHERE U.USER_NO = Q.USER_NO
-	    AND Q.QNA_NO = #{qnaNo}
-	</select>
-	
-	<delete id="deleteQna" parameterType="int">
-	    <![CDATA[
-	    DELETE FROM QNA_T WHERE QNA_NO = #{qnaNo}
-	    ]]>
-	</delete>
+   <insert id="insertQna" parameterType="com.gdu.petmall.dto.QnaDto">
+       <selectKey keyProperty="qnaNo" order="BEFORE" resultType="int">
+           SELECT QNA_SEQ.NEXTVAL FROM DUAL
+       </selectKey>
+       INSERT INTO QNA_T (
+           QNA_NO,
+           TITLE,
+           CONTENTS,
+           USER_NO,
+           CREATED_AT,
+           TEXT_PW,
+           PRODUCT_NO,
+           STATUS,
+           DEPTH,
+           GROUP_NO,
+           CHECK_FLAG
+       ) VALUES (
+           #{qnaNo},
+           #{title},
+           #{contents},
+           #{userDto.userNo},
+           TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'),
+           #{textPw},
+           #{productNo},
+           1,
+           0,
+           QNA_SEQ.CURRVAL,
+           #{checkFlag}
+       )
+   </insert>
 
 
-	<insert id="insertReply" parameterType="QnaDto">
-	    INSERT INTO QNA_T(
-	        USER_NO,
-	        QNA_NO,
-	        CONTENTS,
-	        CREATED_AT,
-	        STATUS,
-	        DEPTH,
-	        GROUP_NO
-	    )VALUES(
-	    	#{userDto.userNo},
-	        QNA_SEQ.NEXTVAL,
-	        #{contents},
-	        TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'),
-	        1,
-	        #{depth},
-	        #{groupNo}
-	    )  
+   <insert id="insertQattach" parameterType="com.gdu.petmall.dto.QattachDto">
+       INSERT INTO QATTACH_T (
+           QATTACH_NO
+           , QNA_NO
+           , PATH
+           , ORIGINAL_FILENAME
+           , FILESYSTEM_NAME
+       ) VALUES (
+            QATTACH_SEQ.NEXTVAL
+           , #{qnaNo}
+           , #{path}
+           , #{originalFilename}
+           , #{filesystemName}
+       )
+   </insert>
+
+   <select id="getQnaList" resultType="int">
+    SELECT COUNT (*)
+     FROM QNA_T
+   </select>
+   
+   <select id="getMyPostList" parameterType="java.util.Map" resultType="com.gdu.petmall.dto.QnaDto">
+       SELECT *
+       FROM QNA_T
+       WHERE USER_NO = #{userNo}
+   </select>
+   
+   <select id="getQna" parameterType="int" resultMap="QnaMap">
+       SELECT Q.QNA_NO, Q.TITLE, Q.CONTENTS, Q.CREATED_AT, Q.PRODUCT_NO, Q.STATUS, Q.USER_NO
+       FROM USER_T U, QNA_T Q
+       WHERE U.USER_NO = Q.USER_NO
+       AND Q.QNA_NO = #{qnaNo}
+   </select>
+   
+   <delete id="deleteQna" parameterType="int">
+       <![CDATA[
+       DELETE FROM QNA_T WHERE QNA_NO = #{qnaNo}
+       ]]>
+   </delete>
+
+
+   <insert id="insertReply" parameterType="QnaDto">
+       INSERT INTO QNA_T(
+           USER_NO,
+           QNA_NO,
+           CONTENTS,
+           CREATED_AT,
+           STATUS,
+           DEPTH,
+           GROUP_NO
+       )VALUES(
+          #{userDto.userNo},
+           QNA_SEQ.NEXTVAL,
+           #{contents},
+           TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'),
+           1,
+           #{depth},
+           #{groupNo}
+       )  
     </insert>
   
-  	<select id="getAllQnalist" resultType="map">
-		 SELECT QN.QNA_NO, QN.TITLE, QN.CONTENTS, QN.CREATED_AT, USR.USER_NO, USR.EMAIL, USR.NAME, QN.CHECK_FLAG
-		 FROM QNA_T QN LEFT OUTER JOIN USER_T USR
-		 ON QN.USER_NO = USR.USER_NO
-    </select>
+	  <select id="getAllQnalist" resultMap="QnaMap">
+	    SELECT QN.QNA_NO, QN.TITLE, QN.CONTENTS, QN.CREATED_AT, USR.USER_NO, USR.EMAIL, USR.NAME, QN.CHECK_FLAG
+	      FROM QNA_T QN LEFT OUTER JOIN USER_T USR
+	        ON QN.USER_NO = USR.USER_NO;
+	  </select>
+	  
+	  <select id="getQnaCount" parameterType="int">
+	    SELECT COUNT(CHECK_FLAG)
+	     FROM QNA_T
+	    <if test="checkFlag != 0">
+	      WHERE CHECK_FLAG= #{CHECK_FLAG};
+	    </if>
+	  </select>
+
     
-    <select id="getQnaCount" parameterType="int" >
-		SELECT COUNT(CHECK_FLAG)
-		FROM QNA_T
-		WHERE CHECK_FLAG= #{CHECK_FLAG}
-    </select>
   
   
 </mapper>
