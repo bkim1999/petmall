@@ -52,6 +52,32 @@
      WHERE EVENT_NO = #{eventNo}
   </update>
   
+  <insert id="insertEventWrite" parameterMap="EventMap">
+    INSERT INTO EVENT_T (
+          EVENT_NO
+        , TITLE
+        , CONTENTS
+        , HIT
+        , STATE
+        , EVENT_THUMNAIL_URL
+        , DISCOUNT_PERCENT
+        , DISCOUNT_PRICE
+        , START_AT
+        , END_AT
+        ) VALUES (
+          EVENT_SEQ.NEXTVAL
+        , #{title}
+        , #{contents}
+        , 0
+        , 1
+        , #{eventThumnailUrl}
+        , #{discountPercent}
+        , #{discountPrice}
+        , #{startAt}
+        , #{endAt}
+        )
+  </insert>
+  
  
   
 </mapper>

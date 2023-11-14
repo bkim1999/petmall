@@ -14,5 +14,6 @@ public interface EventMapper {
   public int getEventCount();
   public EventDto getEventDetailList(int eventNo);
   public int updateHit(int eventNo);
+  public int insertEventWrite(EventDto eventDto);
   
 }

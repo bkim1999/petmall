@@ -111,7 +111,7 @@
 	   <select id="qnaTotalCount" resultType="int">
 	    SELECT COUNT (*)
 	     FROM QNA_T
-	   </select>    
+	   </select>
   
 	  <select id="getAllQnalist" resultMap="QnaMap">
 	    SELECT QN.QNA_NO, QN.TITLE, QN.CONTENTS, QN.CREATED_AT, USR.USER_NO, USR.EMAIL, USR.NAME, QN.CHECK_FLAG

@@ -5,8 +5,11 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gdu.petmall.dto.EventDto;
 import com.gdu.petmall.service.EventService;
@@ -38,5 +41,21 @@ public class EventController {
     eventService.increaseHit(eventNo);
     return "redirect:/event/detail.do?eventNo=" + eventNo;
   }
+  
+  @GetMapping("/write.do")
+  public String writeEvent() {
+    return "event/write";
+  }
+  
+  @PostMapping("/add.do")
+  public String addEvent(MultipartHttpServletRequest multiparRequest
+                      ,  RedirectAttributes redirectAttributes) throws  Exception{
+    boolean addResult = eventService.addEvent(multiparRequest);
+    redirectAttributes.addFlashAttribute("addResult", addResult);
+    return "redirect:/event/list.do";
+  }
+  
+  
+  
   
 }

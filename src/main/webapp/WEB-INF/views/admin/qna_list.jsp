@@ -42,13 +42,24 @@
        <c:if test="${qna.checkFlag == 0}">
        <td>미답변</td>
        </c:if>
-       <td><input type="button" name="" value=""></td>
+       <td>
+        <input type="button" id="btn_answer" value="답변하기">
+        <input type="hidden" value="${qna.qnaNo}">
+       </td>
       </tr>
      </c:forEach>
     </tbody>
   </table>
   
-
+ <script>
+  function fnAnswer() {
+	$(document).on('click', '#btn_answer', function(ev){
+	  location.href = '${contextPath}/user/qnadetail.do?qnaNo='+$(this).next().val();
+	})
+  }
+  
+  fnAnswer();
+ </script>
   
   
     
