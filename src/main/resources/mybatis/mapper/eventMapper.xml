@@ -52,8 +52,6 @@
      WHERE EVENT_NO = #{eventNo}
   </update>
   
-  
-  
  
   
 </mapper>

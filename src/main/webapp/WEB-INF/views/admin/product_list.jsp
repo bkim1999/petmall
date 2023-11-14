@@ -18,15 +18,11 @@ var order = 'PRODUCT_NAME';
 var ascDesc = 'ASC';
 var totalPage = 0;
 
-  $(function(){
-   fnGetProductList();
-  })
-
-const fnGetProductList = () => {
+const fnGetProductDetailList = () => {
   $.ajax({
     // 요청
     type: 'get',
-    url: '${contextPath}/admin/product_list.do',
+    url: '${contextPath}/admin/getlist.do',
     data: {'categoryNo' : categoryNo,
            'page' : page,
            'order' : order,
@@ -41,19 +37,34 @@ const fnGetProductList = () => {
       }
       totalPage = resData.totalPage;
       $.each(resData.productList, (i, product) => {
-        let str = '<div class="product" data-product_no="' + product.productNo + '">';
-        str += '<div class="product_thumbnail">사진';
-        str += '</div>';
-        str += '<div>' + product.productName + '</div>'
-        str += '<div>' + product.productTitle + '</div>';
-        str += '<div>' + product.productPrice + '원</div>';
-        str += '<div>리뷰 ' + product.reviewCount + '</div>';
-        str += '</div>';
+    	let str = '<tr>'
+    	str += '<td class="product" data=product_no="'+product.productNo+'">'+product.productNo+'</td>';
+        str += '<td>' + product.productName+'</td>';
+        str += '<td>' + product.categoryNo + '</td>';
+        str += '<td class="bseq_ea">' + product.productCount + '</td>';
+        str += '<td>'
+        str += '<input type="button" value=" - " onclick="fndel()">'
+        str += '<input type="text" class="amounts" value="'+product.productCount+'" readonly="readonly" style="text-align:center;"/>'
+        str += '<input type="button" value=" + " onclick="fnadd()">'
+        str += '</td>'
+        str += '<td>'
+        str += '<input type="button" value="변경하기">'
+        str += '</td>'
+        str += '</tr>'
         $('#product_list').append(str);
       });
     }
   })
 }
+
+const fnadd = () =>{
+  
+}
+
+
+   fnGetProductDetailList();
+   fnadd();
+   
 </script>
 
   <div>재고 관리 페이지에 오신걸 환영합니다.</div>
@@ -65,9 +76,14 @@ const fnGetProductList = () => {
         <td>제품 번호</td>
         <td>제품 이름</td>
         <td>제품 카테고리</td>
-        <td>제품 수량</td>
+        <td>재고 현황</td>
+        <td>제품 수량조절</td>
+        <td>수량 변경하기</td>
       </tr>
      </thead>
+     <tbody id="product_list">
+     
+     </tbody>
     </table>
   </div>
 
