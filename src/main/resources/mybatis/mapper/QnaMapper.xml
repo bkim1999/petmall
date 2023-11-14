@@ -134,6 +134,19 @@
 	      WHERE CHECK_FLAG= #{checkFlag}
 	    </if>
 	  </select>
+	  
+	  <select id="getQattachList" parameterType="int" resultType="QattachDto">
+	    SELECT QATTACH_NO, PATH, ORIGINAL_FILENAME, FILESYSTEM_NAME
+	      FROM QATTACH_T
+	     WHERE QNA_NO = #{qnaNo}
+	  </select>
+	  
+	
+	  <select id="getQattach" parameterType="int" resultType="QattachDto">
+	    SELECT QATTACH_NO, PATH, ORIGINAL_FILENAME, FILESYSTEM_NAME
+	    FROM QATTACH_T
+	    WHERE QATTACH_NO = #{qattachNo}
+	</select>	  
   
   
 </mapper>
