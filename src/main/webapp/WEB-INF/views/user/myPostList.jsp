@@ -6,9 +6,10 @@
    <c:set var="contextPath" value="${pageContext.request.contextPath}" />
    <jsp:include page="../layout/header.jsp">
      <jsp:param value="Q&A 글작성" name="title"/>
-     
    </jsp:include>
    
+	<h1>MY POSTS</h1>
+	<jsp:include page="mypage_nav.jsp"></jsp:include>
         
 	<div class="table-responsive">
 	    <table class="table align-middle">
@@ -42,6 +43,8 @@
 	</div> 
 	
 	<hr>
+	
+
    
    <%@ include file="../layout/footer.jsp" %>
    
