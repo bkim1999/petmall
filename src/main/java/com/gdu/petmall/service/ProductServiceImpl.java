@@ -25,7 +25,6 @@ import com.gdu.petmall.dao.ProductMapper;
 import com.gdu.petmall.dto.ProductDto;
 import com.gdu.petmall.dto.ProductImageDto;
 import com.gdu.petmall.dto.ProductOptionDto;
-import com.gdu.petmall.dto.ReviewDto;
 import com.gdu.petmall.util.MyFileUtils;
 import com.gdu.petmall.util.MyPageUtils;
 
@@ -229,29 +228,6 @@ public class ProductServiceImpl implements ProductService {
     
 
     
-  }
-  
-  public Map<String, Object> loadReviewList(HttpServletRequest request) {
-    int productNo = Integer.parseInt(request.getParameter("productNo"));
-    Optional<String> opt = Optional.ofNullable(request.getParameter("page"));
-    int page = Integer.parseInt(opt.orElse("1"));
-    int reviewCount = productMapper.getProductReviewCount(productNo);
-    int display = 10;
-    myPageUtils.setPaging(page, reviewCount, display);
-    
-    opt = Optional.ofNullable(request.getParameter("order"));
-    String order = opt.orElse("");
-    
-    
-    Map<String, Object> map = Map.of("productNo", productNo
-                                   , "order", order
-                                   , "begin", myPageUtils.getBegin()
-                                   , "end", myPageUtils.getEnd());
-    
-    List<ReviewDto> reviewList = productMapper.getProductReviewList(map);
-    
-    return Map.of("reviewList", reviewList
-                , "paging", myPageUtils.getAjaxPaging());
   }
   
   @Override
