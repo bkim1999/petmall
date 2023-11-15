@@ -26,14 +26,24 @@
   <div>이벤트글 작성하로왔니?</div>
   
   <div>
-    <form method="post" action="${contextPath}/event/add.do" enctype="multipart/form-data">
+    <form method="post" action="${contextPath}/event/addevent.do" enctype="multipart/form-data">
       <div>
         <label for="title">제목</label>
         <input type="text" name="title" id="title">
       </div>
       
       <div>
-        <textarea name="contents" id="contents" class="event_input"></textarea>
+        <textarea name="contents" id="contents" class="form-control"></textarea>
+      </div>
+      
+      <div>
+        <label for="files" class="form-label">1개의 썸네일 첨부</label>
+        <input type="file" id="files" name="files" multiple class="form-control">
+      </div>
+      
+       <div>
+        <label for="files" class="form-label">이벤트사진</label>
+        <input type="file" name="event_images" id="event_images" class="form-control" multiple>
       </div>
       
       <div>
@@ -56,13 +66,6 @@
       <hr>
       
       <div>
-        <label for="files" class="form-label">1개의 썸네일 첨부</label>
-        <input type="file" id="file" name="file" multiple class="form-control">
-      </div>
-      
-      
-      <div>
-        <input type="hidden" name="userNo">
         <button class="btn btn-primary col-12" type="submit">작성완료</button>
       </div>
       

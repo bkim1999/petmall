@@ -29,6 +29,7 @@ import com.gdu.petmall.util.MyFileUtils;
 import com.gdu.petmall.util.MyPageUtils;
 
 import lombok.RequiredArgsConstructor;
+import net.coobird.thumbnailator.ThumbnailParameter;
 import net.coobird.thumbnailator.Thumbnails;
 
 @Service
@@ -132,30 +133,76 @@ public class EventServiceImpl implements EventService {
   
   
   @Override
-  public void addEvent(EventDto eventDto, MultipartHttpServletRequest multipartRequest, RedirectAttributes redirectAttributes) throws Exception {
+  public void addEvent(MultipartHttpServletRequest multipartRequest, RedirectAttributes redirectAttributes) throws Exception {
     
-    LocalDate today = LocalDate.now();
-    String imagePath = "/event/" + DateTimeFormatter.ofPattern("yyyy/MM/dd").format(today);
-    // 여기해야함
-    eventDto.setEventThumnailUrl(imagePath);
+    String title = multipartRequest.getParameter("title");
+    String contents = multipartRequest.getParameter("contents");
+    String startAt = multipartRequest.getParameter("startAt");    
+    String endAt = multipartRequest.getParameter("endAt");    
+    int discountPercent = Integer.parseInt(multipartRequest.getParameter("discountPercent"));
+    int discountPrice = Integer.parseInt(multipartRequest.getParameter("discountPrice"));
     
-    int addEventResult = eventMapper.insertEventWrite(eventDto);
-    redirectAttributes.addFlashAttribute("addEventResult", addEventResult);
+    List<MultipartFile> files = multipartRequest.getFiles("files");
     
+    int attachCount;
     
-    
-    
-    for(String Image : getEventEditorImageList(eventDto.getContents())) {
-      EventImageDto eventImage = EventImageDto.builder()
-                                     .eventNo(eventDto.getEventNo())
-                                     .originalFilename(imagePath)
-                                     .path(imagePath)
-                                     .FilesystemName(Image)
-                                     .build();
-      eventMapper.insertEventImage(eventImage);
+    if(files.get(0).getSize() == 0) {
+      attachCount = 1;
+    } else { 
+      attachCount = 0;
     }
     
     
+      for(MultipartFile multipartFile : files) {
+      
+      if(multipartFile != null && !multipartFile.isEmpty()) {
+        LocalDate today = LocalDate.now();
+        String imagePath = "/event/" + DateTimeFormatter.ofPattern("yyyy/MM/dd").format(today);
+        File dir = new File(imagePath);
+        if(!dir.exists()) {
+          dir.mkdirs();
+        }
+        
+        String originalFilename = multipartFile.getOriginalFilename();
+        String filesystemName = myFileUtils.getFilesystemName(originalFilename);
+        File file = new File(dir, filesystemName);
+        
+        multipartFile.transferTo(file);
+        
+        String contentType = Files.probeContentType(file.toPath());
+        
+        int hasThumbnail = (contentType != null && contentType.startsWith("image")) ? 1 : 0 ;
+        
+        if(hasThumbnail == 1) {
+          File thumbnail = new File(dir, "s_" + filesystemName); // small 이미지를 의미하는 s_을 덧붙임.
+          //섬네일레이터(디펜던시)의 활용!
+          Thumbnails.of(file)
+                    .size(880, 235)      // 가로 100px, 세로 100px
+                    .toFile(thumbnail);  
+          
+        }
+        
+        
+        
+        String evntTHumnailUrl = imagePath+ "/s_" + filesystemName;
+        
+        EventDto eventDto = EventDto.builder()
+                                    .title(title)
+                                    .contents(contents)
+                                    .discountPercent(discountPercent)
+                                    .discountPrice(discountPrice)
+                                    .eventThumnailUrl(evntTHumnailUrl)
+                                    .startAt(startAt)
+                                    .endAt(endAt)
+                                    .build();
+        eventMapper.insertEventWrite(eventDto);
+        
+        
+      } // if
+      
+    } // for
+    
+
     
   }
  

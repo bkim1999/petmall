@@ -56,11 +56,10 @@ public class EventController {
   public Map<String, Object> eventImageUpload(MultipartHttpServletRequest multipartRequest){
     return eventService.eventImageUpload(multipartRequest);
   }
-  @PostMapping("/add.do")
-  public String addEvent(@ModelAttribute EventDto eventDto
-                      ,  MultipartHttpServletRequest multiparRequest
+  @PostMapping("/addevent.do")
+  public String addEvent(MultipartHttpServletRequest multiparRequest
                       ,  RedirectAttributes redirectAttributes) throws  Exception{
-    eventService.addEvent(eventDto, multiparRequest, redirectAttributes);
+    eventService.addEvent(multiparRequest, redirectAttributes);
     return "redirect:/event/list.do";
   }
   
