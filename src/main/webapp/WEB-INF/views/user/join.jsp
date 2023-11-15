@@ -15,7 +15,7 @@
 
 <form  method="post"  action="${contextPath}/user/join.do" id="frm_join">
 
-<!--개발용 라디오 버튼 admin_author_state -->
+<!--개발용 라디오 버튼 admin_author_state( 추후에 삭제해야함)  -->
 <div>
 <label for="user"><input type="radio" id="user" name="admin_author_state" value="0" checked>사용자</label>
 <label for="admin"><input type="radio"id="admin" name="admin_author_state" value="1">관리자</label>

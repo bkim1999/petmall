@@ -64,13 +64,7 @@ public class ProductController {
     productService.addProduct(product, multipartrequest, redirectAttributes);
     return "redirect:/product/list.do";
   }
-  
-  @ResponseBody
-  @GetMapping(value="/getReviewList.do", produces="application/json")
-  public Map<String, Object> loadReviewList(HttpServletRequest request){
-    return productService.loadReviewList(request);
-  }
-  
+
   @ResponseBody
   @GetMapping(value="/getProductImageList.do", produces="application/json")
   public List<ProductImageDto> loadProductImageList(HttpServletRequest request){

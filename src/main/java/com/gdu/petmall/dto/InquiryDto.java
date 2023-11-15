@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class InquiryDto {
   private int inquiryNo;
-  private int title;
+  private String title;
   private String contents;
   private String createdAt;
   private String textPw;

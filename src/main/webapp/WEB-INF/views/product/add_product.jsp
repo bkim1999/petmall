@@ -160,6 +160,7 @@
   
   fnCkeditor();
   fnCheckRequired();
+  fnFileCheck();
   
 </script>
 

@@ -107,7 +107,7 @@
     $.ajax({
       // 요청
       type: 'get',
-      url: '${contextPath}/product/getReviewList.do',
+      url: '${contextPath}/review/getReviewList.do',
       data: {'productNo' : '${product.productNo}'
     	     , 'page' : page
            , 'order' : order
@@ -118,6 +118,9 @@
         if(resData.reviewList === null){
           alert('리뷰 목록 불러오기 실패');
           return;
+        }
+        if(resData.reviewList.length === 0){
+        	$('#review_list').text('아직 리뷰가 없습니다.');
         }
         $.each(resData.reviewList, (i, review) => {
           let str = '<div class="review" data-review-no="' + review.reviewNo + '">';

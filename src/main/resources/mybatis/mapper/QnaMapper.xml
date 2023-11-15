@@ -16,51 +16,55 @@
       <id column="USER_NO" property="userNo" />
     </association>
   </resultMap>
-
-<insert id="insertQna" parameterType="com.gdu.petmall.dto.QnaDto">
-    INSERT INTO QNA_T (
-        QNA_NO,
-        TITLE,
-        CONTENTS,
-        USER_NO,
-        CREATED_AT,
-        TEXT_PW,
-        PRODUCT_NO,
-        STATUS,
-        DEPTH,
-        GROUP_NO,
-        CHECK_FLAG
-    ) VALUES (
-        QNA_SEQ.NEXTVAL,
-        #{title},
-        #{contents},
-        #{userDto.userNo},
-        TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'),
-        #{textPw},
-        #{productNo},
-        1,
-        0,
-        QNA_SEQ.CURRVAL,
-        #{checkFlag}
-    )
-</insert>
-
-
-   <insert id="insertQattach" parameterType="QattachDto">
-       INSERT INTO QATTACH_T (
-           QATTACH_NO
-           , QNA_NO
-           , PATH
-           , ORIGINAL_FILENAME
-           , FILESYSTEM_NAME
-       ) VALUES (
-            QATTACH_SEQ.NEXTVAL
-           , #{qnaNo}
-           , #{path}
-           , #{originalFilename}
-           , #{filesystemName}
-       )
-   </insert>  
+  
+	<insert id="insertQna" parameterType="com.gdu.petmall.dto.QnaDto">
+	    <selectKey keyProperty="qnaNo" resultType="int" order="BEFORE">
+	        SELECT QNA_SEQ.NEXTVAL AS qnaNo FROM DUAL
+	    </selectKey>
+	    INSERT INTO QNA_T (
+	        QNA_NO,
+	        TITLE,
+	        CONTENTS,
+	        USER_NO,
+	        CREATED_AT,
+	        TEXT_PW,
+	        PRODUCT_NO,
+	        STATUS,
+	        DEPTH,
+	        GROUP_NO,
+	        CHECK_FLAG
+	    ) VALUES (
+	        #{qnaNo},
+	        #{title},
+	        #{contents},
+	        #{userDto.userNo},
+	        TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'),
+	        #{textPw},
+	        #{productNo},
+	        1,
+	        0,
+	        #{qnaNo},
+	        #{checkFlag}
+	    )
+	</insert>
+	
+	
+	
+	<insert id="insertQattach" parameterType="QattachDto">
+	    INSERT INTO QATTACH_T (
+	        QATTACH_NO,
+	        QNA_NO,
+	        PATH,
+	        ORIGINAL_FILENAME,
+	        FILESYSTEM_NAME
+	    ) VALUES (
+	         QATTACH_SEQ.NEXTVAL,
+	         #{qnaNo},
+	         #{path},
+	         #{originalFilename},
+	         #{filesystemName}
+	    )
+	</insert>  
 
    <select id="getQnaList" resultType="int">
     SELECT COUNT (*)
@@ -130,6 +134,19 @@
 	      WHERE CHECK_FLAG= #{checkFlag}
 	    </if>
 	  </select>
+	  
+	  <select id="getQattachList" parameterType="int" resultType="QattachDto">
+	    SELECT QATTACH_NO, PATH, ORIGINAL_FILENAME, FILESYSTEM_NAME
+	      FROM QATTACH_T
+	     WHERE QNA_NO = #{qnaNo}
+	  </select>
+	  
+	
+	  <select id="getQattach" parameterType="int" resultType="QattachDto">
+	    SELECT QATTACH_NO, PATH, ORIGINAL_FILENAME, FILESYSTEM_NAME
+	    FROM QATTACH_T
+	    WHERE QATTACH_NO = #{qattachNo}
+	</select>	  
   
   
 </mapper>
