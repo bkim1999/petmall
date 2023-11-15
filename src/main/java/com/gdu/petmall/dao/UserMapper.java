@@ -10,17 +10,25 @@ import com.gdu.petmall.dto.UserDto;
 
 @Mapper
 public interface UserMapper {
-
+	/*조회*/
 	public UserDto getUser(Map<String, Object>map);
 	public InactiveUserDto getInactiveUser(Map<String, Object> map);
 	public LeaveUserDto getLeaveUser(Map<String, Object> map);
   public int getPoint (Map<String, Object>map);
-	
+	public String getEmail(Map<String, Object>map);
+	public String getPw(Map<String, Object>map);
+  
+  /*삽입수정삭제*/
 	public int insertUser(UserDto user);
 	public int insertAccess(String email);
   public int insertLeaveUser(UserDto user);
   public int updateUser(UserDto user);
   public int deleteUser(UserDto user);
+  
+  /*네이버 api 관련*/
+  public int insertNaverUser(UserDto user);
+  
+  
  // public int updatePoint(UserDto user); // 포인트 삽입 테스트(추후에 삭제해야할것)
   
 }
