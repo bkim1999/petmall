@@ -22,6 +22,26 @@
     <beans:property name="suffix" value=".jsp" />
   </beans:bean>
   
+  <interceptors>
+  
+    <interceptor>
+      <mapping path="/user/mypage"/>
+      <mapping path="/user/mypage/profile.form"/>
+      <mapping path="/user/mypage/point"/>
+      
+      <beans:bean class="com.gdu.petmall.intercept.RequiredLoginInterceptor" />
+    </interceptor>
+    
+    <interceptor>
+      <mapping path="/user/agree.form"/>
+      <mapping path="/user/join.form"/>
+      <mapping path="/user/join_option.form"/>
+      <mapping path="/user/login.form"/>
+      <beans:bean class="com.gdu.petmall.intercept.ShouldNotLoginInterceptor" />
+    </interceptor>
+    
+  </interceptors>
+  
   <context:component-scan base-package="com.gdu.petmall" />
   
   
