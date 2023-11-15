@@ -76,8 +76,8 @@
    
    <delete id="deleteCart" parameterType="int">
       DELETE
-        FROM CART_T
-       WHERE OPTION_NO = #{productOptionDto.optionNo}
+        FROM PRODUCT_OPTION_T
+       WHERE OPTION_NO = #{productOptionDto.optionNo} 
    </delete>
  
    

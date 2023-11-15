@@ -1,6 +1,5 @@
 package com.gdu.petmall.service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,7 +9,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gdu.petmall.dao.CartMapper;
 import com.gdu.petmall.dto.CartDto;
@@ -65,10 +63,31 @@ public class CartServiceImpl implements CartService {
     return addResult;
   } 
   
+//  @Override
+//  public int removeCart(int optionNo) {
+//   return cartMapper.deleteCart(optionNo);
+//  }
+  
+ // Optional<String> opt = Optional.ofNullable(request.getParameter("optionNo"));
+  
   @Override
-  public int removeCart(int optionNo) {
-    return cartMapper.deleteCart(optionNo);
+  public Map<String, Object> removeCart(HttpServletRequest request) throws Exception {
+    
+    try {
+      Map<String, Object> map = Map.of("optionNo", cartMapper.deleteCart(1));
+      int optionNo = Integer.parseInt(request.getParameter("optionNo"));
+      int removeResult = cartMapper.deleteCart(optionNo);
+      
+      return Map.of("removeResult", removeResult);
+      
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    
+    return null;
+    
   }
+  
   
   @Override
   public Map<String, Object> modifyCart(HttpServletRequest request, CartDto cartDto) {
