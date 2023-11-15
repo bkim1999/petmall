@@ -27,7 +27,10 @@
 
 
 <!-- 카카오 로그인 페이지 이동  -->
-<div><button btn_login_kakao>카카오로 시작하기</button></div>
+<div><button>카카오로 시작하기</button></div>
+<!-- 네이버 로그인 페이지 이동  -->
+<div><a href="${naverLoginURL}"><img src="${contextPath}/resources/assets/image/btnG_완성형.png" width="200px" ></a></div>
+
 
 <!-- 로그인 폼  (post)-->
 <form method="post" action="${contextPath}/user/login.do" id="frm_login">
@@ -35,19 +38,18 @@
 
 
 <div><input type="text"   id="email"  name="email"  placeholder="ID(Email)"></div>
-<div><input type="pw"  id="pw" name="pw"  placeholder="PASSWORD"></div>
+<div><input type="password"  id="pw" name="pw"  placeholder="PASSWORD"></div>
 
 
-<div>
-<input type="hidden" name="referer" value="${referer}">
-<div><button id="btn_login" type="submit">로그인</button></div>
-<div><button id="btn_naver_login" type="button">네이버 로그인</button></div>
+  <div>
+      <input type="hidden" name="referer" value="${referer}">
+      <div><button id="btn_login" type="submit">로그인</button></div>
+      
+  </div>
 
 <span><a href="${contextPath}/user/find_id.form">아이디찾기</a></span>
 <span><a href="${contextPath}/user/find_pw.form">비밀번호찾기</a></span>
 <span><a href="${contextPath}/user/join_option.form">회원가입</a></span>
-
-</div>
 
 
 </form>
@@ -55,10 +57,7 @@
 
 </div>
 
-<script>
 
-
-</script>
 
 <%@ include file="../layout/footer.jsp" %>
 

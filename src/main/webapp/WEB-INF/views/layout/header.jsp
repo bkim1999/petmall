@@ -15,6 +15,7 @@
 <link rel="stylesheet" href="${contextPath}/resources/assets/css/bootstrap.min.css?dt=${dt}">
 <link rel="stylesheet" href="${contextPath}/resources/assets/css/style.css?dt=${dt}">
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
 </head>
 
 <body>
@@ -32,7 +33,9 @@
 
    <div class="collapse navbar-collapse menu-ui-design" id="navbar-menu">
       <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
-      
+        <c:if test="${sessionScope.user.adminAuthorState == 1}">
+          <li><a href="${contextPath}/admin/admin.go">관리자페이지</a></li>
+        </c:if>
           <!-- 로그인 여부에 따라 바뀔것-->
         <c:if test="${sessionScope.user == null}">
            <li><a href="${contextPath}/user/login.form">login</a></li>

@@ -1,31 +1,52 @@
 package com.gdu.petmall.service;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.math.BigInteger;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.security.SecureRandom;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 
 import com.gdu.petmall.dao.UserMapper;
 import com.gdu.petmall.dto.InactiveUserDto;
 import com.gdu.petmall.dto.UserDto;
+import com.gdu.petmall.util.MyJavaMailUtils;
+import com.gdu.petmall.util.MyPointUtils;
 import com.gdu.petmall.util.MySecurityUtils;
 
 import lombok.RequiredArgsConstructor;
 
 
-
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-
+	
 	private final UserMapper userMapper;
 	private final MySecurityUtils mySecurityUtils;
+	private final MyJavaMailUtils myJavaMailUtils;
+	private final MyPointUtils myPointUtils;
 	
-	//로그인
+	/*네이버 api 클라이언트정보*/
+  private final String client_id = "OsFLRfpdkM0BZr7yfZrr";
+  private final String client_secret = "eiyecu8MwC";
+	
+/*로그인*/
 @Override
 public void login(HttpServletRequest request, HttpServletResponse response) throws Exception {
 	 
@@ -69,15 +90,18 @@ public void login(HttpServletRequest request, HttpServletResponse response) thro
   }
 }
 	
-	
-	// 회원정보 가져와
+
+
+
+
+// 회원정보 가져와
 @Override
 public UserDto getUser(String email) {
   return userMapper.getUser(Map.of("email", email));
 }
 
 
-// 로그아웃
+/*로그아웃*/
 @Override
 public void logout(HttpServletRequest request, HttpServletResponse response) {
 
@@ -97,5 +121,495 @@ e.printStackTrace();
 
 
 
+/*이메일 체크*/
+@Transactional(readOnly=true)
+@Override
+public ResponseEntity<Map<String, Object>> checkEmail(String email) {
+  
+  Map<String, Object> map = Map.of("email", email);
+  
+  boolean enableEmail = userMapper.getUser(map) == null
+                     && userMapper.getLeaveUser(map) == null
+                     && userMapper.getInactiveUser(map) == null;
+  
+  return new ResponseEntity<>(Map.of("enableEmail", enableEmail), HttpStatus.OK);
+  
+}
+
+
+/*인증코드 전송*/
+@Override
+public ResponseEntity<Map<String, Object>> sendCode(String email) {
+  
+  // RandomString 생성(6자리, 문자 사용, 숫자 사용)
+  String code = mySecurityUtils.getRandomString(8, true, true);
+  
+  // 메일 전송
+  myJavaMailUtils.sendJavaMail(email
+                             , "petmall 인증 코드"
+                             , "<div>인증코드는 <strong>" + code + "</strong>입니다.</div>");
+  
+  return new ResponseEntity<>(Map.of("code", code), HttpStatus.OK);
+  
+}
+
+
+
+
+/*회원가입*/
+@Override
+public void join(HttpServletRequest request, HttpServletResponse response) {
+
+  String email = request.getParameter("email");
+  String pw = mySecurityUtils.getSHA256(request.getParameter("pw"));
+  String name = mySecurityUtils.preventXSS(request.getParameter("name"));
+  String gender = request.getParameter("gender");
+  
+  String[] arrMobile = request.getParameterValues("mobile");
+  StringBuilder mobile =new StringBuilder();
+  for(int i=0;i<arrMobile.length;i++){mobile.append(arrMobile[i]);}
+  
+  String postcode = request.getParameter("postcode");
+  String roadAddress = request.getParameter("roadAddress");
+  String jibunAddress = request.getParameter("jibunAddress");
+  String detailAddress = mySecurityUtils.preventXSS(request.getParameter("detailAddress"));
+  
+  
+  
+ // 이벤트 수신 동의 체크 안돼있으면 null 전달됨. null 처리 해야함
+  String event = request.getParameter("event");
+  Optional<String> opt = Optional.ofNullable(event);
+   event = opt.orElse("off"); 
+  
+  
+  int adminAuthorState=Integer.parseInt(request.getParameter("admin_author_state"));
+  
+  
+  UserDto user = UserDto.builder()
+      .email(email)
+      .pw(pw)
+      .name(name)
+      .gender(gender)
+      .mobile(mobile.toString())
+      .postcode(postcode)
+      .roadAddress(roadAddress)
+      .jibunAddress(jibunAddress)
+      .detailAddress(detailAddress)
+      .agree(event.equals("on") ? 1 : 0)
+      .adminAuthorState(adminAuthorState)
+      .build();
+  
+  
+  int joinResult = userMapper.insertUser(user);
+  
+  
+
+   try {
+    
+    response.setContentType("text/html; charset=UTF-8");
+    PrintWriter out = response.getWriter();
+    out.println("<script>");
+    if(joinResult == 1) {
+      request.getSession().setAttribute("user", userMapper.getUser(Map.of("email", email)));
+      userMapper.insertAccess(email);
+      out.println("alert('회원 가입되었습니다.')");
+      out.println("location.href='" + request.getContextPath() + "/main.do'");
+    } else {
+      out.println("alert('회원 가입이 실패했습니다.')");
+      out.println("history.go(-2)");
+    }
+    out.println("</script>");
+    out.flush();
+    out.close();
+    
+  } catch (Exception e) {
+    e.printStackTrace();
+  }
+  
+}
+
+
+
+/*회원탈퇴*/
+@Override
+public void leave(HttpServletRequest request, HttpServletResponse response) {
+
+  Optional<String> opt = Optional.ofNullable(request.getParameter("userNo"));
+  int userNo = Integer.parseInt(opt.orElse("0"));
+  
+  UserDto user = userMapper.getUser(Map.of("userNo", userNo));
+  
+  if(user == null) {
+    try {
+      response.setContentType("text/html; charset=UTF-8");
+      PrintWriter out = response.getWriter();
+      out.println("<script>");
+      out.println("alert('회원 탈퇴를 수행할 수 없습니다.')");
+      out.println("location.href='" + request.getContextPath() + "/main.do'");
+      out.println("</script>");
+      out.flush();
+      out.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+  
+  int insertLeaveUserResult = userMapper.insertLeaveUser(user);
+  int deleteUserResult = userMapper.deleteUser(user);
+  
+ try {
+    
+    response.setContentType("text/html; charset=UTF-8");
+    PrintWriter out = response.getWriter();
+    out.println("<script>");
+    if(insertLeaveUserResult == 1 && deleteUserResult == 1) {
+      HttpSession session = request.getSession();
+      session.invalidate();
+      out.println("alert('회원 탈퇴되었습니다. 그 동안 이용해 주셔서 감사합니다.')");
+      out.println("location.href='" + request.getContextPath() + "/main.do'");
+    } else {
+      out.println("alert('회원 탈퇴되지 않았습니다.')");
+      out.println("history.back()");
+    }
+    out.println("</script>");
+    out.flush();
+    out.close();
+    
+  } catch (Exception e) {
+    e.printStackTrace();
+  }
+  
+}
+	
+
+/*회원정보수정*/
+@Override
+public ResponseEntity<Map<String, Object>> modify(HttpServletRequest request) {
+	  String email = mySecurityUtils.preventXSS(request.getParameter("email"));
+	  String pw = mySecurityUtils.getSHA256(request.getParameter("pw"));
+	  String name = mySecurityUtils.preventXSS(request.getParameter("name"));
+	  String gender = request.getParameter("gender");
+	  
+	  String[] arrMobile = request.getParameterValues("mobile");
+	  StringBuilder mobile =new StringBuilder();
+	  for(int i=0;i<arrMobile.length;i++){mobile.append(arrMobile[i]);}
+	  
+	  String postcode = request.getParameter("postcode");
+	  String roadAddress = request.getParameter("roadAddress");
+	  String jibunAddress = request.getParameter("jibunAddress");
+	  String detailAddress = mySecurityUtils.preventXSS(request.getParameter("detailAddress"));
+	  
+	  int userNo = Integer.parseInt(request.getParameter("userNo"));
+	  
+	  
+	  
+	 // 이벤트 수신 동의 체크 안돼있으면 null 전달됨. null 처리 해야함
+	  String event = request.getParameter("event");
+	  Optional<String> opt = Optional.ofNullable(event);
+	   event = opt.orElse("off"); 
+	   
+	  int agree = event.equals("on") ? 1 : 0;
+	  
+	  
+	  
+	  
+	  UserDto user = UserDto.builder()
+	      .email(email)
+	      .pw(pw)
+	      .name(name)
+	      .gender(gender)
+	      .mobile(mobile.toString())
+	      .postcode(postcode)
+	      .roadAddress(roadAddress)
+	      .jibunAddress(jibunAddress)
+	      .detailAddress(detailAddress)
+	      .agree(agree)
+	      .userNo(userNo)
+	      .build();
+	  
+   int modifyResult = userMapper.updateUser(user);
+   
+   if(modifyResult == 1) {
+     HttpSession session = request.getSession();
+     UserDto sessionUser = (UserDto)session.getAttribute("user");
+     sessionUser.setEmail(email);
+     sessionUser.setPw(pw);
+     sessionUser.setName(name);
+     sessionUser.setGender(gender);
+     sessionUser.setMobile(mobile.toString());
+     sessionUser.setPostcode(postcode);
+     sessionUser.setRoadAddress(roadAddress);
+     sessionUser.setJibunAddress(jibunAddress);
+     sessionUser.setDetailAddress(detailAddress);
+     sessionUser.setAgree(agree);
+   }
+   
+   return new ResponseEntity<>(Map.of("modifyResult", modifyResult), HttpStatus.OK);
+}
+
+
+
+/*포인트*/
+@Override
+public void getPoint(HttpServletRequest request, Model model) {
+
+	int userNo=Integer.parseInt(request.getParameter("userNo"));
+	Map<String,Object> map=Map.of("userNo",userNo);
+	
+	int  point=userMapper.getPoint(map);
+	
+	model.addAttribute("point",point);
+	model.addAttribute("userNo",userNo);
+	
+}
+
+
+/*아이디 찾기*/
+@Override
+public ResponseEntity<Map<String, Object>> findId(HttpServletRequest request) {
+	
+	String name= request.getParameter("name");
+	String mobile= request.getParameter("mobile");
+	
+	String email= userMapper.getEmail(Map.of("name",name,"mobile",mobile));
+	
+	// 아이디가 검색되었을때
+	if(email!=null)
+	{
+		return new ResponseEntity<>(Map.of("email", email), HttpStatus.OK);
+	}
+	else {
+		return new ResponseEntity<>(Map.of("email", 0), HttpStatus.OK);
+	}
+	
+	
+}
+
+
+/*비밀번호 찾기*/
+@Override
+public ResponseEntity<Map<String, Object>> findPw(HttpServletRequest request) {
+	String email=request.getParameter("email");
+	String pw=userMapper.getPw(Map.of("email",email));
+	
+	
+	
+	// 아이디가 검색되었을때
+	if(pw!=null)
+	{
+		return new ResponseEntity<>(Map.of("pw", pw), HttpStatus.OK);
+	}
+	else {
+		return new ResponseEntity<>(Map.of("pw", 0), HttpStatus.OK);
+	}
+}
+
+
+/* **************************네이버 api 관련 *********************** */
+/*네이버 간편 가입*/
+@Override
+public void naverJoin(HttpServletRequest request, HttpServletResponse response) {
+  
+  String email = request.getParameter("email");
+  String name = request.getParameter("name");
+  String gender = request.getParameter("gender");
+  String mobile = request.getParameter("mobile");
+  String event = request.getParameter("event");
+  
+  UserDto user = UserDto.builder()
+                  .email(email)
+                  .name(name)
+                  .gender(gender)
+                  .mobile(mobile.replace("-", ""))
+                  .agree(event != null ? 1 : 0)
+                  .build();
+  
+  int naverJoinResult = userMapper.insertNaverUser(user);
+  
+  try {
+    
+    response.setContentType("text/html; charset=UTF-8");
+    PrintWriter out = response.getWriter();
+    out.println("<script>");
+    if(naverJoinResult == 1) {
+      request.getSession().setAttribute("user", userMapper.getUser(Map.of("email", email)));
+      userMapper.insertAccess(email);
+      out.println("alert('네이버 간편가입이 완료되었습니다.')");
+    } else {
+      out.println("alert('네이버 간편가입이 실패했습니다.')");
+    }
+    out.println("location.href='" + request.getContextPath() + "/main.do'");
+    out.println("</script>");
+    out.flush();
+    out.close();
+    
+  } catch (Exception e) {
+    e.printStackTrace();
+  }
+  
+}
+
+
+/*네이버 로그인 연동 url  생성*/
+@Override
+public String getNaverLoginURL(HttpServletRequest request) throws Exception {
+  
+  String apiURL = "https://nid.naver.com/oauth2.0/authorize";
+  String response_type = "code";
+  String redirect_uri = URLEncoder.encode("http://localhost:8080" + request.getContextPath() + "/user/naver/getAccessToken.do", "UTF-8");
+  String state = new BigInteger(130, new SecureRandom()).toString();
+
+  StringBuilder sb = new StringBuilder();
+  sb.append(apiURL);
+  sb.append("?response_type=").append(response_type);
+  sb.append("&client_id=").append(client_id);
+  sb.append("&redirect_uri=").append(redirect_uri);
+  sb.append("&state=").append(state);
+  
+  return sb.toString();
+	
+}
+
+/*네이버 로그인 접근  토큰 발급 요청*/
+@Override
+public String getNaverLoginAccessToken(HttpServletRequest request) throws Exception {
+  String code = request.getParameter("code");
+  String state = request.getParameter("state");
+  
+  String apiURL = "https://nid.naver.com/oauth2.0/token";
+  String grant_type = "authorization_code";  // access_token 발급 받을 때 사용하는 값(갱신이나 삭제시에는 다른 값을 사용함)
+  
+  StringBuilder sb = new StringBuilder();
+  sb.append(apiURL);
+  sb.append("?grant_type=").append(grant_type);
+  sb.append("&client_id=").append(client_id);
+  sb.append("&client_secret=").append(client_secret);
+  sb.append("&code=").append(code);
+  sb.append("&state=").append(state);
+  
+  // 요청
+  URL url = new URL(sb.toString());
+  HttpURLConnection con = (HttpURLConnection)url.openConnection();
+  con.setRequestMethod("GET");  // 반드시 대문자로 작성
+  
+  // 응답
+  BufferedReader reader = null;
+  int responseCode = con.getResponseCode();
+  if(responseCode == 200) {
+    reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+  } else {
+    reader = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+  }
+  
+  String line = null;
+  StringBuilder responseBody = new StringBuilder();
+  while ((line = reader.readLine()) != null) {
+    responseBody.append(line);
+  }
+  
+  JSONObject obj = new JSONObject(responseBody.toString());
+  return obj.getString("access_token");
 
 }
+
+/*네이버 로그인 후속작업*/
+@Override
+public UserDto getNaverProfile(String accessToken) throws Exception {
+  
+  // 요청
+  String apiURL = "https://openapi.naver.com/v1/nid/me";
+  URL url = new URL(apiURL);
+  HttpURLConnection con = (HttpURLConnection)url.openConnection();
+  con.setRequestMethod("GET");
+  con.setRequestProperty("Authorization", "Bearer " + accessToken);
+  
+  // 응답
+  BufferedReader reader = null;
+  int responseCode = con.getResponseCode();
+  if(responseCode == 200) {
+    reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+  } else {
+    reader = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+  }
+  
+  String line = null;
+  StringBuilder responseBody = new StringBuilder();
+  while ((line = reader.readLine()) != null) {
+    responseBody.append(line);
+  }
+  
+  // 응답 결과(프로필을 JSON으로 응답) -> UserDto 객체
+  JSONObject obj = new JSONObject(responseBody.toString());
+  JSONObject response = obj.getJSONObject("response");
+  UserDto user = UserDto.builder()
+                  .email(response.getString("email"))
+                  .name(response.getString("name"))
+                  .gender(response.getString("gender"))
+                  .mobile(response.getString("mobile"))
+                  .build();
+  
+  return user;
+}
+
+/*네이버 로그인 */
+@Override
+public void naverLogin(HttpServletRequest request, HttpServletResponse response, UserDto naverProfile)throws Exception {
+  String email = naverProfile.getEmail();
+  UserDto user = userMapper.getUser(Map.of("email", email));
+  
+  if(user != null) {
+    request.getSession().setAttribute("user", user);
+    userMapper.insertAccess(email);
+  } else {
+    response.setContentType("text/html; charset=UTF-8");
+    PrintWriter out = response.getWriter();
+    out.println("<script>");
+    out.println("alert('일치하는 회원 정보가 없습니다.')");
+    out.println("location.href='" + request.getContextPath() + "/main.do'");
+    out.println("</script>");
+    out.flush();
+    out.close();
+  }
+}
+/* ***************************************************************** */
+
+
+
+
+
+
+
+/*포인트 테스트 (추후에 삭제해야함)
+@Override
+public void pointTest(HttpServletRequest request){
+	int userNo=Integer.parseInt(request.getParameter("userNo"));
+	int addPoint=Integer.parseInt(request.getParameter("addPoint"));
+	int subPoint=Integer.parseInt(request.getParameter("subPoint"));
+
+	myPointUtils.setPoint(addPoint, subPoint);
+	
+	
+	UserDto user=UserDto.builder()
+											.userNo(userNo)
+											.point(myPointUtils.getPoint())
+											.build();
+	
+	 userMapper.updatePoint(user);
+
+
+	
+}
+*/	
+
+	
+	
+	
+
+
+}
+
+
+
+
+
+

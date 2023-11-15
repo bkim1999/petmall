@@ -9,11 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Builder
-public class CartDto {
-
-  private int count;
-  private ProductOptionDto productOptionDto;
-  private ProductDto productDto;
-  private UserDto userDto;
-  
+public class ProductImageDto {
+    private String imageCode;
+	  private String position;
+	  private String path;
+	  private String filesystemName;
 }
