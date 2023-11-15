@@ -35,10 +35,20 @@
    
    <hr>
    
-   <h3>첨부 다운로드</h3>
-   <div>
-    
-   </div>
+  <hr class="my-3">
+  <h5>첨부 다운로드</h5>
+  <div>
+    <c:if test="${empty qattachList}">
+      <div>첨부 없음</div>
+    </c:if>
+    <c:if test="${not empty qattachList}">
+      <c:forEach items="${qattachList}" var="atc">
+    <div class="qattach" data-qattach_no="${atc.qattachNo}">
+      <a href="${contextPath}/user/qnadetail/download.do?qattachNo=${atc.qattachNo}">${atc.originalFilename}</a>
+    </div>
+      </c:forEach>
+    </c:if>
+  </div>
    
    <hr>
    
@@ -75,10 +85,20 @@
           });
       
        }
-   
+      const fnDownload = () => {
+           $('.qattach').click(function() {
+             if (confirm('다운로드 할까요?')) {
+               const attachNo = $(this).data('qattach_no');
+               const contextPath = '${contextPath}';
+               location.href = contextPath + 'user/download.do?qattachNo=' + qattachNo;
+             }
+           });
+         };
+         
       fnRemoveQna();
       fnAddReplyResult();
       fnAddReply();
+      fnDownload();
    </script>
    
 <h5>문의 내용 추가 작성하기</h5>
