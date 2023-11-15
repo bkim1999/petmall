@@ -29,4 +29,7 @@ public interface QnaMapper {
     
     public List<QattachDto> getQattachList(int qnaNo);
     public QattachDto getQattach(int qattachNo);
+    
+    
+    public List<QnaDto> getCommentList(Map<String, Object> map);
 }

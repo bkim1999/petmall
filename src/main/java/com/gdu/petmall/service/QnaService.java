@@ -27,4 +27,6 @@ public interface QnaService {
   
   public void loadQna(HttpServletRequest request, Model model);
   public ResponseEntity<Resource> download(HttpServletRequest request);
+  
+  public void loadCommentlist(HttpServletRequest request, Model model); 
 }

@@ -231,6 +231,21 @@ import lombok.RequiredArgsConstructor;
          model.addAttribute("qna", qnaMapper.getQna(qnaNo));
          model.addAttribute("qattachList", qnaMapper.getQattachList(qnaNo));
        }
+       
+       @Override
+       public void loadCommentlist(HttpServletRequest request, Model model) {
+           int qnaNo = Integer.parseInt(request.getParameter("qnaNo"));
+           int groupNo = Integer.parseInt(request.getParameter("groupNo"));
+         
+           Map<String, Object> map = new HashMap<>();
+           map.put("qnaNo", qnaNo);
+           map.put("groupNo", groupNo);
+         
+           List<QnaDto> commentList = qnaMapper.getCommentList(map);
+         
+           Map<String, Object> result = new HashMap<>();
+           model.addAttribute("commentList", commentList);
+       }
 
  
 }
