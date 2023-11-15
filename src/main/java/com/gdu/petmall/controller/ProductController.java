@@ -61,7 +61,8 @@ public class ProductController {
   public String addProduct(@ModelAttribute ProductDto product
                           , MultipartHttpServletRequest multipartrequest
                           , RedirectAttributes redirectAttributes) throws Exception {
-    productService.addProduct(product, multipartrequest, redirectAttributes);
+    int addProductResult = productService.addProduct(product, multipartrequest) ? 1 : 0;
+    redirectAttributes.addFlashAttribute("addProductResult", addProductResult);
     return "redirect:/product/list.do";
   }
 

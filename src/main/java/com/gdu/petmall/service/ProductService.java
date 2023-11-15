@@ -17,6 +17,6 @@ public interface ProductService {
   public Map<String, Object> loadProductList(HttpServletRequest request);
   public void loadProductInfo(HttpServletRequest request, Model model);
   public Map<String, Object> imageUpload(MultipartHttpServletRequest multipartRequest);
-  public void addProduct(ProductDto product, MultipartHttpServletRequest multipartRequest, RedirectAttributes redirectAttributes) throws Exception;
+  public boolean addProduct(ProductDto product, MultipartHttpServletRequest multipartRequest) throws Exception;
   public List<ProductImageDto> loadProductImageList(HttpServletRequest request);
 }

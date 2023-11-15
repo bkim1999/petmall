@@ -148,13 +148,12 @@ public class ProductServiceImpl implements ProductService {
   
   @Transactional
   @Override
-  public void addProduct(ProductDto product, MultipartHttpServletRequest multipartRequest, RedirectAttributes redirectAttributes) throws Exception {
+  public boolean addProduct(ProductDto product, MultipartHttpServletRequest multipartRequest) throws Exception {
     
     // Add ProductDto
     LocalDate today = LocalDate.now();
     String imagePath = "/product/" + DateTimeFormatter.ofPattern("yyyy/MM/dd").format(today);
     int addProductResult = productMapper.insertProduct(product);
-    redirectAttributes.addFlashAttribute("addProductResult", addProductResult);
     
     // Add ProductImageDto's
     for(String editorImage : getEditorImageList(product.getProductContents())) {
@@ -222,12 +221,8 @@ public class ProductServiceImpl implements ProductService {
       
     }
     
-    if((addProductResult == 1) && (productImages.size() == attachCount) == false) {
+    return (addProductResult == 1) && (productImages.size() == attachCount);
       
-    }
-    
-
-    
   }
   
   @Override

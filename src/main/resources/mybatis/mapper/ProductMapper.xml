@@ -39,8 +39,8 @@
                   , PI.PATH, PI.FILESYSTEM_NAME
                FROM PRODUCT_T P LEFT OUTER JOIN PRODUCT_IMAGE_T PI
                  ON PI.IMAGE_CODE = 'product_' || P.PRODUCT_NO
+                AND PI.POSITION = 'thumbnail'
               <where>
-                PI.POSITION = 'thumbnail'
                 <if test="categoryNo != 0">
                   AND CATEGORY_NO = #{categoryNo}
                 </if>

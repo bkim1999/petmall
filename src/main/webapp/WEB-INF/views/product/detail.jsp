@@ -36,9 +36,11 @@
   <div>${product.productContents}</div>
   <div></div>
   
-  <form method="post" action="${contextPath}/order/cart.go">
+  <form method="post" action="${contextPath}/order/addCart.do">
     <div id="selected_option_list"></div>
   </form>
+  
+  <div id="order_list"></div>
   
   <div id="review_list"></div>
 
@@ -71,7 +73,6 @@
         str += '  <input type="text" class="option_price" value="' + (${product.productPrice} + addPrice) + '" readonly>원';
         str += '</div>';
         $('#selected_option_list').append(str);
-        //$(this).val("0");
     });
   }
   
@@ -97,11 +98,47 @@
     });
   }
   
-  
-  
+  const fnGetProductOrderList = () => {
+	    if('${sessionScope.user.userNo}' === ''){
+        $('#order_list').text('로그인 후 리뷰를 작성해주세요.');
+        return;
+	    }
+	    $.ajax({
+	      // 요청
+	      type: 'get',
+	      url: '${contextPath}/review/getProductOrderList.do',
+	      data: {'productNo' : '${product.productNo}'
+	           , 'userNo' : '${sessionScope.user.userNo}'
+	            },
+	      // 응답
+	      dataType: 'json',
+	      success: (resData) => {  // resData = {"productOrderList": []}
+	        if(resData.productOrderList === null){
+	          alert('사용자의 해당 상품 주문목록 불러오기 실패');
+	          return;
+	        }
+	        if(resData.productOrderList.length === 0){
+	          $('#order_list').text('아직 구매하지 않은 상품입니다.');
+	          return;
+	        }
+	        $.each(resData.productOrderList, (i, option) => {
+	          let str = '<div class="review_btn" id="' + option.optionNo + '">';
+	          str += '  <div>' + option.optionName + '</div>';
+	          str += '  <form method="get" action="${contextPath}/review/addReview.form">';
+	          str += '    <input type="hidden" name="product" value="${product}">';
+	          str += '    <input type="hidden" name="optionNo" value="' + option.optionNo + '">';
+	          str += '    <button>리뷰 작성</button>';
+	          str += '</div>';
+	          $('#order_list').append(str);
+	        });
+	      }
+	    })
+
+	    fnGetReviewList();
+	  }
   
   var page = 1;
-  var order = 'PRODUCT_NAME';
+  var order = 'REVIEW_CREATED_AT';
 
   const fnGetReviewList = () => {
     $.ajax({
@@ -121,9 +158,16 @@
         }
         if(resData.reviewList.length === 0){
         	$('#review_list').text('아직 리뷰가 없습니다.');
+        	return;
         }
         $.each(resData.reviewList, (i, review) => {
-          let str = '<div class="review" data-review-no="' + review.reviewNo + '">';
+        	
+        	let str = '<div class="review" data-review-no="' + review.reviewNo + '">';
+        	if(review.userNo == '${sessionScope.user.userNo}'){
+        		$('#' + review.optionNo).find('button').remove();
+        		$('#' + review.optionNo).append('<div>이미 작성한 리뷰입니다.</div>');
+        		str += '<button type="button" class="btn_remove_review">삭제</button>';
+        	}
           str += '<div>' + review.reviewRating + '</div>';
           str += '<div class="review_thumbnail">사진';
           str += '</div>';
@@ -140,7 +184,8 @@
   fnAddOption();
   fnDecreaseCount();
   fnIncreaseCount();
-  fnGetReviewList();
-</script>
+  fnGetProductOrderList();
+
+  </script>
 
 <%@ include file="../layout/footer.jsp" %>
