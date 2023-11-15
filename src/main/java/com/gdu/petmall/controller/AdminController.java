@@ -46,5 +46,12 @@ public class AdminController {
     return "admin/qna_list";
   }
   
+  @GetMapping("/event_list.go")
+  public String eventDetailList(HttpServletRequest request, Model model) {
+    adminService.getEvent(request, model);
+    return "admin/event_list";
+  }
+  
+  
 
 }

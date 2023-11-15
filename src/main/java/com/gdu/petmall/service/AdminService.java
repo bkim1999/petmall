@@ -7,4 +7,5 @@ import org.springframework.ui.Model;
 public interface AdminService {
   
   public void getQna(HttpServletRequest request, Model model);
+  public void getEvent(HttpServletRequest request, Model model);
 }

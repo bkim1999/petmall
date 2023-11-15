@@ -8,8 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import com.gdu.petmall.dao.EventMapper;
 import com.gdu.petmall.dao.ProductMapper;
 import com.gdu.petmall.dao.QnaMapper;
+import com.gdu.petmall.dto.EventDto;
 import com.gdu.petmall.dto.QnaDto;
 import com.gdu.petmall.util.MyPageUtils;
 
@@ -22,6 +24,7 @@ public class AdminServiceImpl implements AdminService {
   private final ProductMapper productMapper;
   private final MyPageUtils myPageUtils;
   private final QnaMapper qnaMapper;
+  private final EventMapper eventMapper;
   
   @Override
   public void getQna(HttpServletRequest request, Model model) {
@@ -39,7 +42,15 @@ public class AdminServiceImpl implements AdminService {
     model.addAttribute("qnaAnswerCount", qnaAnswerCount);
   }
   
+  @Override
+  public void getEvent(HttpServletRequest request, Model model) {
     
+    List<EventDto> eventList = eventMapper.getTotalList();
+    
+    model.addAttribute("eventList", eventList);
+    
+      
+  }  
     
   
 }

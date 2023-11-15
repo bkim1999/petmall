@@ -29,7 +29,7 @@
     WHERE A.RN BETWEEN #{begin} AND #{end}
   </select>
   
-  <select id="getTotalList">
+  <select id="getTotalList" resultMap="EventMap">
     SELECT *
       FROM EVENT_T;
   </select>

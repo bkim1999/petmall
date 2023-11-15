@@ -17,4 +17,5 @@ public interface EventMapper {
   public int updateHit(int eventNo);
   public int insertEventWrite(EventDto eventDto);
   public int insertEventImage(EventImageDto eventImageDto);
+  public List<EventDto> getTotalList();
 }
