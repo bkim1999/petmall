@@ -20,7 +20,7 @@
     display: flex;
     flex-wrap: wrap;
   .product {
-    width: 300px;
+    width: 400px;
     height: 600px;
     text-align: left;
     padding-top: 100px;
@@ -28,7 +28,8 @@
   }
   .product_thumbnail {
     width: 100%;
-    height: 300px;
+    width: 400px;
+    height: 400px;
   }
   .product:hover {
     cursor: pointer;
@@ -71,7 +72,8 @@
         totalPage = resData.totalPage;
         $.each(resData.productList, (i, product) => {
           let str = '<div class="product" data-product_no="' + product.productNo + '">';
-          str += '<div class="product_thumbnail">사진';
+          str += '<div class="product_thumbnail">';
+          str += '  <img src="${contextPath}' + product.productImageDto.path + '/' + product.productImageDto.filesystemName + '">';
           str += '</div>';
           str += '<div>' + product.productName + '</div>'
           str += '<div>' + product.productTitle + '</div>';

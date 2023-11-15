@@ -15,6 +15,7 @@
     <typeAlias alias="InactiveUserDto" type="com.gdu.petmall.dto.InactiveUserDto"/>
     <typeAlias alias="ProductDto" type="com.gdu.petmall.dto.ProductDto" />
     <typeAlias alias="ProductOptionDto" type="com.gdu.petmall.dto.ProductOptionDto" />
+    <typeAlias alias="ProductImageDto" type="com.gdu.petmall.dto.ProductImageDto" />
     <typeAlias alias="CategoryDto" type="com.gdu.petmall.dto.CategoryDto" />
     <typeAlias alias="ReviewDto" type="com.gdu.petmall.dto.ReviewDto" />
     <typeAlias alias="CartDto" type="com.gdu.petmall.dto.CartDto" />

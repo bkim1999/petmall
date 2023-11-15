@@ -13,12 +13,15 @@
 
 <div>
 <button>카카오로 시작하기</button>
+
+
+<div><a href="${naverLoginURL}" ><img src="${contextPath}/resources/assets/image/btnG_완성형.png" width="200px" ></a></div>
 <a href="${contextPath}/user/join.form">가입하기</a>
 </div>
 
 
 
-</script>
+
 
 <%@ include file="../layout/footer.jsp" %>
 
