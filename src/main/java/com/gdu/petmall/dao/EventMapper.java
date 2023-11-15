@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.gdu.petmall.dto.EventDto;
+import com.gdu.petmall.dto.EventImageDto;
 
 @Mapper
 public interface EventMapper {
@@ -15,5 +16,5 @@ public interface EventMapper {
   public EventDto getEventDetailList(int eventNo);
   public int updateHit(int eventNo);
   public int insertEventWrite(EventDto eventDto);
-  
+  public int insertEventImage(EventImageDto eventImageDto);
 }

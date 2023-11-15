@@ -2,20 +2,29 @@ package com.gdu.petmall.service;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gdu.petmall.dao.EventMapper;
 import com.gdu.petmall.dto.EventDto;
+import com.gdu.petmall.dto.EventImageDto;
 import com.gdu.petmall.util.MyFileUtils;
 import com.gdu.petmall.util.MyPageUtils;
 
@@ -62,72 +71,92 @@ public class EventServiceImpl implements EventService {
     return eventMapper.updateHit(eventNo);
   }
   
-  
   @Override
-  public boolean addEvent(MultipartHttpServletRequest multipartRequest) throws Exception {
+  public Map<String, Object> eventImageUpload(MultipartHttpServletRequest multipartRequest) {
     
-    String title = multipartRequest.getParameter("title");
-    String contents = multipartRequest.getParameter("contents");
-    String startAt = multipartRequest.getParameter("startAt");
-    String endAt = multipartRequest.getParameter("endAt");
-    String discountPercent = multipartRequest.getParameter("discountPercent");
-    String discountPrice = multipartRequest.getParameter("discountPrice");
-    
-    List<MultipartFile> files = multipartRequest.getFiles("files");
-    
-    int attachCount;
-    
-    if(files.get(0).getSize() == 0) {
-      attachCount = 1;
-    } else { 
-      attachCount = 0;
+    // 이미지가 저장될 경로
+    LocalDate today = LocalDate.now();
+    String imagePath = "/event/" + DateTimeFormatter.ofPattern("yyyy/MM/dd").format(today);
+    File dir = new File(imagePath);
+    if(!dir.exists()) {
+      dir.mkdirs();
     }
     
-    for(MultipartFile multipartFile : files) {
-      
-      if(multipartFile != null && !multipartFile.isEmpty()) {
-        String path = myFileUtils.getUploadPath();
-        File dir = new File(path);
-        if(!dir.exists()) {
-          dir.mkdirs();
-        }
-        
-        String originalFilename = multipartFile.getOriginalFilename();
-        String filesystemName = myFileUtils.getFilesystemName(originalFilename);
-        File file = new File(dir, filesystemName);
-        
-        multipartFile.transferTo(file);
-        
-        String contentType = Files.probeContentType(file.toPath());
-        
-        int hasThumbnail = (contentType != null && contentType.startsWith("image")) ? 1 : 0 ;
-        
-        if(hasThumbnail == 1) {
-          File thumbnail = new File(dir, "s_" + filesystemName); 
-          Thumbnails.of(file)
-                    .size(100, 100)      // 가로 100px, 세로 100px
-                    .toFile(thumbnail);  
-          
-         String  eventThumnailUrl = path+filesystemName;
-         
-         EventDto eventDto = EventDto.builder()
-                                     .title(title)
-                                     .contents(contents)
-                                     .eventThumnailUrl(eventThumnailUrl)
-                                     .startAt(startAt)
-                                     .endAt(endAt)
-                                     .build();
-          
-          
-        }
-        
-        
-        
-      } // if
-      
-    } // for
+    // 이미지 파일 (CKEditor는 이미지를 upload라는 이름으로 보냄)
+    MultipartFile upload = multipartRequest.getFile("upload");
     
-    return true;
+    // 이미지가 저장될 이름
+    String originalFilename = upload.getOriginalFilename();
+    String filesystemName = myFileUtils.getFilesystemName(originalFilename);
+    
+    // 이미지 File 객체
+    File file = new File(dir, filesystemName);
+    
+    // 저장
+    try {
+      upload.transferTo(file);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    
+    // CKEditor로 저장된 이미지의 경로를 JSON 형식으로 반환해야 함
+    return Map.of("uploaded", true
+                , "url", multipartRequest.getContextPath() + imagePath + "/" + filesystemName);
+    
+    // url: "http://localhost:8080/petmall/event/1/main/filesystemName.jpg"
+    // sevlet-context.xml에
+    // <resources /event/** -> /product/
+  }
+  
+  
+  public List<String> getEventEditorImageList(String contents) {
+    
+    //** 신규 메소드 **//
+    // Editor에 추가한 이미지 목록 반환하기 (Jsoup 라이브러리 사용)
+    
+    List<String> editorImageList = new ArrayList<>();
+    
+    Document document = Jsoup.parse(contents);
+    Elements elements =  document.getElementsByTag("img");
+    
+    if(elements != null) {
+      for(Element element : elements) {
+        String src = element.attr("src");
+        String filesystemName = src.substring(src.lastIndexOf("/") + 1);
+        editorImageList.add(filesystemName);
+      }
+    }
+    
+    return editorImageList;
+  }
+  
+  
+  @Override
+  public void addEvent(EventDto eventDto, MultipartHttpServletRequest multipartRequest, RedirectAttributes redirectAttributes) throws Exception {
+    
+    LocalDate today = LocalDate.now();
+    String imagePath = "/event/" + DateTimeFormatter.ofPattern("yyyy/MM/dd").format(today);
+    // 여기해야함
+    eventDto.setEventThumnailUrl(imagePath);
+    
+    int addEventResult = eventMapper.insertEventWrite(eventDto);
+    redirectAttributes.addFlashAttribute("addEventResult", addEventResult);
+    
+    
+    
+    
+    for(String Image : getEventEditorImageList(eventDto.getContents())) {
+      EventImageDto eventImage = EventImageDto.builder()
+                                     .eventNo(eventDto.getEventNo())
+                                     .originalFilename(imagePath)
+                                     .path(imagePath)
+                                     .FilesystemName(Image)
+                                     .build();
+      eventMapper.insertEventImage(eventImage);
+    }
+    
+    
+    
   }
  
       

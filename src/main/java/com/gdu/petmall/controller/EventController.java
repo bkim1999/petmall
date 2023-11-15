@@ -1,13 +1,17 @@
 package com.gdu.petmall.controller;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -47,11 +51,16 @@ public class EventController {
     return "event/write";
   }
   
+  @ResponseBody
+  @PostMapping(value="/imageUpload.do")
+  public Map<String, Object> eventImageUpload(MultipartHttpServletRequest multipartRequest){
+    return eventService.eventImageUpload(multipartRequest);
+  }
   @PostMapping("/add.do")
-  public String addEvent(MultipartHttpServletRequest multiparRequest
+  public String addEvent(@ModelAttribute EventDto eventDto
+                      ,  MultipartHttpServletRequest multiparRequest
                       ,  RedirectAttributes redirectAttributes) throws  Exception{
-    boolean addResult = eventService.addEvent(multiparRequest);
-    redirectAttributes.addFlashAttribute("addResult", addResult);
+    eventService.addEvent(eventDto, multiparRequest, redirectAttributes);
     return "redirect:/event/list.do";
   }
   

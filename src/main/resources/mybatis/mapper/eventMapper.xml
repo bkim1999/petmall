@@ -52,7 +52,11 @@
      WHERE EVENT_NO = #{eventNo}
   </update>
   
-  <insert id="insertEventWrite" parameterMap="EventMap">
+  <insert id="insertEventWrite" parameterType="EventDto">
+    <selectKey order="BEFORE" keyProperty="eventNo" resultType="int">
+      SELECT EVENT_SEQ.NEXTVAL
+        FROM DUAL
+    </selectKey>
     INSERT INTO EVENT_T (
           EVENT_NO
         , TITLE
@@ -65,7 +69,7 @@
         , START_AT
         , END_AT
         ) VALUES (
-          EVENT_SEQ.NEXTVAL
+          #{eventNo}
         , #{title}
         , #{contents}
         , 0
@@ -76,6 +80,20 @@
         , #{startAt}
         , #{endAt}
         )
+  </insert>
+  
+  <insert id="insertEventImage" parameterType="eventImageDto">
+    INSERT INTO EVENT_IMAGE_T (
+      EVENT_NO
+    , PATH
+    , ORIGINAL_FILENAME
+    , FILESYSTEM_NAME
+    ) VALUES (
+      #{eventNo}
+      #{path}
+      #{originalFilename}
+      #{filesystemName}
+    )
   </insert>
   
  

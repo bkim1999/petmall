@@ -10,9 +10,17 @@
   <jsp:param value="이벤트게시판" name="title"/>
 </jsp:include>
 
-
-
-
+<style>
+  .ck.ck-editor {
+    max-width: 1000px;
+  }
+  .ck-editor__editable {
+    min-height: 400px;
+  }
+  .ck-content {
+    color: gray;
+  }
+</style>
 
 
   <div>이벤트글 작성하로왔니?</div>
@@ -25,8 +33,7 @@
       </div>
       
       <div>
-        <label id="contents">내용</label>
-        <textarea name="contents" id="contents"></textarea>
+        <textarea name="contents" id="contents" class="event_input"></textarea>
       </div>
       
       <div>
@@ -61,6 +68,46 @@
       
     </form>
   </div>
+<script>
+const fnCkeditor = () => {
+    ClassicEditor
+      .create(document.getElementById('contents'), {
+        toolbar: {
+          items: [
+            'undo', 'redo',
+            '|', 'heading',
+            '|', 'fontfamily', 'fontsize', 'fontColor', 'fontBackgroundColor',
+            '|', 'bold', 'italic', 'strikethrough', 'subscript', 'superscript', 'code',
+            '|', 'link', 'uploadImage', 'blockQuote', 'codeBlock',
+            '|', 'bulletedList', 'numberedList', 'todoList', 'outdent', 'indent'
+          ],
+          shouldNotGroupWhenFull: false
+       },
+       heading: {
+         options: [
+           { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+           { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+           { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+           { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
+           { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
+           { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
+           { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
+         ]
+       },
+       ckfinder: {
+         // 이미지 업로드 경로
+         uploadUrl: '${contextPath}/event/imageUpload.do',
+       }
+     })
+     .catch(err => {
+       console.log(err)
+     });
+  }
+  
+  
+  fnCkeditor();
+
+</script>  
   
   
 
