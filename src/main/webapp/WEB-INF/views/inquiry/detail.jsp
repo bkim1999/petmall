@@ -7,68 +7,64 @@
 <c:set var="dt" value="<%=System.currentTimeMillis()%>" />
 
 <jsp:include page="../layout/header.jsp">
-  <jsp:param value="${upload.uploadNo}번 게시글" name="title"/>
+  <jsp:param value="${inquiry.inquiryNo}번 문의글" name="title"/>
 </jsp:include>
 
-<div class="wrap wrap_6">
+<style>
+  .title {
+  margin: auto;
+  width:fit-content;
+</style>
 
-  <h1 class="title">웹하드 게시글</h1>
-  
-  <div class="text-center mb-5">
-    <c:if test="${sessionScope.user.userNo == upload.userDto.userNo}">
-      <form id="frm_btn">
-        <input type="hidden" name="uploadNo" value="${upload.uploadNo}">
-        <button type="button" id="btn_edit" class="btn btn-warning btn-sm">편집</button>
-        <button type="button" id="btn_remove" class="btn btn-danger btn-sm">삭제</button>
-      </form>
-    </c:if>
-  </div>
-  <div>작성자 : ${upload.userDto.name}</div>
-  <div>작성일 : ${upload.createdAt}</div>
-  <div>수정일 : ${upload.modifiedAt}</div>
-  <div>제목 : ${upload.title}</div>
-  <div>내용</div>
-  <div>
-    <c:if test="${empty upload.contents}">
-      내용없음
-    </c:if>
-    <c:if test="${not empty upload.contents}">
-      ${upload.contents}
-    </c:if>
-  </div>
-  
-  <hr class="my-3">
-  
-  <h5>첨부 다운로드</h5>
-  <div>
-    <c:if test="${empty attachList}">
-      <div>첨부 없음</div>
-    </c:if>
-    <c:if test="${not empty attachList}">
-      <c:forEach items="${attachList}" var="atc">
-        <div class="attach" data-attach_no="${atc.attachNo}">
-          <c:if test="${atc.hasThumbnail == 1}">
-            <img src="${contextPath}${atc.path}/s_${atc.filesystemName}" alt="썸네일">
-          </c:if>
-          <c:if test="${atc.hasThumbnail == 0}">
-            <img src="${contextPath}/resources/image/attach1.png" alt="썸네일">
-          </c:if>
-          <a>${atc.originalFilename}</a>
-        </div>
-      </c:forEach>
-      <div><a href="${contextPath}/upload/downloadAll.do?uploadNo=${upload.uploadNo}">모두 다운로드</a></div>
-    </c:if>
+  <div class="board">
+    <h1 class="title">INQUIRY</h1>
+    
+    <br>
+    
+    <div>작성자 : ${inquiry.userDto.email}</div>
+    <div>작성일 : ${inquiry.createdAt}</div>
+    <div>제목 : ${inquiry.title}</div>
+    <div>내용</div>
+    <div>
+      <c:if test="${empty inquiry.contents}">
+        내용없음
+      </c:if>
+      <c:if test="${not empty inquiry.contents}">
+        ${inquiry.contents}
+      </c:if>
+    </div>
+    <span>↓첨부파일 다운로드↓</span>
+      <div>
+        <c:if test="${empty iattachList}">
+          <div>첨부파일 없음</div>
+        </c:if>
+        <c:if test="${not empty iattachList}">
+          <c:forEach items="${iattachList}" var="atc">
+            <div class="iattach" data-attach_no="${atc.iattachNo}">
+              <a>${atc.originalFilename}</a>
+            </div>
+          </c:forEach>
+          <div><a href="${contextPath}/inquiry/downloadAll.do?inquiryNo=${inquiry.inquiryNo}">한번에 다운로드</a></div>
+        </c:if>
+      </div>  
   </div>
   
-</div>
-  
+    <div>
+        <form id="frm_btn">
+          <input type="hidden" name="inquiryNo" value="${inquiry.inquiryNo}">
+          <button type="button" id="btn_edit">편집</button>
+          <button type="button" id="btn_remove">삭제</button>
+          <a href="${contextPath}/inquiry/list.do"><button type="button" id="btn_list">목록</button></a>
+        </form>
+    </div>
+
 <script>
 
   var frmBtn = $('#frm_btn');
 
   const fnEdit = () => {
     $('#btn_edit').click(() => {
-      frmBtn.attr('action', '${contextPath}/upload/edit.form');
+      frmBtn.attr('action', '${contextPath}/inquiry/edit.form');
       frmBtn.attr('method', 'get');
       frmBtn.submit();
     })
@@ -77,7 +73,7 @@
   const fnRemove = () => {
     $('#btn_remove').click(() => {
       if(confirm('해당 게시글을 삭제할까요?')){
-        frmBtn.attr('action', '${contextPath}/upload/removeUpload.do');
+        frmBtn.attr('action', '${contextPath}/inquiry/removeInquiry.do');
         frmBtn.attr('method', 'post');
         frmBtn.submit();
       }
@@ -85,9 +81,9 @@
   }
 
   const fnDownload = () => {
-    $('.attach').click(function(){
+    $('.iattach').click(function(){
       if(confirm('다운로드 할까요?')){
-        location.href = '${contextPath}/upload/download.do?attachNo=' + $(this).data('attach_no');
+        location.href = '${contextPath}/inquiry/download.do?iattachNo=' + $(this).data('iattach_no');
       }
     })
   }
@@ -96,9 +92,9 @@
     let modifyResult = '${modifyResult}';
     if(modifyResult !== ''){
       if(modifyResult === '1'){
-        alert('게시글이 수정되었습니다.');
+        alert('문의글이 수정되었습니다.');
       } else {
-        alert('게시글이 수정되지 않았습니다.');
+        alert('문의글이 수정되지 않았습니다.');
       }
     }
   }
@@ -109,5 +105,5 @@
   fnModifyResult();
   
 </script>
-  
+
 <%@ include file="../layout/footer.jsp" %>

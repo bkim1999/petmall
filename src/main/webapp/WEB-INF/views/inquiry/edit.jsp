@@ -10,101 +10,78 @@
   <jsp:param value="${upload.uploadNo}번 게시글" name="title"/>
 </jsp:include>
 
-<div class="wrap wrap_6">
+<style>
+  .title {
+  width:fit-content;
+  margin:auto;
+</style>
 
-  <h1 class="title">INQUIRY</h1>
+<div>
+
+  <h1 class="title">INQUIRY 수정</h1>
   
-  <form id="frm_inquiry_edit" method="post" action="${contextPath}/inquiry/modifyInquiry.do" enctype="multipart/form-data">
-    <div class="mt-3">
-      <select name="title">업종 구분
-        <option value="1">동물병원</option>
-        <option value="2">펫샵(애견용품점)</option>
-        <option value="3">도매</option>
-        <option value="4">온라인몰</option>
-        <option value="5">약국</option>
-        <option value="6">마트</option>
-        <option value="7">기타</option>
-      </select>
+  <form id="frm_inquiry_edit" method="post" action="${contextPath}/inquiry/modify.do">
+    <div>
+    작성자 : ${sessionScope.user.email}     
     </div>
-    <div class="mt-3">
-      <label for="contents" class="form-label"></label>
-      <textarea rows="80" name="contents" id="contents" class="form-control">${inquiry.contents}</textarea>
-    </div>
-    <div class="mt-3">
-      <label for="UCC_URL" class="form-label">UCC URL</label>
-      <input type="text" name="url" value="url"> 
-    </div>
-    <div class="mt-3">
-      <label for="files1" class="form-label">첨부파일1</label>
-      <input type="file" name="files1" id="files1" class="form-control" multiple>
-    </div>
-    <div class="mt-3">
-      <label for="files2" class="form-label">첨부파일2</label>
-      <input type="file" name="files2" id="files2" class="form-control" multiple>
-    </div>
-    <div class="mt-3">
-      <label for="files3" class="form-label">첨부파일3</label>
-      <input type="file" name="files3" id="files3" class="form-control" multiple>
-    </div>
-    <div class="mt-3">
-      <label for="files4" class="form-label">첨부파일4</label>
-      <input type="file" name="files4" id="files4" class="form-control" multiple>
-    </div>
-    <div class="mt-3">
-      <label for="files5" class="form-label">첨부파일5</label>
-      <input type="file" name="files5" id="files5" class="form-control" multiple>
-    </div>
-    <div class="iattached_list mt-2" id="iattached_list"></div>
-    <div class="text-center mt-5">
-      <input type="hidden" name="userNo" value="${sessionScope.user.userNo}">
-      <button type="submit" class="btn btn-primary">등록</button>
-      <a href="${contextPath}/inquiry/list.do">
-        <button class="btn btn-secondary" type="button">취소</button>
-      </a>
-      <a href="${contextPath}/inquiry/list.do">
-        <button class="btn btn-secondary" type="button">목록</button>
-      </a>
-    </div>
-  </form>
-  
-</div>
     
+    <div>
+     제목: <select name="title" id="title">${inquiry.title}
+            <option label="업종구분" disabled="disabled" selected="selected"></option>
+            <option>동물병원</option>
+            <option>펫샵(애견용품점)</option>
+            <option>도매</option>
+            <option>온라인몰</option>
+            <option>약국</option>
+            <option>마트</option>
+            <option>기타</option>
+          </select>
+    </div>
+    <div>
+     내용<br> 
+      <label for="contents"></label>
+      <textarea rows="50" cols="200"  name="contents" id="contents" 
+      placeholder="1. 지역 (국내 / 해외):<br>2. 회사명 :<br>3. 담당자명 / 직급 :<br>4. 연락처 :<br>5. 이메일 :<br>6. 홈페이지 :<br>7. 문의 내용 :<br>8. 회사소개서, 제안서는 첨부파일 부탁드립니다.">
+      ${inquiry.contents}</textarea>
+    </div>
+    <div>
+     공개여부 : <label for="open"><input type="radio" name="post" id="open">공개글</label>
+             <label for="secret"><input type="radio" name="post" id="secret">비밀글</label>
+    </div>
+    <div>
+    비밀번호 : <input type="text" name="textPw"  placeholder="●●●●●">
+    </div>
+ 
     <!-- 첨부 추가 -->
-    <c:if test="${sessionScope.user.userNo == upload.userDto.userNo}">
+    <c:if test="${sessionScope.user.userNo == inquiry.userDto.userNo}">
       <h5>신규 첨부</h5>
       <div class="input-group">
         <input type="hidden" name="userNo" value="${sessionScope.user.userNo}">
-        <input type="file" name="files" id="files"  class="form-control" multiple>
-        <button class="btn btn-outline-secondary" type="button" id="btn_add_attach">첨부추가하기</button>
+        <input type="file" name="files" id="files" multiple>
+        <button type="button" id="btn_add_iattach">첨부추가</button>
       </div>
-      <div class="attached_list mt-3" id="attached_list"></div>
+      <div class="iattached_list" id="iattached_list"></div>
     </c:if>
-    
-    <hr class="my-3">
 
     <!-- 첨부 목록에서 삭제 -->
     <h5>기존 첨부 목록</h5>
-    <div id="attach_list"></div>
+    <div id="iattach_list"></div>
 
-    <c:if test="${sessionScope.user.userNo == upload.userDto.userNo}">
       <div class="text-center my-3">
-        <a href="${contextPath}/upload/detail.do?uploadNo=${upload.uploadNo}">
-          <button class="btn btn-secondary" type="button">돌아가기</button>
+        <a href="${contextPath}/inquiry/detail.do?inquiryNo=${inquiry.inquiryNo}">
+          <button type="submit">취소</button>
         </a>
-        <input type="hidden" name="uploadNo" value="${upload.uploadNo}">
-        <button type="submit" id="btn_modify" class="btn btn-success">수정하기</button>
+        <input type="hidden" name="inquiryNo" value="${inquiry.inquiryNo}">
+        <button type="submit" id="btn_modify">수정</button>
       </div>
-    </c:if>
-
   </form>
-  
-</div>
-  
+</div>  
+      
 <script>
 
   const fnFileCheck = () => {
     $('#files').change((ev) => {
-      $('#attached_list').empty();
+      $('#iattached_list').empty();
       let maxSize = 1024 * 1024 * 100;
       let maxSizePerFile = 1024 * 1024 * 10;
       let totalSize = 0;
@@ -114,22 +91,22 @@
         if(files[i].size > maxSizePerFile){
           alert('각 첨부파일의 최대 크기는 10MB입니다.');
           $(ev.target).val('');
-          $('#attached_list').empty();
+          $('#iattached_list').empty();
           return;
         }
-        $('#attached_list').append('<div>' + files[i].name + '</div>');
+        $('#iattached_list').append('<div>' + files[i].name + '</div>');
       }
       if(totalSize > maxSize){
         alert('전체 첨부파일의 최대 크기는 100MB입니다.');
         $(ev.target).val('');
-        $('#attached_list').empty();
+        $('#iattached_list').empty();
         return;
       }
     })
   }
   
-  const fnAddAttach = () => {
-    $('#btn_add_attach').click(() => {
+  const fnAddIattach = () => {
+    $('#btn_add_iattach').click(() => {
       // 폼을 FormData 객체로 생성한다.
       let formData = new FormData();
       // 첨부된 파일들을 FormData에 추가한다.
@@ -138,21 +115,21 @@
         formData.append('files', file);  // 폼에 포함된 파라미터명은 files이다. files는 여러 개의 파일을 가지고 있다.
       })
       // 현재 게시글 번호(uploadNo)를 FormData에 추가한다.
-      formData.append('uploadNo', '${upload.uploadNo}');
+      formData.append('inquiryNo', '${inquiry.inquiryNo}');
       // FormData 객체를 보내서 저장한다.
       $.ajax({
         // 요청
         type: 'post',
-        url: '${contextPath}/upload/addAttach.do',
+        url: '${contextPath}/inquiry/addIattach.do',
         data: formData,
         contentType: false,
         processData: false,
         // 응답
         dataType: 'json',
         success: (resData) => {  // resData = {"attachResult": true}
-          if(resData.attachResult){
+          if(resData.iattachResult){
             alert('첨부 파일이 추가되었습니다.');
-            fnAttachList();
+            fnIattachList();
           } else {
             alert('첨부 파일이 추가되지 않았습니다.');
           }
@@ -161,21 +138,21 @@
       })
     })
   }
-
-  const fnAttachList = () => {
+  
+  const fnIattachList = () => {
     $.ajax({
       // 요청
       type: 'get',
-      url: '${contextPath}/upload/getAttachList.do',
-      data: 'uploadNo=${upload.uploadNo}',
+      url: '${contextPath}/inquiry/getIattachList.do',
+      data: 'inquiryNo=${inquiry.inquiryNo}',
       // 응답
       dataType: 'json',
       success: (resData) => {  // resData = {"attachList": []}
-        $('#attach_list').empty();
-        $.each(resData.attachList, (i, attach) => {
-          let str = '<div class="attach">';
-          if(attach.hasThumbnail === 0){
-        	  str += '<img src="${contextPath}/resources/image/attach1.png">';
+        $('#iattach_list').empty();
+        $.each(resData.iattachList, (i, iattach) => {
+          let str = '<div class="iattach">';
+          if(iattach.hasThumbnail === 0){
+        	  str += '<img src="${contextPath}/resources/image/iattach1.png">';
           } else {        	  
             str += '<img src="${contextPath}' + attach.path + '/s_' + attach.filesystemName + '">';
           }
@@ -190,22 +167,22 @@
     })
   }
   
-  const fnRemoveAttach = () => {
-    $(document).on('click', '.ico_remove_attach', (ev) => {
+  const fnRemoveIattach = () => {
+    $(document).on('click', '.ico_remove_iattach', (ev) => {
       if(!confirm('해당 첨부 파일을 삭제할까요?')){
         return;
       }
       $.ajax({
         // 요청
         type: 'post',
-        url: '${contextPath}/upload/removeAttach.do',
-        data: 'attachNo=' + $(ev.target).parent().data('attach_no'),
+        url: '${contextPath}/inquiry/removeIattach.do',
+        data: 'iattachNo=' + $(ev.target).parent().data('iattach_no'),
         // 응답
         dataType: 'json',
         success: (resData) => {  // resData = {"removeResult": 1}
           if(resData.removeResult === 1){
             alert('해당 첨부 파일이 삭제되었습니다.');
-            fnAttachList();
+            fnIattachList();
           } else {
             alert('해당 첨부 파일이 삭제되지 않았습니다.');
           }
@@ -214,26 +191,28 @@
     })
   }
   
-  const fnModifyAttach = () => {
-	  $('#frm_upload_edit').submit((ev) => {
+  const fnModifyIattach = () => {
+    $('#frm_inquiry_edit').submit((ev) => {
       if($('#title').val() === ''){
         alert('제목은 반드시 입력해야 합니다.');
         $('#title').focus();
         ev.preventDefault();
         return;
       } else if($('#files').val() !== ''){
-    	  $('#btn_add_attach').trigger('click');  // 첨부추가하기 버튼을 강제로 클릭함
-    	  return;
+    	  alert('새로운 첨부가 있는 경우 첨부추가 버튼을 먼저 클릭해 주세요.');
+    	  $('#btn_add_iattach').focus();
+    	  ev.preventDefault();
+        return;
       }
-	  })
+    })
   }
-
-  fnFileCheck();
-  fnAddAttach();
-  fnAttachList();
-  fnRemoveAttach();
-  fnModifyAttach();
   
+  fnFileCheck();
+  fnAddIattach();
+  fnIattachList();
+  fnRemoveIattach();
+  fnModifyIattach();
+    
 </script>
   
 <%@ include file="../layout/footer.jsp" %>
