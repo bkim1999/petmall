@@ -21,45 +21,56 @@
   .ck-content {
     color: gray;
   }
+  h1 {
+    margin: 100px 0;
+    text-align:center;
+  }
+  #wrapper {
+    width: 1000px;
+    margin: 100px auto;
+  }
+  #frm_add_product {
+  }
 </style>
 
-<div>
+<div id="wrapper">
   
   <form id="frm_add_product" method="post" action="${contextPath}/product/addProduct.do" enctype="multipart/form-data">
     <h1>상품 추가</h1>
-    <div>
-      <label for="productName">상품명</label>
-      <input type="text" name="productName" id="productName" class="product_input">
+    <div class="form-group">
+      <label for="productName" class="form-label mt-4">상품명</label>
+      <input type="text" class="form-control" name="productName" id="productName" class="product_input">
     </div>
-    <div>
-      <label for="productTitle">상품제목</label>
-      <input type="text" name="productTitle" id="productTitle" class="product_input">
+    <div class="form-group">
+      <label for="productTitle" class="form-label mt-4">상품제목</label>
+      <input type="text"  class="form-control" name="productTitle" id="productTitle" class="product_input">
     </div>
-    <div>
-      <label for="productDescription">상품설명</label>
-      <input type="text" name="productDescription" id="productDescription" class="product_input">
+    <div class="form-group">
+      <label for="productDescription" class="form-label mt-4">상품설명</label>
+      <textarea class="form-control" name="productDescription" id="productDescription" class="product_input" style="height: 150px;"></textarea>
     </div>
-    <div>
-      <label for="productSize">상품규격</label>
-      <input type="text" name="productSize" id="productSize" class="product_input">
+    <div class="form-group">
+      <label for="productSize" class="form-label mt-4">상품규격</label>
+      <textarea type="text" class="form-control" name="productSize" id="productSize" class="product_input" style="height: 150px;"></textarea>
     </div>
-    <div>
-      <label for="productWarning">상품경고</label>
-      <input type="text" name="productWarning" id="productWarning" class="product_input">
-    </div>
-    <div class="mt-3">
-      <label for="files" class="form-label">썸네일</label>
-      <input type="file" name="thumbnail" id="thumbnail" class="form-control">
+    <div class="form-group">
+      <label for="productWarning" class="form-label mt-4">상품경고</label>
+      <textarea type="text" class="form-control" name="productWarning" id="productWarning" class="product_input" style="height: 150px;"></textarea>
     </div>
     <div class="mt-3">
-      <label for="files" class="form-label">상품사진</label>
-      <input type="file" name="product_images" id="product_images" class="form-control" multiple>
+      <label for="files" class="form-label mt-4">썸네일</label>
+      <input type="file" class="form-control" name="thumbnail" id="thumbnail" class="form-control">
+    </div>
+    <div class="mt-3">
+      <label for="files" class="form-label mt-4">상품사진</label>
+      <input type="file" class="form-control" name="product_images" id="product_images" class="form-control" multiple>
     </div>
     <div> 
+      <label for="productContents" class="form-label mt-4">상품내용</label>
       <textarea id="productContents" name="productContents" class="product_input"></textarea>
     </div>
     <div>
-      <label for="productWarning">상품가격</label>
+      <label for="productWarning" class="form-label mt-4">상품가격</label>
       <input type="text" name="productPrice" id="productPrice" class="product_input number_input">
     </div>
     <hr>
@@ -121,12 +132,14 @@
           return false;
         }
 	    });
-	    if(!/^[0-9]+$/.test($('.number_input').val())){
-	    	alert('가격칸에는 숫자만 입력해주세요.');
-	    	ev.preventDefault();
-	    	$('#productPrice').val('');
-	    	return;
-	    }
+	    $.each($('.number_input'), (i, input) => {
+        if(!/^[0-9]+$/.test($('.number_input').val())){
+          alert('가격칸에는 숫자만 입력해주세요.');
+          ev.preventDefault();
+          $('#productPrice').val('');
+          return false;
+	        }
+	      });
 	    var files = Array.from($('#thumbnail').prop('files')).concat(Array.from($('#product_images').prop('files')));
 	    for(let i = 0; i < files.length; i++){
   	    var filetype = files[i].type;

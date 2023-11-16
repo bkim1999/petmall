@@ -10,9 +10,37 @@
   <jsp:param value="상품목록" name="title"/>
 </jsp:include>
 
+<style>
+  #slideshow{
+    width: 400px;
+    height: 400px;
+  }
+</style>
+
 <div>
   
-  <div id="product_images">사진</div>
+  <table>
+    <tbody>
+      <tr>
+        <td colspan="2">
+          <div id="slideshow" class="carousel slide" data-bs-ride="carousel">
+            <div id="product_images" class="carousel-inner">
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#slideshow" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#slideshow" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+         </td>
+      </tr>
+      
+    </tbody>
+  </table>
+  
   <div>${product.productName}</div>
   <div>${product.productDescription}</div>
   <div>${product.productSize}</div>
@@ -53,6 +81,7 @@
 </div>
 
 <script>
+
   const fnAddOption = () => {
     $('#option_list').change(function() {
         var optionNo = $(this).val();
@@ -72,10 +101,10 @@
         var addPrice = $("#option_list option:selected").data('add-price');
         var str = '<div class="selected_option" data-option-no="' + optionNo + '">';
         str += optionName + '  ';
-        str += '  <a class="minus_count">-</a>';
-        str += '  <input type="hidden" class="option_no" value="' + optionNo + '">'
-        str += '  <input type="text" class="count" value="1" readonly>'
-        str += '  <a class="plus_count">+</a>';
+        str += '  <button type="button" class="btn btn-link minus_count">-</button>';
+        str += '  <input type="hidden" class="option_no" value="' + optionNo + '">';
+        str += '  <input type="text" class="count" value="1" readonly>';
+        str += '  <button type="button" class="btn btn-link plus_count">+</button>';
         str += '  <input type="text" class="option_price" value="' + (${product.productPrice} + addPrice) + '" readonly>원';
         str += '</div>';
         $('#selected_option_list').append(str);
@@ -190,6 +219,44 @@
     })
   }
   
+  const fnGetProductImageList = () => {
+	    $.ajax({
+	      // 요청
+	      type: 'get',
+	      url: '${contextPath}/product/getProductImageList.do',
+	      data: {'productNo' : '${product.productNo}'},
+	      // 응답
+	      dataType: 'json',
+	      success: (resData) => {  // resData = {"productImageList": []}
+	        console.log(resData);
+	        if(resData.productImageList === null){
+	          alert('이미지 목록 불러오기 실패');
+	          return;
+	        }
+	        if(resData.productImageList.length === 0){
+	        	let str = '<div class="carousel-item active">';
+            str += '  <img class="d-block w-100" src="#" alt="아직 사진이 없습니다.">';
+            str += '</div>';
+            $('#product_images').append(str);
+	          return;
+	        }
+	        
+	        $.each(resData.productImageList, (i, image) => {
+	          let str = '';
+	          if(i === 1){
+	        	  str += '<div class="carousel-item active">';
+	          }
+	          else{
+	            str += '<div class="carousel-item">';
+	          }
+	          str += '  <img class="d-block w-100" src="${contextPath}' + image.path + '/' + image.filesystemName +  '">';
+	          str += '</div>';
+	          $('#product_images').append(str);
+	        });
+	      }
+	    })
+	  }
+  
   const fnRemoveProduct = () => {
 	  $('#frm_remove_product').submit(function(ev) {
 		  if(!confirm('이 상품을 삭제하시겠습니까?')){
@@ -205,6 +272,7 @@
   fnIncreaseCount();
   fnGetProductOrderList();
   fnRemoveProduct();
+  fnGetProductImageList();
 
   </script>
 
