@@ -10,7 +10,7 @@
   <jsp:param value="이벤트게시판" name="title"/>
 </jsp:include>
 
-  <div>Q&A 페이지에 오신것을 환영합니다.</div>
+  <div>파트너십 페이지에 오신것을 환영합니다.</div>
   
   <div>전체 문의글수 : ${qnaTotalCount}</div>
   <div>답변 완료된 문의글 수 : ${qnaAnswerCount}</div>
@@ -21,36 +21,32 @@
       <tr>
        <td>문의글 번호</td>
        <td>제목</td>
-       <td>내용</td>
        <td>문의일</td>
-       <td>문의자</td>
        <td>답변여부</td>
        <td>답변하로가기</td>
       </tr>
     </thead>
     <tbody>
-     <c:forEach items="${qnaList}" var ="qna" varStatus="vs">
+     <c:forEach items="${inquiryList}" var ="inquiry" varStatus="vs">
       <tr>
-       <td>${qna.qnaNo}</td>
-       <td>${qna.title}</td>
-       <td>${qna.contents}</td>
-       <td>${qna.createdAt}</td>
-       <td>${qna.userDto.name}</td>
-       <c:if test="${qna.checkFlag == 1}">
+       <td>${inquiry.inquiryNo}</td>
+       <td>${inquiry.title}</td>
+       <td>${inquiry.createdAt}</td>
+       <c:if test="${inquiry.checkFlag == 1}">
        <td>답변완료</td>
        </c:if>
-       <c:if test="${qna.checkFlag == 0}">
+       <c:if test="${inquiry.checkFlag == 0}">
        <td>미답변</td>
        </c:if>
        <td>
-        <input type="hidden" value="${qna.groupNo}">
-        <c:if test="${qna.checkFlag == 1}">
+        <input type="hidden" value="${inquiry.groupNo}">
+        <c:if test="${inquiry.checkFlag == 1}">
         <input type="button" id="btn_answer" value="추가답변하기">
         </c:if>
-        <c:if test="${qna.checkFlag == 0}">
+        <c:if test="${inquiry.checkFlag == 0}">
         <input type="button" id="btn_answer" value="답변하기">
         </c:if>
-        <input type="hidden" value="${qna.qnaNo}">
+        <input type="hidden" value="${inquiry.inquiryNo}">
        </td>
       </tr>
      </c:forEach>
