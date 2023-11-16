@@ -73,7 +73,11 @@
         $.each(resData.productList, (i, product) => {
           let str = '<div class="product" data-product_no="' + product.productNo + '">';
           str += '<div class="product_thumbnail">';
-          str += '  <img src="${contextPath}' + product.productImageDto.path + '/' + product.productImageDto.filesystemName + '">';
+          if(product.productImageDto === null){
+        	  str += '썸네일 없음';
+          } else {
+            str += '  <img src="${contextPath}' + product.productImageDto.path + '/' + product.productImageDto.filesystemName + '">';
+          }
           str += '</div>';
           str += '<div>' + product.productName + '</div>'
           str += '<div>' + product.productTitle + '</div>';
