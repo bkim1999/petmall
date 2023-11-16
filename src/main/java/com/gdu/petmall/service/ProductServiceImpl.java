@@ -233,9 +233,9 @@ public class ProductServiceImpl implements ProductService {
   }
   
   @Override
-  public List<ProductImageDto> loadProductImageList(HttpServletRequest request) {
-    String imageCode = request.getParameter("imageCode");
-    return productMapper.getProductImageList(imageCode);
+  public Map<String, Object> loadProductImageList(HttpServletRequest request) {
+    int productNo = Integer.parseInt(request.getParameter("productNo"));
+    return Map.of("productImageList", productMapper.getProductImageList(productNo));
   }
   
   @Override

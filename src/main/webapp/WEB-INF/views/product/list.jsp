@@ -16,31 +16,40 @@
   }
   .product_list {
     width: 1000px;
-    margin: 10px auto;
+    margin: 100px auto;
     display: flex;
     flex-wrap: wrap;
+   }
   .product {
     width: 400px;
     height: 600px;
     text-align: left;
-    padding-top: 100px;
     margin: 20px 10px;
   }
   .product_thumbnail {
-    width: 100%;
-    width: 400px;
+    margin: 0;
     height: 400px;
+    text-align: center;
+  }
+  .product_thumbnail > img {
+    height: 100%;
   }
   .product:hover {
     cursor: pointer;
+  }
+  
+  h1 {
+    margin: 100px 0;
+    text-align:center;
   }
 </style>
 
 <div>
   
   <h1>상품 목록</h1>
-  <div id="product_list" class="product_list"></div>
-
+  <div id="product_list" class="d-flex justify-content-evenly product_list"></div>
+  
+  
 </div>
 
 <script>
@@ -71,19 +80,21 @@
         }
         totalPage = resData.totalPage;
         $.each(resData.productList, (i, product) => {
-          let str = '<div class="product" data-product_no="' + product.productNo + '">';
-          str += '<div class="product_thumbnail">';
+        	let str = '<div class="card product" data-product_no="' + product.productNo + '">';        	
+        	str += '  <div class="product_thumbnail">';
           if(product.productImageDto === null){
-        	  str += '썸네일 없음';
+              str += '썸네일 없음';
           } else {
-            str += '  <img src="${contextPath}' + product.productImageDto.path + '/' + product.productImageDto.filesystemName + '">';
+            str += '    <img class= "col-md-11" src="${contextPath}' + product.productImageDto.path + '/' + product.productImageDto.filesystemName + '">';
           }
-          str += '</div>';
-          str += '<div>' + product.productName + '</div>'
-          str += '<div>' + product.productTitle + '</div>';
-          str += '<div>' + product.productPrice + '원</div>';
-          str += '<div>리뷰 ' + product.reviewCount + '</div>';
-          str += '</div>';
+          str += '  </div>';
+          str += '  <div class="card-body">';
+          str += '  <h4 class="card-title">' + product.productName + '</h4>';
+          str += '  <h6 class="card-subtitle mb-2 text-muted">' + product.productTitle + '</h6>';
+          str += '  <p class="card-text">' + product.productPrice + '원</p>';
+          str += '  <p class="card-text">' + product.reviewCount + '개의 리뷰</p>';
+          str += '  </div>';
+          str += '</div>';        	
           $('#product_list').append(str);
         });
       }

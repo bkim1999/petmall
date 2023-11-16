@@ -117,11 +117,11 @@
     )
   </insert>
 
-  <select id="getProductImageList" parameterType="String" resultType="ProductImageDto">
+  <select id="getProductImageList" parameterType="int" resultType="ProductImageDto">
     SELECT IMAGE_CODE, POSITION, PATH, FILESYSTEM_NAME
       FROM PRODUCT_IMAGE_T
-     WHERE IMAGE_CODE = #{imageCode}
-       AND POSITION != 'contents'
+     WHERE IMAGE_CODE = 'product_' || #{productNo}
+       AND POSITION = 'display'
   </select>
     
   <insert id="insertProductImage" parameterType="ProductImageDto">
