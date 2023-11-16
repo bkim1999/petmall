@@ -44,7 +44,12 @@
        </c:if>
        <td>
         <input type="hidden" value="${qna.groupNo}">
+        <c:if test="${qna.checkFlag == 1}">
+        <input type="button" id="btn_answer" value="추가답변하기">
+        </c:if>
+        <c:if test="${qna.checkFlag == 0}">
         <input type="button" id="btn_answer" value="답변하기">
+        </c:if>
         <input type="hidden" value="${qna.qnaNo}">
        </td>
       </tr>
