@@ -10,12 +10,20 @@
   <jsp:param value="로그인" name="title"/>
 </jsp:include>
 
-<div>
 
+<style>
+.login_wrap{margin:0 auto;}
+
+</style>
 
 
 
 <div class="logo"><a href="${contextPath}/main.do"><img alt="로고" src=""></a></div>
+
+<div class="login_wrap">
+
+
+
 
 
 

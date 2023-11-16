@@ -10,12 +10,63 @@
   <jsp:param value="MyProfile" name="title"/>
 </jsp:include>
 
+<style>
+
+/*profile_wrap*/
+#profile_wrap{
+   width:850px;
+   margin:0 auto;
+}
+
+/* msg 정리 */
+.msg{width:70%; margin: 0 auto;}
+
+/*그외 div 정렬*/
+.cetner{width:70%; margin: 0 auto;}
+
+/*폰번호 중앙 정렬*/
+.mobile{width:28% ; height:40px;}
+
+/*폼요소 중앙정렬(인라인/블럭 모두)*/
+.form-control {width:70%; margin: 0 auto;}
+.text_center{text-align: center;}
+
+/*성별 중앙정렬*/
+.btn-group{width:70%; margin:0 auto;}
+.form-select{width: 12%; display: inline;}
+.gender_center{margin:0 auto;}
+
+
+/*주소폼 너비조정, 글씨 중앙 정렬*/
+.address{width:100%; margin:0 auto;}
+.postcode_control{width:70%; margin:0 auto; }
+.postcode{width:70%; display:inline;}
+
+/*우편번호 찾기 버튼*/
+.btn_postcode{width:170px; height:40px; padding:0;}
+
+
+/*라벨정리*/
+.label{width:15%; text-align:right;}
+
+
+/*체크박스*/
+.chk_each{margin-right:20px; }
+
+/*버튼 영역*/
+.btn_area{display:flex;  }
+
+
+</style>
+
+
+
 <!-- 마이페이지 네비게이션  -->
 <h1>PROFILE</h1>
 <jsp:include page="mypage_nav.jsp"></jsp:include>
 
 <!-- 본문  -->
-<div>
+<div id="profile_wrap">
 
 
 <form  method="post"  action="${contextPath}/user/mypage/modify.do" id="frm_profile">
@@ -28,8 +79,8 @@
 <div>
 
   <div>
-      <span>ID</span>
-      <input type="text" id="email"" name="email"  value="${sessionScope.user.email}"  readonly>
+     <div class="label"><span>ID(Email)</span></div>
+      <input  type="text" id="email"" name="email"  value="${sessionScope.user.email}"  class="form-control"  readonly>
   </div> 
   
 
@@ -38,18 +89,26 @@
 
 <!-- 이름  -->
 <div>
-  <span>이름*</span>
-  <input type="text" id="name"" name="name" value="${sessionScope.user.name}">
-  <div id="msg_name"></div>
+  <div class="label"><span>이름</span></div>
+  <input type="text" id="name"" name="name" value="${sessionScope.user.name}" class="form-control"  placeholder="*이름"> 
+  <div id="msg_name" class="msg"></div>
 </div>
 
 <!-- 성별 -->
-<div>
-<span>성별 </span>
-<label for="no"><input type="radio" id="no" name="gender" value="N" checked>선택안함</label>
-<label for="man"><input type="radio" id="man" name="gender" value="M" >남자</label>
-<label for="woman"><input type="radio"id="woman" name="gender" value="F">여자</label>
+
+
+<div class="text_center gender_center">
+ <div class="label"><span>성별</span></div>
+ <div class="btn-group " role="group" aria-label="Basic radio toggle button group" >
+  <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+  <label class="btn btn-outline-primary" for="btnradio1">선택안함</label>
+  <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" >
+  <label class="btn btn-outline-primary" for="btnradio2">&nbsp;&nbsp;&nbsp;남자&nbsp;&nbsp;&nbsp;</label>
+  <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off" >
+  <label class="btn btn-outline-primary" for="btnradio3">&nbsp;&nbsp;&nbsp;여자&nbsp;&nbsp;&nbsp;</label>
+ </div>
 </div>
+
 
 <!-- 회원이 기존에 선택한값 적용  -->
 <script>
@@ -60,24 +119,27 @@ $(':radio[value=${sessionScope.user.gender}]').prop('checked',true);
 
 <!-- 비번/비번확인  -->
 <div>
-
+ <div class="label"><span>비밀번호</span></div>
   <div>
-   <input type="password" id="pw"" name="pw" placeholder="비밀번호">
-   <div id="msg_pw"></div>
+   <input type="password" id="pw"" name="pw" placeholder="비밀번호" class="form-control">
+   <div id="msg_pw" class="msg"></div>
   </div>
 
 
   <div>
-    <input type="password" id="pw2"  placeholder="* 비밀번호 확인">
-    <div id="msg_pw2"></div>
+    <input type="password" id="pw2"  placeholder="* 비밀번호 확인" class="form-control">
+    <div id="msg_pw2" class="msg"></div>
 </div>
 
 
 </div>
 
 <!-- 휴대폰 번호  -->
+
+ <div class="label"><span>전화번호</span></div>
+<div class="text_center">
 <div>
-  <select id="mobile0" name="mobile">
+  <select id="mobile0" name="mobile"  class="form-select">
     <option>010</option>
     <option>011</option>
     <option>016</option>
@@ -87,12 +149,12 @@ $(':radio[value=${sessionScope.user.gender}]').prop('checked',true);
   </select>
   
   <span>-</span>
-  <input type="text" id="mobile1" name="mobile" size="4" maxlength="4" > 
+  <input type="text" id="mobile1" name="mobile" size="4" maxlength="4"  class="mobile"> 
   <span>-</span>
-  <input type="text" id="mobile2" name="mobile" size="4" maxlength="4"> 
+  <input type="text" id="mobile2" name="mobile" size="4" maxlength="4"  class="mobile"> 
   <div id="msg_mobile"></div>
 </div>
-
+</div>
  <!-- String 으로 받은 휴대폰 번호 처리 스크립트 --> 
 <script>
 
@@ -108,17 +170,24 @@ $('#mobile1').val(mobile1);
 $('#mobile2').val(mobile2);
 </script>
 
+
+
+ <div class="label"><span>주소</span></div>
 <!-- 주소 -->
-<div>
-<input type="text" id="postcode" name="postcode" placeholder="우편번호" value="${sessionScope.user.postcode}" disabled>
-<input type="button" onclick="execDaumPostcode()" value="우편번호 찾기" ><br>
-<input type="text" id="roadAddress"  name="roadAddress" placeholder="도로명주소" value="${sessionScope.user.roadAddress}" disabled>
-<input type="text" id="jibunAddress"  name="jibunAddress" placeholder="지번주소"value="${sessionScope.user.jibunAddress}" disabled> 
+<div class="address">
+
+  <div class="postcode_control">
+    <input type="text" id="postcode" name="postcode" placeholder="우편번호" value="${sessionScope.user.postcode}"  class="form-control postcode"  disabled>
+     <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기"  class="btn_postcode">
+  </div>
+  
+<input type="text" id="roadAddress"  name="roadAddress" placeholder="도로명주소" value="${sessionScope.user.roadAddress}" disabled  class="form-control" >
+<input type="text" id="jibunAddress"  name="jibunAddress" placeholder="지번주소"value="${sessionScope.user.jibunAddress}" disabled  class="form-control" > 
 <span id="guide" style="color:#999;display:none"></span>
-<input type="text" id="detailAddress" name="detailAddress" placeholder="상세주소"value="${sessionScope.user.detailAddress}" >
+<input type="text" id="detailAddress" name="detailAddress" placeholder="상세주소"value="${sessionScope.user.detailAddress}"   class="form-control" >
 
 
-<input type="text" id="extraAddress" name="extraAddress" placeholder="참고항목" disabled>
+<input type="text" id="extraAddress" name="extraAddress" placeholder="참고항목" disabled  class="form-control" >
 
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
@@ -187,9 +256,9 @@ $('#mobile2').val(mobile2);
 
 
 <!-- 이벤트 수신여부 -->
-<div>
+<div class="cetner">
 
-<div><label for="event"><input type="checkbox" id="event" name="event" class="chk_each" >[선택]광고성 정보 이메일 수신 동의</label></div>
+<div><label class="check_label  form-check-label" for="event"><input type="checkbox" id="event" name="event" class="chk_each  form-check-input" >[선택]광고성 정보 이메일 수신 동의</label></div>
 
 <script type="text/javascript">
 if(${sessionScope.user.agree==1}){$('#event').prop('checked',true);}
@@ -201,15 +270,19 @@ else {$('#event').prop('checked',false);}
 
 <!-- 버튼  -->
  
-<div>
+ <div class="btn_area">
+ 
+ <div>
 <input type="hidden" name="userNo" value="${sessionScope.user.userNo}">
-<button type="button" id="btn_modify">회원정보수정</button>
-<button type="button" id="btn_cancel">취소</button>
+<button type="button" id="btn_modify" class="btn btn-primary">회원정보수정</button>
+<button type="button" id="btn_cancel" class="btn btn-primary">취소</button>
 </div>
 
 <div>
-<button type="button" id="btn_leave">회원탈퇴</button>
+<button type="button" id="btn_leave" class="btn btn-primary">회원탈퇴</button>
 </div>
+ 
+ </div>
 
 
 </div>
