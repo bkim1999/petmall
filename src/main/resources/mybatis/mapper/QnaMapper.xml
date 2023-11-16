@@ -147,7 +147,15 @@
 	    FROM QATTACH_T
 	    WHERE QATTACH_NO = #{qattachNo}
 	</select>	  
-  
+ 
+    <select id="getCommentList" parameterType="int" resultMap="QnaMap">
+        SELECT Q.QNA_NO, Q.CONTENTS, Q.STATUS, Q.GROUP_NO, Q.DEPTH, U.USER_NO, U.EMAIL, U.NAME
+        FROM USER_T U, QNA_T Q
+        WHERE U.USER_NO = Q.USER_NO       
+        AND Q.GROUP_NO = #{groupNo}
+        AND Q.STATUS =1
+        AND Q.DEPTH =1
+    </select> 	 
   
 </mapper>
 
