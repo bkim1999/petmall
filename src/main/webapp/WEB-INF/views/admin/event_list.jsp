@@ -12,7 +12,7 @@
 
 
   <div><button type="button" id="btn_write">이벤트 추가하기</button></div>
-  <table border="1">  
+  <table border="1" class="table table-hover">  
     <thead>
       <tr>
         <td>이벤트 번호</td>
@@ -47,7 +47,7 @@
     		return;
     	 }
     	 $.each(resData.eventList, (i, event) => {
-    	   let str ='<tr>'
+    	   let str ='<tr class="table-secondary">'
     	   str +='<td>'+event.eventNo+'</td>';
     	   str +='<td>'+event.title+'</td>';
     	   str +='<td><img src="'+'${contextPath}'+event.eventThumnailUrl+'"width="100px" height="100px"></td>'
@@ -56,19 +56,19 @@
     	   str +='<td>';
     	   str +='<input type="text" value="'+event.discountPercent+'" readonly>';
     	   str +='<div>';
-    	   str +='<form id="frm_changePercent">';
+    	   str +='<form class="frm_changePercent">';
     	   str +='<input type="text" name="discountPercent" placeholder="변경될할인율을 입력해주세요">';
-    	   str +='<input id="change_Percent" type="submit" value="할인율 변경하기">';
+    	   str +='<input class="change_Percent" type="submit" value="할인율 변경하기">';
     	   str +='<input type="hidden" name="eventNo" value="'+event.eventNo+'">';
     	   str +='</form>';
     	   str +='</div>';
     	   str +='</td>';
     	   str +='<td>';
-    	   str +='<input type="text" value="'+event.discountPrice+'">';
+    	   str +='<input type="text" value="'+event.discountPrice+'" readonly>';
     	   str +='<div>';
-    	   str +='<form id="frm_changePrice">';
+    	   str +='<form class="frm_changePrice">';
     	   str +='<input type="text" name="discountPrice" placeholder="변경될할인가를 입력해주세요">';
-    	   str +='<input id="change_Price" type="button" value="할인가 변경하기">';
+    	   str +='<input class="change_Price" type="submit" value="할인가 변경하기">';
     	   str +='<input type="hidden" name="eventNo" value="'+event.eventNo+'">';
     	   str +='</form>';
     	   str +='</div>';
@@ -177,7 +177,17 @@
      } 
      
      function fnChangePercent() {
-       $(document).on('click','#change_Percent',function(ev){
+       $(document).on('click','.change_Percent',function(ev){
+    	let maxPercent = 100;
+    	let minPercent = 0;
+        if($(this).prev().val() > maxPercent){
+            alert('할인율의 최대는 100입니다');
+            return;
+        }
+        if($(this).prev().val() < minPercent){
+            alert('할인율의 최소는 0입니다');
+            return;	
+        }
        	if(!confirm('해당 할인율을 변경시키겠습니까?')){
       	  return;
          }
@@ -185,11 +195,11 @@
        	  //요청
        	  type:'get',
           url: '${contextPath}/event/changePercent.do',
-          data: $('#frm_changePercent').serialize(),
+          data: $(this).parent().serialize(),
           // 응답
       	  dataType: 'json',
       	  success : (resData) => {
-      		if(resData.dpResult === 1){
+      		if(resData.PercentResult === 1){
       		  alert('할인율이 변경되었습니다.');
       		  fnReEventList();	
       		} else {
@@ -202,7 +212,7 @@
      }
      
      function fnChangePrice() {
-         $(document).on('click','#change_Price',function(ev){
+         $(document).on('click','.change_Price',function(ev){
          	if(!confirm('해당 할인율을 변경시키겠습니까?')){
         	  return;
            }
@@ -210,11 +220,11 @@
          	  //요청
          	type:'get',
             url: '${contextPath}/event/changePrice.do',
-            data: $('#frm_changePrice').serialize(),
+            data: $(this).parent().serialize(),
             // 응답
         	  dataType: 'json',
         	  success : (resData) => {
-        		if(resData.PercentResult === 1){
+        		if(resData.PriceResult === 1){
         		  alert('할인가가 변경되었습니다.');
         		  fnReEventList();	
         		} else {
