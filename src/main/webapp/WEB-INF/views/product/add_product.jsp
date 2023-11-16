@@ -60,11 +60,14 @@
     </div>
     <div>
       <label for="productWarning">상품가격</label>
-      <input type="text" name="productPrice" id="productPrice" class="product_input">
+      <input type="text" name="productPrice" id="productPrice" class="product_input number_input">
     </div>
     <hr>
     
-    <h1>옵션 추가</h1>
+    <h1>옵션</h1>
+    
+    <div id="option_list"></div>
+    <div><button type="button" id="btn_add_option" >옵션 추가</button></div>
     
     <button type="submit">상품 추가</button>
     
@@ -115,10 +118,10 @@
         if($.trim($(input).val()) === ''){
           alert('빈칸에 내용을 입력해주세요.');
           ev.preventDefault();
-          return;
+          return false;
         }
 	    });
-	    if(!/^[0-9]+$/.test($('#productPrice').val())){
+	    if(!/^[0-9]+$/.test($('.number_input').val())){
 	    	alert('가격칸에는 숫자만 입력해주세요.');
 	    	ev.preventDefault();
 	    	$('#productPrice').val('');
@@ -158,9 +161,32 @@
     });
   }
   
+  let optionCount = 0;
+  
+  const fnAddOption = () => {
+	  $('#btn_add_option').click((ev) => {
+		  let str = '<div class="option">';
+		  str += '  <div>';
+		  str += '    <label for="productOptionList[' + optionCount + '].optionName">옵션명</label>';
+			str += '    <input type="text" name="productOptionList[' + optionCount + '].optionName" id="productOptionList[' + optionCount + '].optionName" class="product_input">';
+			str += '  </div>';
+      str += '  <div>';
+      str += '    <label for="productOptionList[' + optionCount + '].addPrice">추가금액</label>';
+      str += '    <input type="text" name="productOptionList[' + optionCount + '].addPrice" id="productOptionList[' + optionCount + '].addPrice" class="product_input number_input">';
+      str += '  </div>';
+      str += '  <div>';
+      str += '    <label for="productOptionList[' + optionCount + '].optionCount">재고</label>';
+      str += '    <input type="text" name="productOptionList[' + optionCount + '].optionCount" id="productOptionList[' + optionCount + '].optionCount" class="product_input number_input">';
+      str += '  </div>';
+		  $('#option_list').append(str);
+		  optionCount = optionCount + 1;
+	  });
+  }
+  
   fnCkeditor();
   fnCheckRequired();
   fnFileCheck();
+  fnAddOption();
   
 </script>
 

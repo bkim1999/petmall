@@ -25,12 +25,12 @@
 
 <div>
   
-  <form id="frm_add_review" method="post" action="${contextPath}/product/addReview.do" enctype="multipart/form-data">
+  <form id="frm_add_review" method="post" action="${contextPath}/review/addReview.do" enctype="multipart/form-data">
     <h1>상품 리뷰</h1>
-    <div>상품명: ${product.productName}</div>
+    <div>상품명: ${productName} (${optionName})</div>
     <div>
-      <label for="productRating">평점</label>
-      <input type="text" name="productRating" id="productRating" class="review_input">
+      <label for="reviewRating">평점</label>
+      <input type="text" name="reviewRating" id="reviewRating" class="review_input">
     </div>
     <div>
       <label for="reviewTitle">제목</label>
@@ -42,10 +42,11 @@
     </div>
     <div class="mt-3">
       <label for="files" class="form-label">사진첨부</label>
-      <input type="file" name="review_images" id="review_images" class="form-control" multiple>
+      <input type="file" name="review_images" id="review_images" class="form-control">
     </div>
     <div>
-      <input type="hidden" name="userNo" value="${sessionScope.userDto.userNo}">
+      <input type="hidden" name="userNo" value="${sessionScope.user.userNo}">
+      <input type="hidden" name="productNo" value="${productNo}">
       <input type="hidden" name="optionNo" value="${optionNo}">
       <button type="submit">작성</button>
     </div>

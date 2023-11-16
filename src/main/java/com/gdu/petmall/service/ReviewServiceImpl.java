@@ -10,10 +10,11 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.gdu.petmall.dao.ProductMapper;
 import com.gdu.petmall.dao.ReviewMapper;
 import com.gdu.petmall.dto.ProductImageDto;
 import com.gdu.petmall.dto.ProductOptionDto;
@@ -30,6 +31,7 @@ import net.coobird.thumbnailator.Thumbnails;
 public class ReviewServiceImpl implements ReviewService {
   
   private final ReviewMapper reviewMapper;
+  private final ProductMapper productMapper;
   private final MyPageUtils myPageUtils;
   private final MyFileUtils myFileUtils;
   
@@ -68,8 +70,9 @@ public class ReviewServiceImpl implements ReviewService {
     return Map.of("productOrderList", productOrderList);
   }
   
+  @Transactional
   @Override
-  public boolean addReview(int productNo, ReviewDto review, MultipartHttpServletRequest multipartRequest) {
+  public boolean addReview(int productNo, ReviewDto review, MultipartHttpServletRequest multipartRequest) throws Exception {
     int addReviewResult = reviewMapper.insertProductReview(review);
     reviewMapper.updateProductRating(productNo);
     
@@ -77,8 +80,16 @@ public class ReviewServiceImpl implements ReviewService {
     String imagePath = "/product/" + DateTimeFormatter.ofPattern("yyyy/MM/dd").format(today);
     List<MultipartFile> reviewImages = multipartRequest.getFiles("review_images");
     
+    int attachCount = 0;
+
+    if(reviewImages.get(0).getSize() == 0) {
+      attachCount = 1;
+    } else {
+      attachCount = 0;
+    }
+    
     for(MultipartFile reviewImage : reviewImages) {
-      
+
       if(reviewImage != null && !reviewImage.isEmpty()) {
         // Add Review thumbnails
         String filesystemName = myFileUtils.getFilesystemName(reviewImage.getOriginalFilename());
@@ -94,37 +105,10 @@ public class ReviewServiceImpl implements ReviewService {
             .imageCode("review_" + review.getReviewNo())
             .position("thumbnail")
             .path(imagePath)
-            .filesystemName(filesystemName)
+            .filesystemName("s_" + filesystemName)
             .build();
-        reviewMapper.insertReviewImage(thumbnailImage);
 
-        // Add ProductImageDto(Product images)
-        List<MultipartFile> reviewImages = multipartRequest.getFiles("product_images");
-        int attachCount;
-        if(reviewImages.get(0).getSize() == 0) {
-          attachCount = 1;
-        } else {
-          attachCount = 0;
-        }
-        
-        File dir = new File(imagePath);
-        String productImageFilename = myFileUtils.getFilesystemName(reviewImage.getOriginalFilename());
-        File tempFile = new File(dir, productImageFilename);
-        reviewImage.transferTo(tempFile);
-
-        File productImageFile = new File(dir, "d_" + productImageFilename);
-        Thumbnails.of(tempFile)
-                  .size(754, 754)      // 가로 754px, 세로 754px
-                  .imageType(ThumbnailParameter.DEFAULT_IMAGE_TYPE)
-                  .toFile(productImageFile);
-
-        ProductImageDto productImageDto = ProductImageDto.builder()
-            .imageCode("product_" + product.getProductNo())
-            .position("display")
-            .path(imagePath)
-            .filesystemName(productImageFilename)
-            .build();
-        attachCount += productMapper.insertProductImage(productImageDto);
+        attachCount += productMapper.insertProductImage(thumbnailImage);
         
       }
       

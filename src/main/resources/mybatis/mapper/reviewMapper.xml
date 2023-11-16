@@ -5,18 +5,36 @@
   
 <mapper namespace="com.gdu.petmall.dao.ReviewMapper">
 	
+  <resultMap type="ReviewDto" id="ReviewMap">
+    <id     column="REVIEW_NO"          property="reviewNo" />
+    <result column="USER_NO"            property="userNo" />
+    <result column="OPTION_NO"          property="optionNo" />
+    <result column="REVIEW_TITLE"       property="reviewTitle" />
+    <result column="REVIEW_CONTENTS"    property="reviewContents" />
+    <result column="REVIEW_RATING"      property="reviewRating" />
+    <association javaType="ProductImageDto"  property="reviewImageDto">
+      <id     column="IMAGE_CODE"          property="imageCode" />
+      <result column="POSITION"      property="position" />
+      <result column="PATH"      property="path" />
+      <result column="FILESYSTEM_NAME"      property="filesystemName" />
+    </association>
+  </resultMap>
+  
+  
+  
   <select id="getProductReviewCount" parameterType="int" resultType="int">
     SELECT COUNT(*)
       FROM REVIEW_T
      WHERE OPTION_NO IN (<include refid = "getProductOptionNo"/>)
   </select>
   
-  <select id="getProductReviewList" parameterType="Map" resultType="ReviewDto">
-    SELECT A.REVIEW_NO, A.USER_NO, A.OPTION_NO, A.REVIEW_TITLE, A.REVIEW_CONTENTS, A.REVIEW_RATING, A.REVIEW_CREATED_AT, A.REVIEW_MODIFIED_AT
+  <select id="getProductReviewList" parameterType="Map" resultMap="ReviewMap">
+    SELECT A.REVIEW_NO, A.USER_NO, A.OPTION_NO, A.REVIEW_TITLE, A.REVIEW_CONTENTS, A.REVIEW_RATING, A.REVIEW_CREATED_AT, A.REVIEW_MODIFIED_AT, RI.PATH, RI.POSITION, RI.FILESYSTEM_NAME
       FROM (SELECT ROW_NUMBER() OVER(ORDER BY ${order} DESC) AS RN, REVIEW_NO, USER_NO, OPTION_NO, REVIEW_TITLE, REVIEW_CONTENTS, REVIEW_RATING, REVIEW_CREATED_AT, REVIEW_MODIFIED_AT
               FROM REVIEW_T
              WHERE OPTION_NO IN (<include refid = "getProductOptionNo"/>)
-             ) A
+             ) A LEFT OUTER JOIN PRODUCT_IMAGE_T RI
+        ON RI.IMAGE_CODE = 'review_' || A.REVIEW_NO
      WHERE A.RN BETWEEN #{begin} AND #{end}
   </select>
   
@@ -60,7 +78,7 @@
      UPDATE PRODUCT_T
        SET PRODUCT_RATING = (SELECT AVG(REVIEW_RATING) 
                                FROM REVIEW_T 
-                              WHERE OPTION_NO IN (<include refid = "getProductOptionNo"/>)
+                              WHERE OPTION_NO IN (<include refid = "getProductOptionNo"/>))
   </update>
   
   <sql id = "getProductOptionNo">

@@ -17,6 +17,12 @@
   <div>${product.productDescription}</div>
   <div>${product.productSize}</div>
   <div>${product.productWarning}</div>
+  <c:if test="${sessionScope.user.adminAuthorState == 1}">
+    <form method="post" action="${contextPath}/product/removeProduct.do" id="frm_remove_product">
+      <input type="hidden" name="productNo" value="${product.productNo}">
+      <button>상품삭제</button>
+    </form>
+  </c:if>
   
   <c:if test="${not empty optionList}">
     <div>
@@ -125,8 +131,10 @@
 	          let str = '<div class="review_btn" id="' + option.optionNo + '">';
 	          str += '  <div>' + option.optionName + '</div>';
 	          str += '  <form method="get" action="${contextPath}/review/addReview.form">';
-	          str += '    <input type="hidden" name="product" value="${product}">';
+	          str += '    <input type="hidden" name="productNo" value="${product.productNo}">';
+	          str += '    <input type="hidden" name="productName" value="${product.productName}">';
 	          str += '    <input type="hidden" name="optionNo" value="' + option.optionNo + '">';
+	          str += '    <input type="hidden" name="optionName" value="' + option.optionName + '">';
 	          str += '    <button>리뷰 작성</button>';
 	          str += '</div>';
 	          $('#order_list').append(str);
@@ -151,7 +159,7 @@
             },
       // 응답
       dataType: 'json',
-      success: (resData) => {  // resData = {"reviewList": [], paging: ""}
+      success: (resData) => {  // resData = {"reviewList": [], "paging": ""}
         if(resData.reviewList === null){
           alert('리뷰 목록 불러오기 실패');
           return;
@@ -169,15 +177,26 @@
         		str += '<button type="button" class="btn_remove_review">삭제</button>';
         	}
           str += '<div>' + review.reviewRating + '</div>';
-          str += '<div class="review_thumbnail">사진';
+          str += '<div class="review_thumbnail">';
+          str += '  <image src="${contextPath}/' + review.path + '/' + review.filesystemName + '">';
           str += '</div>';
           str += '<div>' + review.reviewTitle+ '</div>'
           str += '<div>' + review.reviewContents + '</div>';
           str += '</div>';
           $('#review_list').append(str);
         });
+        $('#review_list').append(resData.paging);
       }
     })
+  }
+  
+  const fnRemoveProduct = () => {
+	  $('#frm_remove_product').submit(function(ev) {
+		  if(!confirm('이 상품을 삭제하시겠습니까?')){
+			  ev.preventDefault();
+			  return;
+		  }
+	  });
   }
   
   
@@ -185,6 +204,7 @@
   fnDecreaseCount();
   fnIncreaseCount();
   fnGetProductOrderList();
+  fnRemoveProduct();
 
   </script>
 

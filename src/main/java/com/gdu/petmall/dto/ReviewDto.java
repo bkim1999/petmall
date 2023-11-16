@@ -15,5 +15,6 @@ public class ReviewDto {
   private int optionNo;
   private String reviewTitle;
   private String reviewContents;
-  private double reviewRating;  
+  private double reviewRating; 
+  private ProductImageDto reviewImageDto;
 }
