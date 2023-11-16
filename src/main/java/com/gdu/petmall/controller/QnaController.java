@@ -75,6 +75,10 @@ public class QnaController {
     model.addAttribute("qna", qna);
     model.addAttribute("groupNo", qna.getGroupNo()); 
     qnaService.loadQna(request, model);
+    
+
+    qnaService.loadCommentlist(request, model);
+    
     return "user/qnadetail";
   }
   
