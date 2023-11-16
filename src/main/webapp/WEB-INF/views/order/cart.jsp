@@ -6,6 +6,26 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <c:set var="dt" value="<%=System.currentTimeMillis()%>" />
+<style>
+  .cart_info_td {
+    height: 10px;
+    margin: 10px;
+  }
+  
+  .totalPrice_span {
+    height: 100px;
+    margin: 120px;
+  }
+  
+  .b {
+    height: 100px;
+    margin: 10px;
+  }
+  .cart_checkbox{
+    height: 10px;
+    margin: 10px;
+  }
+</style>
 
 <jsp:include page="../layout/header.jsp">
   <jsp:param value="장바구니" name="cart"/>
@@ -23,7 +43,7 @@
       <h3>일반상품</h3>
     </div>
     <form id="frm_btn"> 
-      <table border="1">
+      <table border="1" class="b">
         <thead>
           <tr>
             <th>이미지 / 상품명 / 판매가 /수량 /적립금 /배송 /상품합계 </th>
@@ -32,7 +52,7 @@
         <tbody>
         <caption>장바구니</caption>
           <c:forEach var="cartProduct" items="${cartList}">
-            <tr>
+            <tr class="a">
               <td class="cart_info_td">
                 <input type="checkbox" class="cart_checkbox" checked="checked">
                 <input type="" class="image" value="이미지">
