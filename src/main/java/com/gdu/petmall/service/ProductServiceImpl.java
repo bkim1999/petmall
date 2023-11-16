@@ -148,15 +148,21 @@ public class ProductServiceImpl implements ProductService {
   
   @Transactional
   @Override
-  public void addProduct(ProductDto product, MultipartHttpServletRequest multipartRequest, RedirectAttributes redirectAttributes) throws Exception {
+  public boolean addProduct(ProductDto product, List<ProductOptionDto> productOptionList, MultipartHttpServletRequest multipartRequest) throws Exception {
     
     // Add ProductDto
     LocalDate today = LocalDate.now();
     String imagePath = "/product/" + DateTimeFormatter.ofPattern("yyyy/MM/dd").format(today);
     int addProductResult = productMapper.insertProduct(product);
-    redirectAttributes.addFlashAttribute("addProductResult", addProductResult);
     
-    // Add ProductImageDto's
+    // Add ProductOptionDtos
+    for(ProductOptionDto option : productOptionList) {
+      option.setProductNo(product.getProductNo());
+      productMapper.insertProductOption(option);
+    }
+    
+    
+    // Add ProductImageDtos
     for(String editorImage : getEditorImageList(product.getProductContents())) {
       ProductImageDto productImage = ProductImageDto.builder()
                                       .imageCode("product_" + product.getProductNo())
@@ -222,18 +228,20 @@ public class ProductServiceImpl implements ProductService {
       
     }
     
-    if((addProductResult == 1) && (productImages.size() == attachCount) == false) {
+    return (addProductResult == 1) && (productImages.size() == attachCount);
       
-    }
-    
-
-    
   }
   
   @Override
   public List<ProductImageDto> loadProductImageList(HttpServletRequest request) {
     String imageCode = request.getParameter("imageCode");
     return productMapper.getProductImageList(imageCode);
+  }
+  
+  @Override
+  public void removeProduct(int productNo, RedirectAttributes redirectAttributes) {
+    int removeProductResult = productMapper.deleteProduct(productNo);
+    redirectAttributes.addFlashAttribute("removeProductResult", removeProductResult);
   }
   
 }

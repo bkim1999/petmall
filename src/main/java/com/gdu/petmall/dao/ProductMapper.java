@@ -16,6 +16,8 @@ public interface ProductMapper {
   public ProductDto getProduct(int productNo);
   public List<ProductOptionDto> getOptionList(int productNo);
   public int insertProduct (ProductDto product);
+  public int insertProductOption (ProductOptionDto option);
   public List<ProductImageDto> getProductImageList(String imageCode);
   public int insertProductImage(ProductImageDto productImage);
+  public int deleteProduct(int productNo);
 }

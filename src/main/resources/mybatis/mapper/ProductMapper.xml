@@ -39,8 +39,8 @@
                   , PI.PATH, PI.FILESYSTEM_NAME
                FROM PRODUCT_T P LEFT OUTER JOIN PRODUCT_IMAGE_T PI
                  ON PI.IMAGE_CODE = 'product_' || P.PRODUCT_NO
+                AND PI.POSITION = 'thumbnail'
               <where>
-                PI.POSITION = 'thumbnail'
                 <if test="categoryNo != 0">
                   AND CATEGORY_NO = #{categoryNo}
                 </if>
@@ -100,6 +100,22 @@
       , null
     )
   </insert>
+  
+  <insert id="insertProductOption" parameterType="ProductOptionDto">
+    INSERT INTO PRODUCT_OPTION_T (
+      OPTION_NO
+    , PRODUCT_NO
+    , OPTION_NAME
+    , ADD_PRICE
+    , OPTION_COUNT    
+    ) VALUES (
+      PRODUCT_OPTION_SEQ.NEXTVAL
+    , #{productNo}
+    , #{optionName}
+    , #{addPrice}
+    , #{optionCount}
+    )
+  </insert>
 
   <select id="getProductImageList" parameterType="String" resultType="ProductImageDto">
     SELECT IMAGE_CODE, POSITION, PATH, FILESYSTEM_NAME
@@ -121,6 +137,12 @@
     , #{filesystemName}
     )
   </insert>
+  
+  <delete id="deleteProduct" parameterType="int">
+    DELETE 
+      FROM PRODUCT_T
+     WHERE PRODUCT_NO = #{productNo}
+  </delete>
   
   
 </mapper>
