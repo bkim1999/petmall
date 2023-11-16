@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
 @Override
 public void login(HttpServletRequest request, HttpServletResponse response) throws Exception {
 	 
-  String email = request.getParameter("email");
+  String email = mySecurityUtils.preventXSS(request.getParameter("email"));
   String pw = mySecurityUtils.getSHA256(request.getParameter("pw")); 
   
   Map<String, Object> map = Map.of("email", email
@@ -368,8 +368,8 @@ public void getPoint(HttpServletRequest request, Model model) {
 @Override
 public ResponseEntity<Map<String, Object>> findId(HttpServletRequest request) {
 	
-	String name= request.getParameter("name");
-	String mobile= request.getParameter("mobile");
+	String name= mySecurityUtils.preventXSS(request.getParameter("name"));
+	String mobile= mySecurityUtils.preventXSS(request.getParameter("mobile"));
 	
 	String email= userMapper.getEmail(Map.of("name",name,"mobile",mobile));
 	
@@ -386,24 +386,68 @@ public ResponseEntity<Map<String, Object>> findId(HttpServletRequest request) {
 }
 
 
-/*비밀번호 찾기*/
+/*일치하는 이메일 조회(비번 변경용)*/
 @Override
-public ResponseEntity<Map<String, Object>> findPw(HttpServletRequest request) {
-	String email=request.getParameter("email");
-	String pw=userMapper.getPw(Map.of("email",email));
+public ResponseEntity<Map<String, Object>> changePw(HttpServletRequest request) {
+	
+	
+	String email=mySecurityUtils.preventXSS(request.getParameter("email"));	
 	
 	
 	
-	// 아이디가 검색되었을때
-	if(pw!=null)
-	{
-		return new ResponseEntity<>(Map.of("pw", pw), HttpStatus.OK);
-	}
-	else {
-		return new ResponseEntity<>(Map.of("pw", 0), HttpStatus.OK);
-	}
+	// 일치하는 이메일이 있으면 비번 변경폼 보여주고 
+	//email을 modfyPw로 전달해야함 
+	if(userMapper.getEmailforPw(Map.of("email",email))==1) {
+		
+		return new ResponseEntity<>(Map.of("result", 1), HttpStatus.OK);
+		
+	}else {
+		return new ResponseEntity<>(Map.of("result", 0), HttpStatus.OK);
+	}	
+
 }
 
+/*비번 변경 적용*/
+@Override
+public void modifyPw(HttpServletRequest request, HttpServletResponse response) {
+
+	String email=mySecurityUtils.preventXSS(request.getParameter("valid_email"));
+	String pw=mySecurityUtils.getSHA256(request.getParameter("pw"));
+	
+	UserDto user=UserDto.builder()
+											.email(email)
+											.pw(pw)
+											.build();
+											
+	
+	int updateResult=userMapper.updatePw(user);
+	
+	try {
+		
+		response.setContentType("text/html; charset=UTF-8");
+		PrintWriter out=response.getWriter();
+		out.println("<script>");
+		if(updateResult==1)
+		{
+			out.println("alert('비밀번호가 변경되었습니다.')");
+			out.println("location.href='"+request.getContextPath()+"/main.do'");
+		}
+		else {
+			out.println("alert('비밀번호 변경이 실패했습니다.')");
+			out.println("history.back()");
+		}
+		
+		out.println("</script>");
+		 out.flush();
+     out.close();
+		
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+	
+	
+
+}
 
 /* **************************네이버 api 관련 *********************** */
 /*네이버 간편 가입*/
@@ -573,8 +617,45 @@ public void naverLogin(HttpServletRequest request, HttpServletResponse response,
 }
 /* ***************************************************************** */
 
+/*회원 휴면 처리*/
+@Override
+public void inactiveUserBatch() {
+	
+  userMapper.insertInactiveUser();
+  userMapper.deleteUserForInactive();
+}
 
-
+/*휴면 복원*/
+@Override
+public void active(HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+	
+	
+  InactiveUserDto inactiveUser = (InactiveUserDto)session.getAttribute("inactiveUser");
+  String email = inactiveUser.getEmail();
+  
+  int insertActiveUserResult = userMapper.insertActiveUser(email);
+  int deleteInactiveUserResult = userMapper.deleteInactiveUser(email);
+  
+  try {
+    response.setContentType("text/html; charset=UTF-8");
+    PrintWriter out = response.getWriter();
+    out.println("<script>");
+    if(insertActiveUserResult == 1 && deleteInactiveUserResult == 1) {
+      out.println("alert('휴면계정이 복구되었습니다. 계정 활성화를 위해서 곧바로 로그인 해 주세요.')");
+      out.println("location.href='" + request.getContextPath() + "/main.do'"); 
+    } else {
+      out.println("alert('휴면계정이 복구가 실패했습니다. 다시 시도하세요.')");
+      out.println("history.back()");
+    }
+    out.println("</script>");
+    out.flush();
+    out.close();
+  } catch (Exception e) {
+    e.printStackTrace();
+  }
+	
+	
+}
 
 
 

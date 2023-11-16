@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gdu.petmall.dto.UserDto;
 import com.gdu.petmall.service.UserService;
@@ -34,17 +34,40 @@ public class UserController {
 	@GetMapping(value = "/login.form")
 	public String loginForm(HttpServletRequest request, Model model) throws Exception{
 		
-		// 이전 주소 저장
+		// 이전 주소 저장되는 요청 Header  값
     String referer = request.getHeader("referer");
-    model.addAttribute("referer", referer == null ? request.getContextPath() + "/main.do" : referer);
+    
+    // 이전 페이지가 아닌 메인으로 되돌릴 url 
+    String[] exceptUrl = {"/join.form","/join_option.form","find_id.form","change_pw.form"};
+    String ret="";
+    
+    
+    if(referer!=null) {
+    	
+    			for(String url:exceptUrl) {
+    			
+    	// 강제로 메인으로 되돌릴 url
+    					if(referer.contains(url)) {
+    					ret =request.getContextPath()+"/main.do";
+    					}
+
+    			}
+
+    	}else {
+     // 이전 페이지 값이 없어서 메인으로 되돌림
+    	ret=request.getContextPath()+"/main.do";
+    	}
+    
+    // ret 값이 들어있지 않으면 referer, ret에 값이 있으면 ret 저장
+    model.addAttribute("referer", ret.isEmpty() ? referer : ret);
+    
+    //model.addAttribute("referer", referer == null ? request.getContextPath() + "/main.do" : referer);
     
     //네이버 간편 로그인 방식 선택시
     model.addAttribute("naverLoginURL", userService.getNaverLoginURL(request));
     
 		return"user/login";
 	}
-	
-	
 	
 	
 	
@@ -99,15 +122,21 @@ public class UserController {
   
   
   //비번 찾기 폼
-  @GetMapping(value = "/find_pw.form")
+  @GetMapping(value = "/change_pw.form")
   public String findPwForm() {
   	
-  	return "user/find_pw";
+  	return "user/change_pw";
   }
   
   
+  //복원폼
+  @GetMapping("/active.form")
+  public String activeForm() {
+    return "user/active";
+  }
   
   
+ /* *********************************************8********** */ 
 	
 	// 로그인 
 	@PostMapping(value = "/login.do")
@@ -192,7 +221,6 @@ public class UserController {
  
   }
   
-
   
   // 아이디 찾기
   @PostMapping(value = "/find_id.do",produces=MediaType.APPLICATION_JSON_VALUE)
@@ -202,13 +230,24 @@ public class UserController {
   }
   
   
-  // 비밀번호 찾기
-  @PostMapping(value = "/find_pw.do",produces=MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<Map<String, Object>> findPw(HttpServletRequest request) {
-  	return userService.findPw(request);
-  	
+  // 비밀번호 변경 폼 응답
+  @PostMapping(value = "/change_pw.do",produces=MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<Map<String, Object>> changePw(HttpServletRequest request) {
+  	return userService.changePw(request);
   }
   
   
+  // 비밀번호 변경 적용
+  @PostMapping(value = "/modify_pw.do")
+  public void modifyPw(HttpServletRequest request, HttpServletResponse response) {
+  	 userService.modifyPw(request,response);
+  }
+  
+  
+  //휴면복원
+  @GetMapping("/active.do")
+  public void active(HttpSession session, HttpServletRequest request, HttpServletResponse response) {
+    userService.active(session, request, response);
+  }
 	
 }

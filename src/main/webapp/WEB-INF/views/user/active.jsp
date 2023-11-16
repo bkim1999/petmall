@@ -7,61 +7,35 @@
 <c:set var="dt" value="<%=System.currentTimeMillis()%>" />
 
 <jsp:include page="../layout/header.jsp">
-  <jsp:param value="로그인" name="title"/>
+  <jsp:param value="휴면해제" name="title"/>
 </jsp:include>
 
 <div>
 
-<button type="button" id="btn_back">뒤로가기</button>
-
-
-<div class="logo"><a href="${contextPath}/main.do"><img alt="로고" src=""></a></div>
-
-
-
-
-<hr>
-
-
-
-
-
-<!-- 카카오 로그인 페이지 이동  -->
-<div><button btn_login_kakao>카카오로 시작하기</button></div>
-
-<!-- 로그인 폼  (post)-->
-<form method="post" action="${contextPath}/user/login.do" id="frm_login">
-
-
-
-<div><input type="text"   id="email"  name="email"  placeholder="ID(Email)"></div>
-<div><input type="pw"  id="pw" name="pw"  placeholder="PASSWORD"></div>
-
-
-<div>
-<input type="hidden" name="referer" value="${referer}">
-<div><button id="btn_login" type="submit">로그인</button></div>
-<div><button id="btn_naver_login" type="button">네이버 로그인</button></div>
-
-<span><a href="${contextPath}/user/find_id.form">아이디찾기</a></span>
-<span><a href="${contextPath}/user/find_pw.form">비밀번호찾기</a></span>
-<span><a href="${contextPath}/user/join.way">회원가입</a></span>
+  <h1 >휴면계정안내</h1>
+  
+  <div>
+    ${sessionScope.inactiveUser.email}님은 1년 이상 로그인하지 않아
+    관계 법령에 의해서 휴면회원으로 전환되었습니다.
+  </div>
+  
+  <div>
+    휴면전환일 : ${sessionScope.inactiveUser.inactivedAt}
+  </div>
+  
+  <div>휴면해제를 위해서 휴면해제 버튼을 클릭하세요.</div>
+  <div><button type="button" id="btn_active" >휴면해제</button></div>
+  
+  <script>
+    const fnActive = () => {
+      $('#btn_active').click(() => {
+        location.href = '${contextPath}/user/active.do';
+      })
+    }
+    
+    fnActive();
+  </script>
 
 </div>
-
-
-</form>
-
-
-</div>
-
-<script>
-
-
-</script>
 
 <%@ include file="../layout/footer.jsp" %>
-
-
-    
-
