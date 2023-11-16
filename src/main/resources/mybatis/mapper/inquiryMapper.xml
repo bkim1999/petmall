@@ -120,7 +120,7 @@
     UPDATE INQUIRY_T
        SET TITLE = #{title}
          , CONTENTS = #{contents}
-         , MODIFIED_AT = TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS')
+         , TEXT_PW = #{textPw}
      WHERE INQUIRY_NO = #{inquiryNo}
   </update>
   

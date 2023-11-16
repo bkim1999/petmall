@@ -172,7 +172,6 @@ import lombok.RequiredArgsConstructor;
                            .build())
                    .groupNo(groupNo)  
                    .build();
-
            int addReplyResult = qnaMapper.insertReply(reply);
            return addReplyResult;
        }
