@@ -43,6 +43,7 @@
        <td>미답변</td>
        </c:if>
        <td>
+        <input type="hidden" value="${qna.groupNo}">
         <input type="button" id="btn_answer" value="답변하기">
         <input type="hidden" value="${qna.qnaNo}">
        </td>
@@ -54,7 +55,7 @@
  <script>
   function fnAnswer() {
 	$(document).on('click', '#btn_answer', function(ev){
-	  location.href = '${contextPath}/user/qnadetail.do?qnaNo='+$(this).next().val();
+	  location.href = '${contextPath}/user/qnadetail.do?qnaNo='+$(this).next().val()+'&groupNo='+$(this).prev().val();
 	})
   }
   
