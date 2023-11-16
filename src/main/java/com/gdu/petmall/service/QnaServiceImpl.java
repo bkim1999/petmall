@@ -41,6 +41,7 @@ import lombok.RequiredArgsConstructor;
        private final MyFileUtils myFileUtils;
        private final MyPageUtils myPageUtils;
    
+       // 게시글 추가
        @Override
        public boolean addQna(MultipartHttpServletRequest multipartRequest) throws Exception {
            int title = 0;
@@ -66,10 +67,6 @@ import lombok.RequiredArgsConstructor;
 
            UserDto userDto = UserDto.builder()
                    .userNo(userNo)
-                   .build();
-
-           ProductDto productDto = ProductDto.builder()
-                   .productNo(productNo)
                    .build();
 
            QnaDto qna = QnaDto.builder()
@@ -114,7 +111,7 @@ import lombok.RequiredArgsConstructor;
            return true;
        }
 
-       
+       // 유저번호값 null방지를 위한 변환
        @Override
        public int getLoggedInUserNo(HttpServletRequest request) {
            HttpSession session = request.getSession();
@@ -126,10 +123,14 @@ import lombok.RequiredArgsConstructor;
            }
        }
        
+       // 작성글 목록 조회
        @Override
        public Map<String, Object> myPostList(HttpServletRequest request) {
+    	   
+    	   int qnaTotalCount = qnaMapper.qnaTotalCount();
+    	   request.setAttribute("qnaTotalCount", qnaTotalCount);
            String loggedInUserNo = String.valueOf(getLoggedInUserNo(request));
-
+         
            Map<String, Object> paramMap = new HashMap<>();
            paramMap.put("userNo", loggedInUserNo);
 
@@ -141,17 +142,19 @@ import lombok.RequiredArgsConstructor;
            return resultMap;
        }
        
-       
+       // 전채 기능조회
        @Override
        public QnaDto getQna(int qnaNo) {
            return qnaMapper.getQna(qnaNo);
        }
        
+       // 게시글 삭제
        @Override
        public int removeQna(int qnaNo) {
           return qnaMapper.deleteQna(qnaNo);
        }
        
+       // 댓글 추가
        @Override
        public int addReply(HttpServletRequest request, RedirectAttributes redirectAttributes) {
            int userNo = getLoggedInUserNo(request);
@@ -176,8 +179,7 @@ import lombok.RequiredArgsConstructor;
            return addReplyResult;
        }
        
-       
-       
+       // 첨부파일 다운로드
        @Override
        public ResponseEntity<Resource> download(HttpServletRequest request) {
          
@@ -223,6 +225,7 @@ import lombok.RequiredArgsConstructor;
          return new ResponseEntity<Resource>(resource, header, HttpStatus.OK);
        }
        
+       // 게시글 및 첨부리스트 조회
        @Override
        public void loadQna(HttpServletRequest request, Model model) {
          Optional<String> opt = Optional.ofNullable(request.getParameter("qnaNo"));
@@ -232,6 +235,7 @@ import lombok.RequiredArgsConstructor;
          model.addAttribute("qattachList", qnaMapper.getQattachList(qnaNo));
        }
        
+       // 댓글 목록 조회
        @Override
        public void loadCommentlist(HttpServletRequest request, Model model) {
            int qnaNo = Integer.parseInt(request.getParameter("qnaNo"));

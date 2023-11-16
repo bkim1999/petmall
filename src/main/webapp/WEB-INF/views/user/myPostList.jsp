@@ -8,7 +8,8 @@
      <jsp:param value="Q&A 글작성" name="title"/>
    </jsp:include>
    
-
+	
+	<div>전체 문의 답변을 기다리는남은 갯수: ${qnaTotalCount}</div>
         
 	<div class="table-responsive">
 	    <table class="table align-middle">
@@ -16,12 +17,10 @@
 	            <tr>
 	                <td>순번</td>
 	                <td>작성글번호</td>
+	                <td>문의한 제품 번호</td>
 	                <td>제목</td>
-	                <td>확인여부</td>
-	                <td>작성자</td>
 	                <td>작성일자</td>
 	                <td>그룹번호</td>
-	                <td>제품번호</td>
 	            </tr>
 	        </thead>
 	        <tbody>
@@ -30,12 +29,10 @@
 	             <tr class="align-bottom">
 	                 <td>${vs.index + 1}</td>
 	                 <td><a href="${contextPath}/user/qnadetail.do?qnaNo=${post.qnaNo}&groupNo=${post.groupNo}">${post.qnaNo}</a></td>
+	                    <td>${post.productNo}</td>
 	                 <td>${post.title}</td>
-	                 <td>${post.status}</td>
-	                 <td>${post.userDto.userNo}</td>
 	                 <td>${post.createdAt}</td>
 	                    <td>${post.groupNo}</td>
-	                    <td>${post.productNo}</td>
 	             </tr>
 	             </c:if>
 	         </c:forEach>

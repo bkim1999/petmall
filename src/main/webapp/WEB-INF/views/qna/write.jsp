@@ -11,9 +11,10 @@
 	
 	<div class="wrap wrap_6">
 	
-	<h1>작성페이지</h1>
+	<h1>문의글 Q&A 작성하는곳</h1>
 	
 	
+	  
 	  <form id="frm_qna_add" method="post" action="${contextPath}/qna/add.do" enctype="multipart/form-data">
 
 		<div class="mt-3">
@@ -47,20 +48,25 @@
 	      <label for="textPw" class="form-label">비밀번호</label>
 	      <input type="text" name="textPw" id="textPw" class="form-control" multiple>
 	    </div>    
-																	
-	    <div class="attached_list mt-2" id="attached_list"></div>
-	    <div class="text-center mt-5">
-	      <a href="${contextPath}/petmall/qna/list.do">
-	        <button class="btn btn-secondary" type="button">작성취소</button>
-	      </a>
-	      <input type="hidden" name="userNo" value="${sessionScope.user.userNo}">
-	      <button type="submit" class="btn btn-primary">작성완료</button>
-	    </div>
+	    
+		<hr>
+		
+		<div>추가한 첨부파일</div>
+		<div class="attached_list mt-2" id="attached_list"></div>
+		<div class="text-center mt-5">
+		  <a href="${contextPath}/qna/list.do" class="mr-2">
+		    <button class="btn btn-secondary" type="button">작성취소</button>
+		  </a>
+		  <input type="hidden" name="userNo" value="${sessionScope.user.userNo}">
+		  <button type="submit" class="btn btn-primary">작성완료</button>
+		</div>
+
 	    
 	  </form>
 	  
-	</div>
+	  <hr>
 	  
+	</div>
 	  
 	<script>
 	
