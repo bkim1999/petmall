@@ -15,6 +15,7 @@ public class EventDto {
   private String title;
   private String contents;
   private int hit;
+  private int state;
   private String eventThumnailUrl;
   private int discountPercent;
   private int discountPrice;

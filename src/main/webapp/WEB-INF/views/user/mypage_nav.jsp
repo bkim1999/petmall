@@ -31,7 +31,7 @@
       </form>
      </li>
     <li><a href="${contextPath}/user/myPostList">MyPosts</a></li>
-    <li><a href="${contextPath}/user/">Address</a></li>
+  <!-- <li><a href="${contextPath}/user/">Address</a></li> -->
 
   </ul>
 </div>

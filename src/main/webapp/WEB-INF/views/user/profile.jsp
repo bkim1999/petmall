@@ -110,15 +110,15 @@ $('#mobile2').val(mobile2);
 
 <!-- 주소 -->
 <div>
-<input type="text" id="postcode" name="postcode" placeholder="우편번호" value="${sessionScope.user.postcode}">
-<input type="button" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
-<input type="text" id="roadAddress"  name="roadAddress" placeholder="도로명주소" value="${sessionScope.user.roadAddress}">
-<input type="text" id="jibunAddress"  name="jibunAddress" placeholder="지번주소"value="${sessionScope.user.jibunAddress}">
+<input type="text" id="postcode" name="postcode" placeholder="우편번호" value="${sessionScope.user.postcode}" disabled>
+<input type="button" onclick="execDaumPostcode()" value="우편번호 찾기" ><br>
+<input type="text" id="roadAddress"  name="roadAddress" placeholder="도로명주소" value="${sessionScope.user.roadAddress}" disabled>
+<input type="text" id="jibunAddress"  name="jibunAddress" placeholder="지번주소"value="${sessionScope.user.jibunAddress}" disabled> 
 <span id="guide" style="color:#999;display:none"></span>
-<input type="text" id="detailAddress" name="detailAddress" placeholder="상세주소"value="${sessionScope.user.detailAddress}">
+<input type="text" id="detailAddress" name="detailAddress" placeholder="상세주소"value="${sessionScope.user.detailAddress}" >
 
 
-<input type="text" id="extraAddress" name="extraAddress" placeholder="참고항목">
+<input type="text" id="extraAddress" name="extraAddress" placeholder="참고항목" disabled>
 
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>

@@ -21,6 +21,7 @@
 	                <td>작성자</td>
 	                <td>작성일자</td>
 	                <td>그룹번호</td>
+	                <td>제품번호</td>
 	            </tr>
 	        </thead>
 	        <tbody>
@@ -34,6 +35,7 @@
 	                 <td>${post.userDto.userNo}</td>
 	                 <td>${post.createdAt}</td>
 	                    <td>${post.groupNo}</td>
+	                    <td>${post.productNo}</td>
 	             </tr>
 	             </c:if>
 	         </c:forEach>
