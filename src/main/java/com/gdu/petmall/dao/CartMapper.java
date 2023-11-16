@@ -9,12 +9,19 @@ import com.gdu.petmall.dto.CartDto;
 
 @Mapper
 public interface CartMapper {
-
+  
+  //카트 목록
   public List<CartDto> getCartList(int userNo); 
   
+  // 카트 추가
   public int insertCart(CartDto cartDto);
   
+  // 카트 삭제
   public int deleteCart(int optionNo);
   
-  public int updateCart(Map<String, Object> map);
+  // 카트 수량 수정
+  public int updateCart(CartDto cartDto);
+
+  
+ 
 }
