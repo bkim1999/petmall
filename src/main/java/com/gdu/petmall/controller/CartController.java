@@ -8,15 +8,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gdu.petmall.dto.CartDto;
 import com.gdu.petmall.service.CartService;
 
 import lombok.RequiredArgsConstructor;
-import oracle.jdbc.proxy.annotation.Post;
 
 
 @RequiredArgsConstructor
@@ -38,30 +35,25 @@ public class CartController {
    return "/order/cart";
   }
   
-  @PostMapping(value="/order/")
-  @ResponseBody
-  public String addCart(HttpServletRequest request, CartDto cartDto) {
-    int addResult = cartService.addCart(request, cartDto);
-    return "";
-  }
-  
-//  @ResponseBody
-//  @PostMapping(value="/order/delete.do", produces = "application/json")
-//  public String removeCart(@RequestParam(value="optionNo", required=false, defaultValue="0") int optionNo
-//                     , RedirectAttributes redirectAttributes) {
-//    int removeResult = cartService.removeCart(optionNo);
-//    redirectAttributes.addAttribute("removeResult", removeResult);
-//    return "redirect:/order/cart";
-// }
-  
   @ResponseBody
   @PostMapping(value="/order/delete.do", produces="application/json")
   public Map<String, Object> removeCart(HttpServletRequest request) throws Exception {
     return cartService.removeCart(request);
   }
+  
+  @ResponseBody
+  @PostMapping(value="/order/modify.do")
+  public String upDateCart(CartDto cartDto){
+    cartService.modifiyCount(cartDto);
+    return "redirect:/order/cart"; 
+  } 
 
+//  @ResponseBody
+//  @PostMapping(value="/order/modify.do", produces="application/json")
+//  public Map<String, Object> modifyCart(@RequestBody CartDto cartDto, HttpServletRequest request) {
+//      return cartService.modifyCart(request, cartDto);
+//  }
 
-
-
+  
 
 }
