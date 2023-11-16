@@ -6,6 +6,10 @@
 <mapper namespace="com.gdu.petmall.dao.CartMapper">
 	
   <resultMap type="CartDto"     id="CartMap">
+    <id     column="CART_NO"    property="cartNo" />
+    <result column="PR_NAME"    property="prName" />
+    <result column="PR_PRICE"    property="prPrice" />
+    <result column="DELIVERY"    property="delivery" />
     <result column="COUNT"    property="count" />
     <association  javaType="ProductDto" property="productDto">
       <id     column="PRODUCT_NO"           property="productNo" />
@@ -43,17 +47,18 @@
     </association>  
   </resultMap>
   
-   <select id="getCartList" parameterType="int" resultMap="CartMap">
-      SELECT B.OPTION_NO, A.PRODUCT_NAME, A.PRODUCT_PRICE, B.ADD_PRICE, D.USER_NO,A.PRODUCT_NO, COUNT
+   <select id="getCartList" parameterType="CartDto" resultMap="CartMap">
+      SELECT C.USER_NO, C.COUNT
+           , A.PRODUCT_NAME, A.PRODUCT_PRICE, A.PRODUCT_NO
+           , B.OPTION_NO,B.ADD_PRICE
         FROM PRODUCT_T A, 
              PRODUCT_OPTION_T B,
-             CART_T C,
-             USER_T D
-       WHERE C.USER_NO = D.USER_NO AND
-             A.PRODUCT_NO = B.PRODUCT_NO AND
-             B.OPTION_NO = C.OPTION_NO
-             AND C.USER_NO = #{userNo}
+             CART_T C
+       WHERE A.PRODUCT_NO = B.PRODUCT_NO 
+         AND B.OPTION_NO = C.OPTION_NO
+         AND C.USER_NO = ${userNo}
     </select>
+    
     
    <insert id="insertCart" parameterType="CartDto">
       INSERT INTO CART_T(
@@ -67,17 +72,17 @@
       )
    </insert>
    
-   <update id="updateCart" parameterType="Map">
+   <update id="updateCart" parameterType="CartDto">
       UPDATE CART_T
-         SET COUNT = #{count} 
-       WHERE USER_NO = #{userDto.userNo}
-         AND OPTION_NO = #{productOptionDto.optionNo}
+        SET COUNT = #{count}
+        WHERE USER_NO = #{userNo} AND OPTION_NO = #{optionNo}
    </update>
    
    <delete id="deleteCart" parameterType="int">
       DELETE
-        FROM PRODUCT_OPTION_T
-       WHERE OPTION_NO = #{productOptionDto.optionNo} 
+        FROM CART_T
+       WHERE OPTION_NO = #{optionNo}
+       AND USER_NO = #{userNo}
    </delete>
  
    
