@@ -12,10 +12,14 @@
     <result column="CREATED_AT" property="createdAt" />
     <result column="MODIFIED_AT" property="modifiedAt" />
     <result column="TEXT_PW" property="textPw" />
+    <result column="CHECK_FLAG" property="checkFlag"/>
    <association javaType="UserDto"      property="userDto">
       <id column="USER_NO" property="userNo" />
+      <result column="EMAIL" property="email"/>
+      <result column="NAME"  property="name"/>
     </association>
   </resultMap>
+
   
 	<insert id="insertQna" parameterType="com.gdu.petmall.dto.QnaDto">
 	    <selectKey keyProperty="qnaNo" resultType="int" order="BEFORE">
