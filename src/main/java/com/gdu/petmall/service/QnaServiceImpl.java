@@ -174,9 +174,10 @@ import lombok.RequiredArgsConstructor;
                    .build();
 
            int addReplyResult = qnaMapper.insertReply(reply);
-
            return addReplyResult;
        }
+       
+       
        
        @Override
        public ResponseEntity<Resource> download(HttpServletRequest request) {

@@ -76,6 +76,9 @@
             <li class="nav-item">
               <a class="nav-link" href="${contextPath}/order/cart.go">장바구니</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="${contextPath}/user/logout.do">로그아웃</a>
+            </li>
           </c:if>
         </ul>
       </div>

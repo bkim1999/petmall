@@ -71,7 +71,7 @@ public class ProductController {
 
   @ResponseBody
   @GetMapping(value="/getProductImageList.do", produces="application/json")
-  public List<ProductImageDto> loadProductImageList(HttpServletRequest request){
+  public Map<String, Object> loadProductImageList(HttpServletRequest request){
     return productService.loadProductImageList(request);
   }
   
