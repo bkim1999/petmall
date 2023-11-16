@@ -53,8 +53,18 @@
     	   str +='<td><img src="'+'${contextPath}'+event.eventThumnailUrl+'"width="100px" height="100px"></td>'
     	   str +='<td>'+event.startAt+'</td>';
     	   str +='<td>'+event.endAt+'</td>';
-    	   str +='<td>'+event.discountPercent+'</td>';
-    	   str +='<td>'+event.discountPrice+'</td>';
+    	   str +='<td>';
+    	   str +='<input id="change_dp"type="text" value="'+event.discountPercent+'">';
+    	   str +='<div>';
+    	   str +='<input type="button" value="할인율 변경하기">';
+    	   str +='</div>';
+    	   str +='</td>';
+    	   str +='<td>';
+    	   str +='<input type="text" value="'+event.discountPrice+'">';
+    	   str +='<div>';
+    	   str +='<input type="button" value="할인가 변경하기">';
+    	   str +='</div>';
+    	   str +='</td>';
 		   if(event.state === 1){
 	    	str +='<td>이벤트 진행중</td>'; 			   
 		   }
@@ -66,10 +76,12 @@
     	   str +='<input type="hidden" value="'+event.eventNo+'">';
     	   str +='</td>';
     	   str +='<td>';
+    	   str +='<input type="hidden" value="'+event.state+'">';
     	   str +='<input type="button" id="btn_event_start" value="이벤트시작하기">';
     	   str +='<input type="hidden" value="'+event.eventNo+'">';
     	   str +='</td>';
-    	   str +='<td>'
+    	   str +='<td>';
+    	   str +='<input type="hidden" value="'+event.state+'">';
     	   str +='<input type="button" id="btn_event_end" value="이벤트종료시키기">';
     	   str +='<input type="hidden" value="'+event.eventNo+'">';
     	   str +='</td>';
@@ -93,6 +105,10 @@
     // 시작종료 막아야함.
     function fnEventEnd() {
       $(document).on('click', '#btn_event_end',function(ev){
+        if($(this).prev().val() === '0'){
+            alert('이미 종료된 이벤트입니다.');
+            return;
+          }
     	if(!confirm('해당 이벤트를 종료시키겠습니까?')){
     	  return;
     	}
@@ -118,6 +134,10 @@
     
     function fnEventStart() {
         $(document).on('click', '#btn_event_start',function(ev){
+        if($(this).prev().val() === '1'){
+          alert('이미 진행중인 이벤트입니다.');
+          return;
+        }
       	if(!confirm('해당 이벤트를 시작하겠습니까?')){
       	  return;
       	}
