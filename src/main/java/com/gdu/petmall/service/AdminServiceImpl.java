@@ -1,5 +1,6 @@
 package com.gdu.petmall.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,13 +44,11 @@ public class AdminServiceImpl implements AdminService {
   }
   
   @Override
-  public void getEvent(HttpServletRequest request, Model model) {
+  public Map<String, Object> getEvent() {
     
     List<EventDto> eventList = eventMapper.getTotalList();
     
-    model.addAttribute("eventList", eventList);
-    
-      
+    return Map.of("eventList",eventList);
   }  
     
   

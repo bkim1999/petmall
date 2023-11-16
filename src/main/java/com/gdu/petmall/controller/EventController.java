@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -56,6 +55,7 @@ public class EventController {
   public Map<String, Object> eventImageUpload(MultipartHttpServletRequest multipartRequest){
     return eventService.eventImageUpload(multipartRequest);
   }
+  
   @PostMapping("/addevent.do")
   public String addEvent(MultipartHttpServletRequest multiparRequest
                       ,  RedirectAttributes redirectAttributes) throws  Exception{
@@ -63,7 +63,16 @@ public class EventController {
     return "redirect:/event/list.do";
   }
   
-  
+  @ResponseBody
+  @GetMapping(value="/eventEnd.do", produces = "application/json")
+  public Map<String, Object> eventEnd(HttpServletRequest request) {
+    return eventService.endEvent(request);
+  }
+  @ResponseBody
+  @GetMapping(value="/eventStart.do", produces = "application/json")
+  public Map<String, Object> eventStart(HttpServletRequest request) {
+    return eventService.startEvent(request);
+  }
   
   
 }

@@ -213,7 +213,28 @@ public class EventServiceImpl implements EventService {
     
   }
  
-      
+  
+  @Override
+  public Map<String, Object> endEvent(HttpServletRequest request) {
+    
+    int eventNo = Integer.parseInt(request.getParameter("eventNo"));
+    
+    int endResult = eventMapper.eventEnd(eventNo);
+    
+    return Map.of("endResult",endResult);
+  }
+  
+  
+  @Override
+  public Map<String, Object> startEvent(HttpServletRequest request) {
+    
+    int eventNo = Integer.parseInt(request.getParameter("eventNo"));
+    
+    int startResult = eventMapper.eventStart(eventNo);
+    
+    return Map.of("startResult",startResult);
+  }
+  
       
       
       

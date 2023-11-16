@@ -47,9 +47,14 @@ public class AdminController {
   }
   
   @GetMapping("/event_list.go")
-  public String eventDetailList(HttpServletRequest request, Model model) {
-    adminService.getEvent(request, model);
+  public String list() {
     return "admin/event_list";
+  }
+  
+  @ResponseBody
+  @GetMapping("/event_list.do")
+  public Map<String, Object> eventDetailList() {
+    return adminService.getEvent();
   }
   
   
