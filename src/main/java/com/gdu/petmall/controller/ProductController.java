@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gdu.petmall.dto.ProductDto;
 import com.gdu.petmall.dto.ProductImageDto;
+import com.gdu.petmall.dto.ProductOptionListDto;
 import com.gdu.petmall.service.ProductService;
 
 import lombok.RequiredArgsConstructor;
@@ -59,16 +60,25 @@ public class ProductController {
   
   @PostMapping(value="/addProduct.do")
   public String addProduct(@ModelAttribute ProductDto product
+                          , @ModelAttribute(value="productOptionList") ProductOptionListDto productOptionList
                           , MultipartHttpServletRequest multipartrequest
                           , RedirectAttributes redirectAttributes) throws Exception {
-    productService.addProduct(product, multipartrequest, redirectAttributes);
+    System.out.println("fdsafdsfsffd" + productOptionList.getProductOptionList());
+    int addProductResult = productService.addProduct(product, productOptionList.getProductOptionList(), multipartrequest) ? 1 : 0;
+    redirectAttributes.addFlashAttribute("addProductResult", addProductResult);
     return "redirect:/product/list.do";
   }
 
   @ResponseBody
   @GetMapping(value="/getProductImageList.do", produces="application/json")
-  public List<ProductImageDto> loadProductImageList(HttpServletRequest request){
+  public Map<String, Object> loadProductImageList(HttpServletRequest request){
     return productService.loadProductImageList(request);
+  }
+  
+  @PostMapping(value="/removeProduct.do")
+  public String removeProduct(@RequestParam(value="productNo") int productNo, RedirectAttributes redirectAttributes) {
+    productService.removeProduct(productNo, redirectAttributes);
+    return "redirect:/product/list.do";
   }
   
 }

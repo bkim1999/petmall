@@ -21,50 +21,64 @@
   .ck-content {
     color: gray;
   }
+  h1 {
+    margin: 100px 0;
+    text-align:center;
+  }
+  #wrapper {
+    width: 1000px;
+    margin: 100px auto;
+  }
+  #frm_add_product {
+  }
 </style>
 
-<div>
+<div id="wrapper">
   
   <form id="frm_add_product" method="post" action="${contextPath}/product/addProduct.do" enctype="multipart/form-data">
     <h1>상품 추가</h1>
-    <div>
-      <label for="productName">상품명</label>
-      <input type="text" name="productName" id="productName" class="product_input">
+    <div class="form-group">
+      <label for="productName" class="form-label mt-4">상품명</label>
+      <input type="text" class="form-control" name="productName" id="productName" class="product_input">
     </div>
-    <div>
-      <label for="productTitle">상품제목</label>
-      <input type="text" name="productTitle" id="productTitle" class="product_input">
+    <div class="form-group">
+      <label for="productTitle" class="form-label mt-4">상품제목</label>
+      <input type="text"  class="form-control" name="productTitle" id="productTitle" class="product_input">
     </div>
-    <div>
-      <label for="productDescription">상품설명</label>
-      <input type="text" name="productDescription" id="productDescription" class="product_input">
+    <div class="form-group">
+      <label for="productDescription" class="form-label mt-4">상품설명</label>
+      <textarea class="form-control" name="productDescription" id="productDescription" class="product_input" style="height: 150px;"></textarea>
     </div>
-    <div>
-      <label for="productSize">상품규격</label>
-      <input type="text" name="productSize" id="productSize" class="product_input">
+    <div class="form-group">
+      <label for="productSize" class="form-label mt-4">상품규격</label>
+      <textarea type="text" class="form-control" name="productSize" id="productSize" class="product_input" style="height: 150px;"></textarea>
     </div>
-    <div>
-      <label for="productWarning">상품경고</label>
-      <input type="text" name="productWarning" id="productWarning" class="product_input">
-    </div>
-    <div class="mt-3">
-      <label for="files" class="form-label">썸네일</label>
-      <input type="file" name="thumbnail" id="thumbnail" class="form-control">
+    <div class="form-group">
+      <label for="productWarning" class="form-label mt-4">상품경고</label>
+      <textarea type="text" class="form-control" name="productWarning" id="productWarning" class="product_input" style="height: 150px;"></textarea>
     </div>
     <div class="mt-3">
-      <label for="files" class="form-label">상품사진</label>
-      <input type="file" name="product_images" id="product_images" class="form-control" multiple>
+      <label for="files" class="form-label mt-4">썸네일</label>
+      <input type="file" class="form-control" name="thumbnail" id="thumbnail" class="form-control">
+    </div>
+    <div class="mt-3">
+      <label for="files" class="form-label mt-4">상품사진</label>
+      <input type="file" class="form-control" name="product_images" id="product_images" class="form-control" multiple>
     </div>
     <div> 
+      <label for="productContents" class="form-label mt-4">상품내용</label>
       <textarea id="productContents" name="productContents" class="product_input"></textarea>
     </div>
     <div>
-      <label for="productWarning">상품가격</label>
-      <input type="text" name="productPrice" id="productPrice" class="product_input">
+      <label for="productWarning" class="form-label mt-4">상품가격</label>
+      <input type="text" name="productPrice" id="productPrice" class="product_input number_input">
     </div>
     <hr>
     
-    <h1>옵션 추가</h1>
+    <h1>옵션</h1>
+    
+    <div id="option_list"></div>
+    <div><button type="button" id="btn_add_option" >옵션 추가</button></div>
     
     <button type="submit">상품 추가</button>
     
@@ -115,15 +129,17 @@
         if($.trim($(input).val()) === ''){
           alert('빈칸에 내용을 입력해주세요.');
           ev.preventDefault();
-          return;
+          return false;
         }
 	    });
-	    if(!/^[0-9]+$/.test($('#productPrice').val())){
-	    	alert('가격칸에는 숫자만 입력해주세요.');
-	    	ev.preventDefault();
-	    	$('#productPrice').val('');
-	    	return;
-	    }
+	    $.each($('.number_input'), (i, input) => {
+        if(!/^[0-9]+$/.test($('.number_input').val())){
+          alert('가격칸에는 숫자만 입력해주세요.');
+          ev.preventDefault();
+          $('#productPrice').val('');
+          return false;
+	        }
+	      });
 	    var files = Array.from($('#thumbnail').prop('files')).concat(Array.from($('#product_images').prop('files')));
 	    for(let i = 0; i < files.length; i++){
   	    var filetype = files[i].type;
@@ -158,9 +174,32 @@
     });
   }
   
+  let optionCount = 0;
+  
+  const fnAddOption = () => {
+	  $('#btn_add_option').click((ev) => {
+		  let str = '<div class="option">';
+		  str += '  <div>';
+		  str += '    <label for="productOptionList[' + optionCount + '].optionName">옵션명</label>';
+			str += '    <input type="text" name="productOptionList[' + optionCount + '].optionName" id="productOptionList[' + optionCount + '].optionName" class="product_input">';
+			str += '  </div>';
+      str += '  <div>';
+      str += '    <label for="productOptionList[' + optionCount + '].addPrice">추가금액</label>';
+      str += '    <input type="text" name="productOptionList[' + optionCount + '].addPrice" id="productOptionList[' + optionCount + '].addPrice" class="product_input number_input">';
+      str += '  </div>';
+      str += '  <div>';
+      str += '    <label for="productOptionList[' + optionCount + '].optionCount">재고</label>';
+      str += '    <input type="text" name="productOptionList[' + optionCount + '].optionCount" id="productOptionList[' + optionCount + '].optionCount" class="product_input number_input">';
+      str += '  </div>';
+		  $('#option_list').append(str);
+		  optionCount = optionCount + 1;
+	  });
+  }
+  
   fnCkeditor();
   fnCheckRequired();
   fnFileCheck();
+  fnAddOption();
   
 </script>
 
