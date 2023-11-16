@@ -13,10 +13,8 @@
 <style>
   #slideshow{
     width: 400px;
-<<<<<<< HEAD
     height: 400px;
   }
-=======
     height: 100%;
   }
   #product_explanation{
@@ -31,12 +29,10 @@
   #product_images img {
     height: 100%;
   }
->>>>>>> product
 </style>
 
 <div>
   
-<<<<<<< HEAD
   <table>
     <tbody>
       <tr>
@@ -63,7 +59,6 @@
   <div>${product.productDescription}</div>
   <div>${product.productSize}</div>
   <div>${product.productWarning}</div>
-=======
   
   <div id="product_header" class="d-flex justify-content-center">
     <div id="slideshow" class="carousel slide" data-bs-ride="carousel">
@@ -106,7 +101,6 @@
     </div>
   </div>
   
->>>>>>> product
   <c:if test="${sessionScope.user.adminAuthorState == 1}">
     
     <form method="post" id="frm_modify_remove">
@@ -173,11 +167,8 @@
         str += '  <input type="hidden" class="option_no" value="' + optionNo + '">';
         str += '  <input type="text" class="count" value="1" readonly>';
         str += '  <button type="button" class="btn btn-link plus_count">+</button>';
-<<<<<<< HEAD
         str += '  <input type="text" class="option_price" value="' + (${product.productPrice} + addPrice) + '" readonly>원';
-=======
         str += '  <p>' + (${product.productPrice} + addPrice) + '원</p>';
->>>>>>> product
         str += '</div>';
         $('#selected_option_list').append(str);
     });
@@ -292,7 +283,6 @@
   }
   
   const fnGetProductImageList = () => {
-<<<<<<< HEAD
 	    $.ajax({
 	      // 요청
 	      type: 'get',
@@ -328,7 +318,6 @@
 	        });
 	      }
 	    })
-=======
       $.ajax({
         // 요청
         type: 'get',
@@ -374,7 +363,6 @@
 	        return;
 	      }
 	    });
->>>>>>> product
 	  }
   
   const fnRemoveProduct = () => {
