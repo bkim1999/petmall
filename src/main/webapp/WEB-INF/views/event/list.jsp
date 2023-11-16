@@ -47,6 +47,15 @@
     border-radius: 10px;
     padding : 20px;
   }
+  .btn_by {
+    display:flex;
+    justify-content: space-between;
+    margin : 0px 130px;
+  }
+  
+  .bottom a{
+   padding : 20px; 
+  }
 </style>
 
 
@@ -54,7 +63,8 @@
    <div>페스룸 회원가입하고</div>
    <div>첫 구매 100원</div>
    <div>회원가입만 하면 프리미엄 휴먼그레이드 간식이 100원!</div>
-   <div>구매하로가기
+   <div>구매하로가기</div>
+   <div class="btn_by">
     <img class="cat1" src="https://pethroom.com/web/upload/NNEditor/page/event-alex.png" width=350px height=170px>
     <img class="dog1" src="https://pethroom.com/web/upload/NNEditor/page/event-boss.png" width=350px height=170px>
    </div>
@@ -64,10 +74,10 @@
     <c:forEach items="${eventList}" var="event" varStatus="vs">
      <div class="Middle">
        <c:if test="${sessionScope.user.userNo != null}">
-        <a href="${contextPath}/event/increase.do?eventNo=${event.eventNo}"><img class="img1" src="${contextPath}${event.eventThumnailUrl}" width=880px height=253px></a>
+        <a href="${contextPath}/event/increase.do?eventNo=${event.eventNo}"><img class="img1" src="${contextPath}${event.eventThumnailUrl}" width="1250px" height="300px"></a>
        </c:if>
        <c:if test="${sessionScope.user.userNo == null}">
-        <a href="${contextPath}/event/detail.do?eventNo=${event.eventNo}"><img class="img2" src="${contextPath}${event.eventThumnailUrl}" width=880px height=253px></a>
+        <a href="${contextPath}/event/detail.do?eventNo=${event.eventNo}"><img class="img2" src="${contextPath}${event.eventThumnailUrl}" width="1250px" height="300px"></a>
        </c:if>
      </div>
     </c:forEach>

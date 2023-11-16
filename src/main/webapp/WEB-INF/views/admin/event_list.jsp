@@ -11,8 +11,23 @@
 </jsp:include>
 
 
-  <div><button type="button" id="btn_write">이벤트 추가하기</button></div>
-  <table border="1" class="table table-hover">  
+<style>
+  .table_font {
+    font-size: 13px;
+    text-align: center;
+    line-height: 20px;
+  }
+  .tr_font {
+   line-height: 30px;
+  }
+  .td_font {
+    border-right: 1px solid gray;
+    padding-top: 20px;
+  }
+</style>
+
+  <div><button type="button" class="btn_write">이벤트 추가하기</button></div>
+  <table border="1" class="table table-hover table_font">  
     <thead>
       <tr>
         <td>이벤트 번호</td>
@@ -47,50 +62,50 @@
     		return;
     	 }
     	 $.each(resData.eventList, (i, event) => {
-    	   let str ='<tr class="table-secondary">'
-    	   str +='<td>'+event.eventNo+'</td>';
-    	   str +='<td>'+event.title+'</td>';
-    	   str +='<td><img src="'+'${contextPath}'+event.eventThumnailUrl+'"width="100px" height="100px"></td>'
-    	   str +='<td>'+event.startAt+'</td>';
-    	   str +='<td>'+event.endAt+'</td>';
-    	   str +='<td>';
+    	   let str ='<tr class="table-light tr_font">'
+    	   str +='<td class="td_font">'+event.eventNo+'</td>';
+    	   str +='<td class="td_font">'+event.title+'</td>';
+    	   str +='<td class="td_font"><img src="'+'${contextPath}'+event.eventThumnailUrl+'"width="100px" height="100px"></td>'
+    	   str +='<td class="td_font">'+event.startAt+'</td>';
+    	   str +='<td class="td_font">'+event.endAt+'</td>';
+    	   str +='<td class="td_font">';
     	   str +='<input type="text" value="'+event.discountPercent+'" readonly>';
     	   str +='<div>';
     	   str +='<form class="frm_changePercent">';
-    	   str +='<input type="text" name="discountPercent" placeholder="변경될할인율을 입력해주세요">';
+    	   str +='<input type="text" name="discountPercent" placeholder="변경될할인율입력">';
     	   str +='<input class="change_Percent" type="submit" value="할인율 변경하기">';
     	   str +='<input type="hidden" name="eventNo" value="'+event.eventNo+'">';
     	   str +='</form>';
     	   str +='</div>';
     	   str +='</td>';
-    	   str +='<td>';
+    	   str +='<td class="td_font">';
     	   str +='<input type="text" value="'+event.discountPrice+'" readonly>';
     	   str +='<div>';
     	   str +='<form class="frm_changePrice">';
-    	   str +='<input type="text" name="discountPrice" placeholder="변경될할인가를 입력해주세요">';
+    	   str +='<input type="text" name="discountPrice" placeholder="변경될할인가입력">';
     	   str +='<input class="change_Price" type="submit" value="할인가 변경하기">';
     	   str +='<input type="hidden" name="eventNo" value="'+event.eventNo+'">';
     	   str +='</form>';
     	   str +='</div>';
     	   str +='</td>';
 		   if(event.state === 1){
-	    	str +='<td>이벤트 진행중</td>'; 			   
+	    	str +='<td class="td_font">이벤트 진행중</td>'; 			   
 		   }
     	   if(event.state === 0){
-    		str +='<td>이벤트 종료</td>';   
+    		str +='<td class="td_font">이벤트 종료</td>';   
     	   }
-    	   str +='<td>';
-    	   str +='<input type="button" id="btn_event" value="상세보기">';
+    	   str +='<td class="td_font">';
+    	   str +='<input type="button" class="btn_event" value="상세보기">';
     	   str +='<input type="hidden" value="'+event.eventNo+'">';
     	   str +='</td>';
-    	   str +='<td>';
+    	   str +='<td class="td_font">';
     	   str +='<input type="hidden" value="'+event.state+'">';
-    	   str +='<input type="button" id="btn_event_start" value="이벤트시작하기">';
+    	   str +='<input type="button" class="btn_event_start" value="이벤트시작하기">';
     	   str +='<input type="hidden" value="'+event.eventNo+'">';
     	   str +='</td>';
-    	   str +='<td>';
+    	   str +='<td class="td_font">';
     	   str +='<input type="hidden" value="'+event.state+'">';
-    	   str +='<input type="button" id="btn_event_end" value="이벤트종료시키기">';
+    	   str +='<input type="button" class="btn_event_end" value="이벤트종료시키기">';
     	   str +='<input type="hidden" value="'+event.eventNo+'">';
     	   str +='</td>';
     	   str +='</tr>';
@@ -104,7 +119,7 @@
     
     
     function fnDetailEvent() {
-      $(document).on('click', '#btn_event', function(ev){
+      $(document).on('click', '.btn_event', function(ev){
         location.href = '${contextPath}/event/detail.do?eventNo='+$(this).next().val();
       })
     }
@@ -112,7 +127,7 @@
     
     // 시작종료 막아야함.
     function fnEventEnd() {
-      $(document).on('click', '#btn_event_end',function(ev){
+      $(document).on('click', '.btn_event_end',function(ev){
         if($(this).prev().val() === '0'){
             alert('이미 종료된 이벤트입니다.');
             return;
@@ -141,7 +156,7 @@
     }
     
     function fnEventStart() {
-        $(document).on('click', '#btn_event_start',function(ev){
+        $(document).on('click', '.btn_event_start',function(ev){
         if($(this).prev().val() === '1'){
           alert('이미 진행중인 이벤트입니다.');
           return;
@@ -171,7 +186,7 @@
     
     
      function fnEventWrite() {
-       $('#btn_write').on('click',function(ev){
+       $('.btn_write').on('click',function(ev){
     	 location.href = '${contextPath}/event/write.do';
        })
      } 
