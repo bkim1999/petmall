@@ -13,12 +13,30 @@
 <style>
   #slideshow{
     width: 400px;
+<<<<<<< HEAD
     height: 400px;
   }
+=======
+    height: 100%;
+  }
+  #product_explanation{
+    width: 400px;
+    height: 400px;
+  }
+  #product_header{
+    width: 100%;
+    height: 600px;
+    margin: 100px;
+  }
+  #product_images img {
+    height: 100%;
+  }
+>>>>>>> product
 </style>
 
 <div>
   
+<<<<<<< HEAD
   <table>
     <tbody>
       <tr>
@@ -45,10 +63,56 @@
   <div>${product.productDescription}</div>
   <div>${product.productSize}</div>
   <div>${product.productWarning}</div>
+=======
+  
+  <div id="product_header" class="d-flex justify-content-center">
+    <div id="slideshow" class="carousel slide" data-bs-ride="carousel">
+      <div id="product_images" class="carousel-inner">
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#slideshow" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#slideshow" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+    
+    <div id="product_explanation">
+      <div>${product.productName}</div>
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" data-bs-toggle="tab" href="#description" aria-selected="false" role="tab" tabindex="-1">설명</a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link active" data-bs-toggle="tab" href="#size" aria-selected="true" role="tab">규격</a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" data-bs-toggle="tab" href="#warning" aria-selected="true" role="tab">경고</a>
+        </li>
+      </ul>
+      <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade" id="description" role="tabpanel">
+          <p>${product.productDescription}</p>
+        </div>
+        <div class="tab-pane fade active show" id="size" role="tabpanel">
+          <p>${product.productSize}</p>
+        </div>
+        <div class="tab-pane fade active show" id="warning" role="tabpanel">
+          <p>${product.productWarning}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+>>>>>>> product
   <c:if test="${sessionScope.user.adminAuthorState == 1}">
-    <form method="post" action="${contextPath}/product/removeProduct.do" id="frm_remove_product">
+    
+    <form method="post" id="frm_modify_remove">
       <input type="hidden" name="productNo" value="${product.productNo}">
-      <button>상품삭제</button>
+      <button type="button" id="btn_modify" class="btn btn-warning">수정</button>
+      <button type="button"  id="btn_remove" class="btn btn-danger">삭제</button>
     </form>
   </c:if>
   
@@ -67,12 +131,16 @@
       </select>
     </div>
   </c:if>
+  
+  <form method="post" action="${contextPath}/order/addCart.do">
+    <input type="hidden" name="userNo" value="${sessionScope.user.userNo}">
+    <div id="selected_option_list"></div>
+    <button type="submit" class="btn btn-success">장바구니 담기</button>
+  </form>
+  
   <div>${product.productContents}</div>
   <div></div>
   
-  <form method="post" action="${contextPath}/order/addCart.do">
-    <div id="selected_option_list"></div>
-  </form>
   
   <div id="order_list"></div>
   
@@ -105,7 +173,11 @@
         str += '  <input type="hidden" class="option_no" value="' + optionNo + '">';
         str += '  <input type="text" class="count" value="1" readonly>';
         str += '  <button type="button" class="btn btn-link plus_count">+</button>';
+<<<<<<< HEAD
         str += '  <input type="text" class="option_price" value="' + (${product.productPrice} + addPrice) + '" readonly>원';
+=======
+        str += '  <p>' + (${product.productPrice} + addPrice) + '원</p>';
+>>>>>>> product
         str += '</div>';
         $('#selected_option_list').append(str);
     });
@@ -134,45 +206,45 @@
   }
   
   const fnGetProductOrderList = () => {
-	    if('${sessionScope.user.userNo}' === ''){
+      if('${sessionScope.user.userNo}' === ''){
         $('#order_list').text('로그인 후 리뷰를 작성해주세요.');
         return;
-	    }
-	    $.ajax({
-	      // 요청
-	      type: 'get',
-	      url: '${contextPath}/review/getProductOrderList.do',
-	      data: {'productNo' : '${product.productNo}'
-	           , 'userNo' : '${sessionScope.user.userNo}'
-	            },
-	      // 응답
-	      dataType: 'json',
-	      success: (resData) => {  // resData = {"productOrderList": []}
-	        if(resData.productOrderList === null){
-	          alert('사용자의 해당 상품 주문목록 불러오기 실패');
-	          return;
-	        }
-	        if(resData.productOrderList.length === 0){
-	          $('#order_list').text('아직 구매하지 않은 상품입니다.');
-	          return;
-	        }
-	        $.each(resData.productOrderList, (i, option) => {
-	          let str = '<div class="review_btn" id="' + option.optionNo + '">';
-	          str += '  <div>' + option.optionName + '</div>';
-	          str += '  <form method="get" action="${contextPath}/review/addReview.form">';
-	          str += '    <input type="hidden" name="productNo" value="${product.productNo}">';
-	          str += '    <input type="hidden" name="productName" value="${product.productName}">';
-	          str += '    <input type="hidden" name="optionNo" value="' + option.optionNo + '">';
-	          str += '    <input type="hidden" name="optionName" value="' + option.optionName + '">';
-	          str += '    <button>리뷰 작성</button>';
-	          str += '</div>';
-	          $('#order_list').append(str);
-	        });
-	      }
-	    })
+      }
+      $.ajax({
+        // 요청
+        type: 'get',
+        url: '${contextPath}/review/getProductOrderList.do',
+        data: {'productNo' : '${product.productNo}'
+             , 'userNo' : '${sessionScope.user.userNo}'
+              },
+        // 응답
+        dataType: 'json',
+        success: (resData) => {  // resData = {"productOrderList": []}
+          if(resData.productOrderList === null){
+            alert('사용자의 해당 상품 주문목록 불러오기 실패');
+            return;
+          }
+          if(resData.productOrderList.length === 0){
+            $('#order_list').text('아직 구매하지 않은 상품입니다.');
+            return;
+          }
+          $.each(resData.productOrderList, (i, option) => {
+            let str = '<div class="review_btn" id="' + option.optionNo + '">';
+            str += '  <div>' + option.optionName + '</div>';
+            str += '  <form method="get" action="${contextPath}/review/addReview.form">';
+            str += '    <input type="hidden" name="productNo" value="${product.productNo}">';
+            str += '    <input type="hidden" name="productName" value="${product.productName}">';
+            str += '    <input type="hidden" name="optionNo" value="' + option.optionNo + '">';
+            str += '    <input type="hidden" name="optionName" value="' + option.optionName + '">';
+            str += '    <button class="btn btn-success">리뷰 작성</button>';
+            str += '</div>';
+            $('#order_list').append(str);
+          });
+        }
+      })
 
-	    fnGetReviewList();
-	  }
+      fnGetReviewList();
+    }
   
   var page = 1;
   var order = 'REVIEW_CREATED_AT';
@@ -183,7 +255,7 @@
       type: 'get',
       url: '${contextPath}/review/getReviewList.do',
       data: {'productNo' : '${product.productNo}'
-    	     , 'page' : page
+           , 'page' : page
            , 'order' : order
             },
       // 응답
@@ -194,17 +266,17 @@
           return;
         }
         if(resData.reviewList.length === 0){
-        	$('#review_list').text('아직 리뷰가 없습니다.');
-        	return;
+          $('#review_list').text('아직 리뷰가 없습니다.');
+          return;
         }
         $.each(resData.reviewList, (i, review) => {
-        	
-        	let str = '<div class="review" data-review-no="' + review.reviewNo + '">';
-        	if(review.userNo == '${sessionScope.user.userNo}'){
-        		$('#' + review.optionNo).find('button').remove();
-        		$('#' + review.optionNo).append('<div>이미 작성한 리뷰입니다.</div>');
-        		str += '<button type="button" class="btn_remove_review">삭제</button>';
-        	}
+          
+          let str = '<div class="review" data-review-no="' + review.reviewNo + '">';
+          if(review.userNo == '${sessionScope.user.userNo}'){
+            $('#' + review.optionNo).find('button').remove();
+            $('#' + review.optionNo).append('<div>이미 작성한 리뷰입니다.</div>');
+            str += '<button type="button" class="btn_remove_review">삭제</button>';
+          }
           str += '<div>' + review.reviewRating + '</div>';
           str += '<div class="review_thumbnail">';
           str += '  <image src="${contextPath}/' + review.path + '/' + review.filesystemName + '">';
@@ -220,6 +292,7 @@
   }
   
   const fnGetProductImageList = () => {
+<<<<<<< HEAD
 	    $.ajax({
 	      // 요청
 	      type: 'get',
@@ -255,15 +328,63 @@
 	        });
 	      }
 	    })
+=======
+      $.ajax({
+        // 요청
+        type: 'get',
+        url: '${contextPath}/product/getProductImageList.do',
+        data: {'productNo' : '${product.productNo}'},
+        // 응답
+        dataType: 'json',
+        success: (resData) => {  // resData = {"productImageList": []}
+          console.log(resData);
+          if(resData.productImageList === null){
+            alert('이미지 목록 불러오기 실패');
+            return;
+          }
+          if(resData.productImageList.length === 0){
+            let str = '<div class="carousel-item active">';
+            str += '  <img class="d-block w-100" src="#" alt="아직 사진이 없습니다.">';
+            str += '</div>';
+            $('#product_images').append(str);
+            return;
+          }
+          
+          $.each(resData.productImageList, (i, image) => {
+            let str = '';
+            if(i === 1){
+              str += '<div class="carousel-item active">';
+            }
+            else{
+              str += '<div class="carousel-item">';
+            }
+            str += '  <img class="d-block w-100" src="${contextPath}' + image.path + '/' + image.filesystemName +  '">';
+            str += '</div>';
+            $('#product_images').append(str);
+          });
+        }
+      })
+    }
+  
+  const fnModifyProduct = () => {
+	    $('#btn_modify').click(function(ev) {
+	      if(confirm('이 상품을 수정하시겠습니까?')){
+	    	  $(this).parents('#frm_modify_remove').prop('actions', '${contextPath}/product/modifyProduct.do')
+	        $(this).parents('#frm_modify_remove').submit();
+	        return;
+	      }
+	    });
+>>>>>>> product
 	  }
   
   const fnRemoveProduct = () => {
-	  $('#frm_remove_product').submit(function(ev) {
-		  if(!confirm('이 상품을 삭제하시겠습니까?')){
-			  ev.preventDefault();
-			  return;
-		  }
-	  });
+    $('#btn_remove').click(function(ev) {
+      if(confirm('이 상품을 삭제하시겠습니까?')){
+        $(this).parents('#frm_modify_remove').prop('action', '${contextPath}/product/removeProduct.do')
+        $(this).parents('#frm_modify_remove').submit();
+        return;
+      }
+    });
   }
   
   
@@ -271,6 +392,7 @@
   fnDecreaseCount();
   fnIncreaseCount();
   fnGetProductOrderList();
+  fnModifyProduct();
   fnRemoveProduct();
   fnGetProductImageList();
 

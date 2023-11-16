@@ -4,6 +4,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +18,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gdu.petmall.dao.InquiryMapper;
+import com.gdu.petmall.dto.IattachDto;
 import com.gdu.petmall.dto.InquiryDto;
 import com.gdu.petmall.service.InquiryService;
 
@@ -39,7 +43,8 @@ private final InquiryService inquiryService;
   }
   
   @PostMapping("/add.do")
-  public String add(MultipartHttpServletRequest multipartHttpServletRequest, RedirectAttributes redirectAttributes) throws Exception {
+  public String add(MultipartHttpServletRequest multipartHttpServletRequest, 
+                    RedirectAttributes redirectAttributes) throws Exception {
     boolean addResult = inquiryService.addInquiry(multipartHttpServletRequest);
     redirectAttributes.addFlashAttribute("addResult", addResult);
     return "redirect:/inquiry/list.do";
@@ -50,6 +55,16 @@ private final InquiryService inquiryService;
     inquiryService.loadInquiry(request, model);
     return "inquiry/detail";
   }
+  
+  @GetMapping("/download.do")
+  public ResponseEntity<Resource> download(HttpServletRequest request) { 
+    return inquiryService.download(request);
+  }
+  
+  @GetMapping("/downloadAll.do")
+  public ResponseEntity<Resource> downloadAll(HttpServletRequest request) {
+    return inquiryService.downloadAll(request);
+  }
  
   @GetMapping("edit.form")
   public String edit(@RequestParam(value="inquiryNo", required=false, defaultValue="0") int inquiryNo
@@ -59,14 +74,32 @@ private final InquiryService inquiryService;
   }
   
  @PostMapping("modify.do")
-  public String modify(InquiryDto inquuiry, RedirectAttributes redirectAttributes) {
-    int modifyResult = inquiryService.modifyInquiry(inquuiry);
+  public String modify(InquiryDto inquiry, RedirectAttributes redirectAttributes) {
+    int modifyResult = inquiryService.modifyInquiry(inquiry);
     redirectAttributes.addFlashAttribute("modifyResult", modifyResult);
-    return "redirect:/inquiry/detail.do?inquiryNo=" + inquuiry.getInquiryNo();
+    return "redirect:/inquiry/detail.do?inquiryNo=" + inquiry.getInquiryNo();
   }
  
+ @ResponseBody
+ @PostMapping(value="/addIattach.do", produces="application/json")
+ public Map<String, Object> addAttach(MultipartHttpServletRequest multipartRequest) throws Exception {
+   return inquiryService.addIattach(multipartRequest);
+ }
+ 
+ @ResponseBody
+ @GetMapping(value="/getIattachList.do", produces="application/json")
+ public Map<String, Object> getIattachList(HttpServletRequest request) {
+   return inquiryService.getIattachList(request);
+ }
+ 
+ @ResponseBody
+ @PostMapping(value="/removeIattach.do", produces="application/json")
+ public Map<String, Object> removeIattach(HttpServletRequest request) {
+   return inquiryService.removeIattach(request);
+ }
+ 
  @PostMapping("/removeInquiry.do")
- public String removeUpload(@RequestParam(value="inquiryNo", required=false, defaultValue="0") int inquiryNo
+ public String removeInquiry(@RequestParam(value="inquiryNo", required=false, defaultValue="0") int inquiryNo
      , RedirectAttributes redirectAttributes) {
    int removeResult = inquiryService.removeInquiry(inquiryNo);
    redirectAttributes.addFlashAttribute("removeResult", removeResult);
