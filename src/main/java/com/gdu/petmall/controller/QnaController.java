@@ -4,6 +4,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,14 +53,6 @@ public class QnaController {
       return "user/myPostList";
   }
   
-  @GetMapping("/user/qnadetail.do")
-  public String detail(@RequestParam(value = "qnaNo", defaultValue = "0") int qnaNo, Model model) {
-      QnaDto qna = qnaService.getQna(qnaNo);
-      model.addAttribute("qna", qna);
-      model.addAttribute("groupNo", qna.getGroupNo()); 
-      
-      return "user/qnadetail";
-  }
 
   @PostMapping("/user/remove.do")
   public String remove(@RequestParam(value="qnaNo", required=false, defaultValue="0") int QnaNo
@@ -75,6 +69,23 @@ public class QnaController {
       return "redirect:/user/myPostList";
   }
   
+  @GetMapping("/user/qnadetail.do")
+  public String detail(@RequestParam(value = "qnaNo", defaultValue = "0") int qnaNo,HttpServletRequest request, Model model) {
+    QnaDto qna = qnaService.getQna(qnaNo);
+    model.addAttribute("qna", qna);
+    model.addAttribute("groupNo", qna.getGroupNo()); 
+    qnaService.loadQna(request, model);
+    
+
+    qnaService.loadCommentlist(request, model);
+    
+    return "user/qnadetail";
+  }
+  
+  @GetMapping("user/qnadetail/download.do")
+  public ResponseEntity<Resource> download(HttpServletRequest request) {
+    return qnaService.download(request);
+  }
 
   
 }

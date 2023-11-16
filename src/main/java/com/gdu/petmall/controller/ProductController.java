@@ -1,5 +1,6 @@
 package com.gdu.petmall.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,9 +11,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gdu.petmall.dto.ProductDto;
+import com.gdu.petmall.dto.ProductImageDto;
+import com.gdu.petmall.dto.ProductOptionListDto;
 import com.gdu.petmall.service.ProductService;
 
 import lombok.RequiredArgsConstructor;
@@ -41,21 +47,38 @@ public class ProductController {
     return "/product/detail";
   }
   
+  @ResponseBody
+  @PostMapping(value="/imageUpload.do")
+  public Map<String, Object> imageUpload(MultipartHttpServletRequest multipartRequest) {
+    return productService.imageUpload(multipartRequest);
+  }
+  
   @GetMapping(value="/addProduct.form")
   public String addProductForm() {
     return "/product/add_product";
   }
   
   @PostMapping(value="/addProduct.do")
-  public String addProduct(@ModelAttribute ProductDto product, Model model) {
-    productService.addProduct(product, model);
-    return "redirect:product/list.do";
+  public String addProduct(@ModelAttribute ProductDto product
+                          , @ModelAttribute(value="productOptionList") ProductOptionListDto productOptionList
+                          , MultipartHttpServletRequest multipartrequest
+                          , RedirectAttributes redirectAttributes) throws Exception {
+    System.out.println("fdsafdsfsffd" + productOptionList.getProductOptionList());
+    int addProductResult = productService.addProduct(product, productOptionList.getProductOptionList(), multipartrequest) ? 1 : 0;
+    redirectAttributes.addFlashAttribute("addProductResult", addProductResult);
+    return "redirect:/product/list.do";
+  }
+
+  @ResponseBody
+  @GetMapping(value="/getProductImageList.do", produces="application/json")
+  public Map<String, Object> loadProductImageList(HttpServletRequest request){
+    return productService.loadProductImageList(request);
   }
   
-  @ResponseBody
-  @GetMapping(value="/getReviewList.do", produces="application/json")
-  public Map<String, Object> loadReviewList(HttpServletRequest request){
-    return productService.loadReviewList(request);
+  @PostMapping(value="/removeProduct.do")
+  public String removeProduct(@RequestParam(value="productNo") int productNo, RedirectAttributes redirectAttributes) {
+    productService.removeProduct(productNo, redirectAttributes);
+    return "redirect:/product/list.do";
   }
   
 }

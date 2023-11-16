@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class IattachDto {
   private int iattachNo;
-  private int inauiryNo;
+  private int inquiryNo;
   private String path;
   private String originalFilename;
   private String filesystemName;

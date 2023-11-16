@@ -15,7 +15,7 @@
 
 <form  method="post"  action="${contextPath}/user/join.do" id="frm_join">
 
-<!--개발용 라디오 버튼 admin_author_state -->
+<!--개발용 라디오 버튼 admin_author_state( 추후에 삭제해야함)  -->
 <div>
 <label for="user"><input type="radio" id="user" name="admin_author_state" value="0" checked>사용자</label>
 <label for="admin"><input type="radio"id="admin" name="admin_author_state" value="1">관리자</label>
@@ -89,15 +89,15 @@
 
 <!-- 주소 -->
 <div>
-<input type="text" id="postcode" name="postcode" placeholder="우편번호">
+<input type="text" id="postcode" name="postcode" placeholder="우편번호" disabled>
 <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
-<input type="text" id="roadAddress"  name="roadAddress" placeholder="도로명주소">
-<input type="text" id="jibunAddress"  name="jibunAddress" placeholder="지번주소">
+<input type="text" id="roadAddress"  name="roadAddress" placeholder="도로명주소" disabled>
+<input type="text" id="jibunAddress"  name="jibunAddress" placeholder="지번주소" disabled>
 <span id="guide" style="color:#999;display:none"></span>
-<input type="text" id="detailAddress" name="detailAddress" placeholder="상세주소">
+<input type="text" id="detailAddress" name="detailAddress" placeholder="상세주소" >
 
 
-<input type="text" id="extraAddress" name="extraAddress" placeholder="참고항목">
+<input type="text" id="extraAddress" name="extraAddress" placeholder="참고항목" disabled>
 
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
@@ -180,7 +180,7 @@
       <button type="button">약관 보기</button>
     </div>
   
-  <div><label for="event"><input type="checkbox" id="event" name="event" class="chk_each" value="off">[선택]광고성 정보 이메일 수신 동의</label></div>
+  <div><label for="event"><input type="checkbox" id="event" name="event" class="chk_each" >[선택]광고성 정보 이메일 수신 동의</label></div>
 
 
 <!-- 버튼  -->

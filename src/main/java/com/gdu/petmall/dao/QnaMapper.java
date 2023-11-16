@@ -26,4 +26,10 @@ public interface QnaMapper {
     public List<QnaDto> getAllQnalist();
     public int getQnaCount(int checkFlag);
     public int qnaTotalCount();	
+    
+    public List<QattachDto> getQattachList(int qnaNo);
+    public QattachDto getQattach(int qattachNo);
+    
+    
+    public List<QnaDto> getCommentList(Map<String, Object> map);
 }
