@@ -28,8 +28,8 @@
     </div>
     
     <div>
-     제목: <select name="title" id="title">
-            <option label="업종구분" disabled="disabled" selected="selected"></option>
+     제목: <select name="title" id="title" required="required">
+            <option label="업종구분" disabled="disabled" selected="selected" hidden></option>
             <option>동물병원</option>
             <option>펫샵(애견용품점)</option>
             <option>도매</option>
