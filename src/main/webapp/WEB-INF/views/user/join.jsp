@@ -10,60 +10,90 @@
   <jsp:param value="회원가입" name="title"/>
 </jsp:include>
 
-<div>
+<style>
+/*중앙 정렬*/
+.join_wrap{width:850px; margin:0 auto;}
+
+/*라디오 정렬*/
+.test_radio_label{ margin-right:30px; margin-left:10px;}
+.gender_radio{margin-right:30px; margin-left:10px;}
+
+/*폼*/
+.form-control{margin-bottom:10px;}
+.form-select{width: 20%; display: inline;}
+.mobile{width:38%; display:inline}
+
+/*주소*/
+.
+
+
+</style>
 <h1>회원정보 입력</h1>
 
-<form  method="post"  action="${contextPath}/user/join.do" id="frm_join">
-
-<!--개발용 라디오 버튼 admin_author_state( 추후에 삭제해야함)  -->
-<div>
-<label for="user"><input type="radio" id="user" name="admin_author_state" value="0" checked>사용자</label>
-<label for="admin"><input type="radio"id="admin" name="admin_author_state" value="1">관리자</label>
-</div>
 
 <hr>
 
+
+<div class="join_wrap">
+
+
+<form  method="post"  action="${contextPath}/user/join.do" id="frm_join">
+
+
+<!--개발용 라디오 버튼 admin_author_state( 추후에 삭제해야함)  -->
+<div>권한</div>
+<div  class="form-check">
+<label for="user"  class="form-check-label test_radio_label"><input type="radio" id="user" name="admin_author_state" value="0" checked  class="form-check-input">사용자</label>
+<label for="admin" class="form-check-label test_radio_label"><input type="radio"id="admin" name="admin_author_state" value="1 "  class="form-check-input">관리자</label>
+</div>
+
+
 <!-- 이름  -->
 <div>
-  <input type="text" id="name"" name="name" placeholder="* 이름">
+이름
+</div>
+<div>
+  <input type="text" id="name"" name="name" placeholder="* 이름" class="form-control">
   <div id="msg_name"></div>
 </div>
 
 <!-- 성별 -->
-<div>
-성별
-<label for="no"><input type="radio" id="no" name="gender" value="N" checked>선택안함</label>
-<label for="man"><input type="radio" id="man" name="gender" value="M" >남자</label>
-<label for="woman"><input type="radio"id="woman" name="gender" value="F">여자</label>
+<div>성별</div>
+<div class="gender">
+<label for="no" class="form-check-label gender_label"><input type="radio" id="no" name="gender" value="N" checked class="form-check-input gender_radio">선택안함</label>
+<label for="man" class="form-check-label gender_label"><input type="radio" id="man" name="gender" value="M"  class="form-check-input gender_radio">남자</label>
+<label for="woman" class="form-check-label gender_label"><input type="radio"id="woman" name="gender" value="F" class="form-check-input gender_radio">여자</label>
 </div>
 
 <!-- 이메일인증  -->
 <div>
 
   <div>
-      <input type="text" id="email"" name="email" placeholder="* ID(EMAIL)" >
-      <button type="button" id="btn_get_code">인증코드받기</button>
+    <div>이메일</div>
+      <input type="text" id="email"" name="email" placeholder="* ID(EMAIL)"  class="form-control">
+      <button type="button" id="btn_get_code" class="form-control">인증코드받기</button>
       <div id="msg_email"></div>
   </div> 
   
   <div>
-      <input type="text" id="verify_code" placeholder="인증코드입력" disabled> 
-      <button type="button" id="btn_verify_code" disabled>인증하기</button>
+  <div>이메일 인증</div>
+      <input type="text" id="verify_code" placeholder="인증코드입력" disabled class="form-control"> 
+      <button type="button" id="btn_verify_code" disabled class="form-control">인증하기</button>
   </div>
   
 </div>
 
 <!-- 비번/비번확인  -->
-<div>
-
+<div>비밀번호</div>
   <div>
-   <input type="password" id="pw"" name="pw" placeholder="* 비밀번호">
-   <div id="msg_pw"></div>
+  <div>
+   <input type="password" id="pw"" name="pw" placeholder="* 비밀번호" class="form-control">
+   <div id="msg_pw" ></div>
   </div>
 
 
   <div>
-    <input type="password" id="pw2"  placeholder="* 비밀번호 확인">
+    <input type="password" id="pw2"  placeholder="* 비밀번호 확인" class="form-control">
     <div id="msg_pw2"></div>
 </div>
 
@@ -71,7 +101,7 @@
 
 <!-- 휴대폰 번호  -->
 <div>
-  <select id="mobile0" name="mobile">
+  <select id="mobile0" name="mobile" class="form-select">
     <option>010</option>
     <option>011</option>
     <option>016</option>
@@ -80,24 +110,24 @@
     <option>019</option>
   </select>
   <span>-</span>
-  <input type="text" id="mobile1" name="mobile" size="4" maxlength="4"> 
+  <input type="text" id="mobile1" name="mobile" size="4" maxlength="4" class="form-control mobile"> 
   <span>-</span>
-  <input type="text" id="mobile2" name="mobile" size="4" maxlength="4"> 
+  <input type="text" id="mobile2" name="mobile" size="4" maxlength="4" class="form-control mobile"> 
   <div id="msg_mobile"></div>
 </div>
 
 
 <!-- 주소 -->
 <div>
-<input type="text" id="postcode" name="postcode" placeholder="우편번호" disabled>
+<input type="text" id="postcode" name="postcode" placeholder="우편번호" disabled class="form-control">
 <input type="button" onclick="execDaumPostcode()" value="우편번호 찾기"><br>
-<input type="text" id="roadAddress"  name="roadAddress" placeholder="도로명주소" disabled>
-<input type="text" id="jibunAddress"  name="jibunAddress" placeholder="지번주소" disabled>
+<input type="text" id="roadAddress"  name="roadAddress" placeholder="도로명주소" disabled class="form-control">
+<input type="text" id="jibunAddress"  name="jibunAddress" placeholder="지번주소" disabled class="form-control">
 <span id="guide" style="color:#999;display:none"></span>
-<input type="text" id="detailAddress" name="detailAddress" placeholder="상세주소" >
+<input type="text" id="detailAddress" name="detailAddress" placeholder="상세주소"  class="form-control">
 
 
-<input type="text" id="extraAddress" name="extraAddress" placeholder="참고항목" disabled>
+<input type="text" id="extraAddress" name="extraAddress" placeholder="참고항목" disabled class="form-control">
 
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>

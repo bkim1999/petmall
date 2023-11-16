@@ -14,18 +14,22 @@
 <h1>POINT</h1>
 <jsp:include page="mypage_nav.jsp"></jsp:include>
 
+<style>
+.point_wrap{width:95%; margin:0 auto;}
+.point_table{}
+</style>
 
 <!-- 본문  -->
-<div>
+<div class="point_wrap">
 
-<table border="1">
+<table  class="table point_table" border="1" >
   <thead>
-    <tr>
+    <tr  class="table-primary">
       <td>사용가능한 적립금</td>
     </tr>
   </thead>
   <tbody>
-      <tr>
+      <tr class="table-light">
       <td>${point}</td>
     </tr>
   </tbody>

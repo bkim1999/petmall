@@ -8,32 +8,50 @@
 
 
 
-
-<!-- 임시 스타일 -->
-<style>
-.mypage_nav ul li{display: inline-block;}
-
-
-</style>
-
 <div>
-  
-  <!-- 마이페이지 네비게이션 -->
-<div class="mypage_nav">
-  <ul>
-    <li><a href="${contextPath}/user/mypage">MyPage</a></li>
-    <li><a href="${contextPath}/user/">Order</a></li>
-    <li><a href="${contextPath}/user/mypage/profile.form"">Profile</a></li>
-    <li>
-      <form action="${contextPath}/user/mypage/point" method="post">
-        <input type="hidden" name="userNo" value="${sessionScope.user.userNo}">
-        <button>Point</button>
-      </form>
-     </li>
-    <li><a href="${contextPath}/user/myPostList">MyPosts</a></li>
-  <!-- <li><a href="${contextPath}/user/">Address</a></li> -->
+  <nav class="navbar navbar-expand-lg bg-light" data-bs-theme="light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="${contextPath}/main.do">PetMall</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarColor03">
+    
+      <ul class="navbar-nav me-auto">
+      
+        <li class="nav-item">
+          <a class="nav-link active" href="${contextPath}/user/mypage">MyPage
+            <span class="visually-hidden">(current)</span>
+          </a>
+        </li>
+        
+        <li class="nav-item">
+          <a class="nav-link" href="#"">Order</a>
+        </li>
+        
+        <li class="nav-item">
+          <a class="nav-link" href="${contextPath}/user/mypage/profile.form">Profile</a>
+        </li>
+        
+        <li class="nav-item">
+          <form action="${contextPath}/user/mypage/point" method="post">
+             <input type="hidden" name="userNo" value="${sessionScope.user.userNo}">
+             <button class="nav-link">Point</button>
+          </form>
+        </li>
+        
+        <li class="nav-item">
+          <a class="nav-link" href="${contextPath}/user/myPostList">MyPosts</a>
+        </li>
 
-  </ul>
+
+      </ul>
+      
+    </div>
+  </div>
+</nav>
+
 </div>
 
 
