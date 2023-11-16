@@ -56,16 +56,19 @@
   .bottom a{
    padding : 20px; 
   }
+  .event_font{
+    text-align: center;
+  }
 </style>
 
 
   <div>
-   <div>페스룸 회원가입하고</div>
-   <div>첫 구매 100원</div>
-   <div>회원가입만 하면 프리미엄 휴먼그레이드 간식이 100원!</div>
-   <div>구매하로가기</div>
+   <div class="event_font">페스룸 회원가입하고 첫 구매 100원 회원가입만 하면 프리미엄 휴먼그레이드 간식이 100원!</div>
    <div class="btn_by">
     <img class="cat1" src="https://pethroom.com/web/upload/NNEditor/page/event-alex.png" width=350px height=170px>
+    <a href="${contextPath}/product/list.do">
+     <input type="button" value="구매하로가기">
+    </a>
     <img class="dog1" src="https://pethroom.com/web/upload/NNEditor/page/event-boss.png" width=350px height=170px>
    </div>
   </div>

@@ -35,7 +35,7 @@ public class AdminServiceImpl implements AdminService {
     int checkFlag = 1;
     int qnaTotalCount = qnaMapper.qnaTotalCount();
     int qnaAnswerCount = qnaMapper.getQnaCount(checkFlag);
-    int qnaNonAnswerCount = qnaTotalCount -qnaAnswerCount;
+    int qnaNonAnswerCount = qnaTotalCount-qnaAnswerCount;
     
     model.addAttribute("qnaList", qnaList);
     model.addAttribute("qnaTotalCount", qnaTotalCount);

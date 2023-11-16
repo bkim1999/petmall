@@ -10,16 +10,61 @@
   <jsp:param value="이벤트게시판" name="title"/>
 </jsp:include>
 
-  <div>관리자 페이지에 오신것을 환영합니다.</div>
-  
-  <div><a href=${contextPath}/admin/product_list.go>제품 재고 관리하로가기</a></div>
-  
-  <div><a href=${contextPath}/admin/qna_list.go>모든 문의글 관리하로가기</a></div>
-  
-  <div><a>총 주문현황 관리하로가기</a></div>
-  
-  <div><a>파트너십 제안 관리하로가기</a></div>
-  
-  <div><a href=${contextPath}/admin/event_list.go>이벤트 현황보로가기</a></div>
+  <style>
+    .btn_admin{
+      font-size : 30px;
+      text-align: center;
+    }
+    .navbar navbar-expand-lg bg-light{
+      border-right: 1px solid gray;
+    }
+  </style>
 
+  <div class="btn_admin">관리자 페이지에 오신것을 환영합니다.</div>
+  
+  
+  <nav class="navbar navbar-expand-lg bg-light" data-bs-theme="light">
+  <div class="container-fluid">
+    <a class="nav-link active">관리자페이지</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarColor03">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="${contextPath}/admin/product_list.go">제품 재고 관리하로가기
+            <span class="visually-hidden">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="${contextPath}/admin/qna_list.go">모든 문의글 관리하로가기
+            <span class="visually-hidden">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="${contextPath}/admin/event_list.go">이벤트 현황보로가기
+            <span class="visually-hidden">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="#">총 주문현황 관리하로가기
+            <span class="visually-hidden">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="#">파트너십 제안 관리하로가기
+            <span class="visually-hidden">(current)</span>
+          </a>
+        </li>
+        
+      </ul>
+      <form class="d-flex">
+        <input class="form-control me-sm-2" type="search" placeholder="Search">
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>
+  
 <%@ include file="../layout/footer.jsp" %>

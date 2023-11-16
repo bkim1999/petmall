@@ -52,6 +52,10 @@
     </tbody>
   </table>
   
+   <div>
+    <a href="${contextPath}/admin/admin.go"><input type="button" value="관리자페이지돌아가기"></a>
+  </div>
+  
  <script>
   function fnAnswer() {
 	$(document).on('click', '#btn_answer', function(ev){
@@ -61,7 +65,7 @@
   
   fnAnswer();
  </script>
-  QW
+  
   
     
 

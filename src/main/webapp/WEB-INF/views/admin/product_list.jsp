@@ -67,9 +67,21 @@ const fnadd = () =>{
    
 </script>
 
-  <div>재고 관리 페이지에 오신걸 환영합니다.</div>
+  <style>
+    .btn_admin{
+      font-size : 30px;
+      text-align: center;
+    }
+    .table{
+      display:flex;
+      text-align: center;
+    }
+  </style>
+
+  <div class="btn_admin">재고 관리 페이지에 오신것을 환영합니다.</div>
+
   
-  <div>
+  <div class="table">
     <table border=1>
      <thead>
       <tr>
@@ -85,6 +97,9 @@ const fnadd = () =>{
      
      </tbody>
     </table>
+  </div>
+  <div>
+    <a href="${contextPath}/admin/admin.go"><input type="button" value="관리자페이지돌아가기"></a>
   </div>
 
 

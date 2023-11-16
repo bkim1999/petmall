@@ -26,7 +26,11 @@
   }
 </style>
 
-  <div><button type="button" class="btn_write">이벤트 추가하기</button></div>
+  <div>
+    <button type="button" class="btn_write">이벤트 추가하기</button>
+    <a href="${contextPath}/admin/admin.go"><input type="button" value="관리자페이지돌아가기"></a>  
+  </div>
+    
   <table border="1" class="table table-hover table_font">  
     <thead>
       <tr>
@@ -45,6 +49,10 @@
     </thead>
     <tbody id="event_list"></tbody>
   </table>
+  
+  <div>
+    <a href="${contextPath}/admin/admin.go"><input type="button" value="관리자페이지돌아가기"></a>
+  </div>
   
    <script>
    
