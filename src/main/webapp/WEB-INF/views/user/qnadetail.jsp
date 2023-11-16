@@ -16,6 +16,7 @@
         <c:if test="${sessionScope.user.userNo == qna.userDto.userNo}" > 
             <form id="frn_btn" method="post">
                 <input type="hidden" name="qnaNo" value="${qna.qnaNo}">
+                <input type="hidden" name="productNo" value="${qna.productNo}">
                 <input type="hidden" name="title" value="${qna.title}">
                 <input type="hidden" name="contents" value="${qna.contents}">
             </form>
