@@ -10,38 +10,55 @@
   <jsp:param value="회원가입" name="title"/>
 </jsp:include>
 
-<div>
+<style>
+/*중앙 정렬*/
+.join_wrap{width:850px; margin:0 auto;}
+
+/*라디오 정렬*/
+.test_radio_label{ margin-right:30px; margin-left:10px;}
+.gender_radio{margin-right:30px; margin-left:10px;}
+</style>
 <h1>회원정보 입력</h1>
 
-<form  method="post"  action="${contextPath}/user/join.do" id="frm_join">
-
-<!--개발용 라디오 버튼 admin_author_state( 추후에 삭제해야함)  -->
-<div>
-<label for="user"><input type="radio" id="user" name="admin_author_state" value="0" checked>사용자</label>
-<label for="admin"><input type="radio"id="admin" name="admin_author_state" value="1">관리자</label>
-</div>
 
 <hr>
 
+
+<div class="join_wrap">
+
+
+<form  method="post"  action="${contextPath}/user/join.do" id="frm_join">
+
+
+<!--개발용 라디오 버튼 admin_author_state( 추후에 삭제해야함)  -->
+<div  class="form-check">
+<label for="user"  class="form-check-label test_radio_label"><input type="radio" id="user" name="admin_author_state" value="0" checked  class="form-check-input">사용자</label>
+<label for="admin" class="form-check-label test_radio_label"><input type="radio"id="admin" name="admin_author_state" value="1 "  class="form-check-input">관리자</label>
+</div>
+
+
 <!-- 이름  -->
 <div>
-  <input type="text" id="name"" name="name" placeholder="* 이름">
+이름
+</div>
+<div>
+  <input type="text" id="name"" name="name" placeholder="* 이름" class="form-control">
   <div id="msg_name"></div>
 </div>
 
 <!-- 성별 -->
-<div>
-성별
-<label for="no"><input type="radio" id="no" name="gender" value="N" checked>선택안함</label>
-<label for="man"><input type="radio" id="man" name="gender" value="M" >남자</label>
-<label for="woman"><input type="radio"id="woman" name="gender" value="F">여자</label>
+<div>성별</div>
+<div class="gender">
+<label for="no" class="form-check-label gender_label"><input type="radio" id="no" name="gender" value="N" checked class="form-check-input gender_radio">선택안함</label>
+<label for="man" class="form-check-label gender_label"><input type="radio" id="man" name="gender" value="M"  class="form-check-input gender_radio">남자</label>
+<label for="woman" class="form-check-label gender_label"><input type="radio"id="woman" name="gender" value="F" class="form-check-input gender_radio">여자</label>
 </div>
 
 <!-- 이메일인증  -->
 <div>
 
   <div>
-      <input type="text" id="email"" name="email" placeholder="* ID(EMAIL)" >
+      <input type="text" id="email"" name="email" placeholder="* ID(EMAIL)"  class="form-control">
       <button type="button" id="btn_get_code">인증코드받기</button>
       <div id="msg_email"></div>
   </div> 
