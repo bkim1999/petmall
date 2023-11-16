@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -132,38 +133,138 @@ public class EventServiceImpl implements EventService {
   
   
   @Override
-  public void addEvent(EventDto eventDto, MultipartHttpServletRequest multipartRequest, RedirectAttributes redirectAttributes) throws Exception {
+  public void addEvent(MultipartHttpServletRequest multipartRequest, RedirectAttributes redirectAttributes) throws Exception {
     
-    LocalDate today = LocalDate.now();
-    String imagePath = "/event/" + DateTimeFormatter.ofPattern("yyyy/MM/dd").format(today);
-    // 여기해야함
-    eventDto.setEventThumnailUrl(imagePath);
+    String title = multipartRequest.getParameter("title");
+    String contents = multipartRequest.getParameter("contents");
+    String startAt = multipartRequest.getParameter("startAt");    
+    String endAt = multipartRequest.getParameter("endAt");    
+    int discountPercent = Integer.parseInt(multipartRequest.getParameter("discountPercent"));
+    int discountPrice = Integer.parseInt(multipartRequest.getParameter("discountPrice"));
     
-    int addEventResult = eventMapper.insertEventWrite(eventDto);
-    redirectAttributes.addFlashAttribute("addEventResult", addEventResult);
+    List<MultipartFile> files = multipartRequest.getFiles("files");
     
+    int attachCount;
     
-    
-    
-    for(String Image : getEventEditorImageList(eventDto.getContents())) {
-      EventImageDto eventImage = EventImageDto.builder()
-                                     .eventNo(eventDto.getEventNo())
-                                     .originalFilename(imagePath)
-                                     .path(imagePath)
-                                     .FilesystemName(Image)
-                                     .build();
-      eventMapper.insertEventImage(eventImage);
+    if(files.get(0).getSize() == 0) {
+      attachCount = 1;
+    } else { 
+      attachCount = 0;
     }
     
     
+      for(MultipartFile multipartFile : files) {
+      
+      if(multipartFile != null && !multipartFile.isEmpty()) {
+        LocalDate today = LocalDate.now();
+        String imagePath = "/event/" + DateTimeFormatter.ofPattern("yyyy/MM/dd").format(today);
+        File dir = new File(imagePath);
+        if(!dir.exists()) {
+          dir.mkdirs();
+        }
+        
+        String originalFilename = multipartFile.getOriginalFilename();
+        String filesystemName = myFileUtils.getFilesystemName(originalFilename);
+        File file = new File(dir, filesystemName);
+        
+        multipartFile.transferTo(file);
+        
+        String contentType = Files.probeContentType(file.toPath());
+        
+        int hasThumbnail = (contentType != null && contentType.startsWith("image")) ? 1 : 0 ;
+        
+        if(hasThumbnail == 1) {
+          File thumbnail = new File(dir, "s_" + filesystemName); // small 이미지를 의미하는 s_을 덧붙임.
+          //섬네일레이터(디펜던시)의 활용!
+          Thumbnails.of(file)
+                    .size(880, 235)      // 가로 880px, 세로 235px
+                    .toFile(thumbnail);  
+          
+        }
+        
+        
+        
+        String evntTHumnailUrl = imagePath+ "/s_" + filesystemName;
+        
+        EventDto eventDto = EventDto.builder()
+                                    .title(title)
+                                    .contents(contents)
+                                    .discountPercent(discountPercent)
+                                    .discountPrice(discountPrice)
+                                    .eventThumnailUrl(evntTHumnailUrl)
+                                    .startAt(startAt)
+                                    .endAt(endAt)
+                                    .build();
+        
+        eventMapper.insertEventWrite(eventDto);
+        
+        
+        EventImageDto eventImageDto = EventImageDto.builder()
+                                                   .path(evntTHumnailUrl)
+                                                   .originalFilename(originalFilename)
+                                                   .FilesystemName(filesystemName)
+                                                   .build();
+        
+      } // if
+      
+    } // for
+    
+
     
   }
  
+  
+  @Override
+  public Map<String, Object> endEvent(HttpServletRequest request) {
+    
+    int eventNo = Integer.parseInt(request.getParameter("eventNo"));
+    
+    int endResult = eventMapper.eventEnd(eventNo);
+    
+    return Map.of("endResult",endResult);
+  }
+  
+  
+  @Override
+  public Map<String, Object> startEvent(HttpServletRequest request) {
+    
+    int eventNo = Integer.parseInt(request.getParameter("eventNo"));
+    
+    int startResult = eventMapper.eventStart(eventNo);
+    
+    return Map.of("startResult",startResult);
+  }
+  
+  
+  @Override
+  public Map<String, Object> changePercent(HttpServletRequest request) {
+    
+    int discountPercent = Integer.parseInt(request.getParameter("discountPercent"));
+    int eventNo = Integer.parseInt(request.getParameter("eventNo"));
+    
+    Map<String, Object> map = Map.of("discountPercent", discountPercent, "eventNo", eventNo);
+   
+    
+    int PercentResult = eventMapper.changeDiscountPercent(map);
+    
+    return Map.of("PercentResult",PercentResult);
+  }
       
       
       
-      
-      
+  @Override
+   public Map<String, Object> changePrice(HttpServletRequest request) {
+    
+    int discountPrice = Integer.parseInt(request.getParameter("discountPrice"));
+    int eventNo = Integer.parseInt(request.getParameter("eventNo"));
+    
+    Map<String, Object> map = Map.of("discountPrice", discountPrice, "eventNo", eventNo);
+   
+    
+    int PriceResult = eventMapper.changeDiscountPrice(map);
+    
+    return Map.of("PriceResult",PriceResult);
+   }    
       
       
       

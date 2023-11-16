@@ -40,7 +40,7 @@
         </c:if>
         <c:if test="${not empty iattachList}">
           <c:forEach items="${iattachList}" var="atc">
-            <div class="iattach" data-attach_no="${atc.iattachNo}">
+            <div class="iattach" data-iattach_no="${atc.iattachNo}">
               <a>${atc.originalFilename}</a>
             </div>
           </c:forEach>
@@ -81,7 +81,7 @@
   }
 
   const fnDownload = () => {
-    $('.iattach').click(function(){
+    $('.iattach').click(function() {
       if(confirm('다운로드 할까요?')){
         location.href = '${contextPath}/inquiry/download.do?iattachNo=' + $(this).data('iattach_no');
       }

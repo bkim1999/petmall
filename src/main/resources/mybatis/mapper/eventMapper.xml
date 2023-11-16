@@ -9,6 +9,7 @@
       <result column="TITLE"                  property="title"/>
       <result column="CONTENTS"               property="contents"/>
       <result column="HIT"                    property="hit"/>
+      <result column="STATE"                  property="state"/>
       <result column="EVENT_THUMNAIL_URL"     property="eventThumnailUrl"/>
       <result column="DISCOUNT_PERCENT"       property="discountPercent"/>
       <result column="DISCOUNT_PRICE"         property="discountPrice"/>
@@ -29,9 +30,10 @@
     WHERE A.RN BETWEEN #{begin} AND #{end}
   </select>
   
-  <select id="getTotalList">
-    SELECT *
-      FROM EVENT_T;
+  <select id="getTotalList" resultMap="EventMap">
+    SELECT EVENT_NO, TITLE, CONTENTS, HIT, STATE, EVENT_THUMNAIL_URL, DISCOUNT_PERCENT, DISCOUNT_PRICE, START_AT,END_AT
+      FROM EVENT_T
+     ORDER BY EVENT_NO DESC
   </select>
   
    <select id="getEventCount" resultType="int">
@@ -96,6 +98,29 @@
     )
   </insert>
   
+  <update id="eventEnd" parameterType="int">
+    UPDATE EVENT_T
+       SET STATE = 0
+     WHERE EVENT_NO = #{eventNo}
+  </update>
+  
+  <update id="eventStart" parameterType="int">
+    UPDATE EVENT_T
+       SET STATE = 1
+     WHERE EVENT_NO = #{eventNo}
+  </update>
+  
+   <update id="changeDiscountPercent" parameterType="Map" >
+    UPDATE EVENT_T
+       SET DISCOUNT_PERCENT = #{discountPercent}
+     WHERE EVENT_NO = #{eventNo}
+  </update>
+  
+   <update id="changeDiscountPrice" parameterType="Map" >
+    UPDATE EVENT_T
+       SET DISCOUNT_PRICE = #{discountPrice}
+     WHERE EVENT_NO = #{eventNo}
+  </update>
  
   
 </mapper>

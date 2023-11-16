@@ -18,6 +18,7 @@
   <br>
   
   <div id="inquiry_list" class="inquiry_list">
+  
     <table border="1" style="margin: auto;">
       <thead>
         <tr>
@@ -35,7 +36,13 @@
         </tr>    
         </c:forEach>
       </tbody>
+      <tbody>
+        <tr>
+          <td colspan="5">${paging}</td>
+        </tr>
+      </tbody>
     </table>
+    
   </div>
 
 
