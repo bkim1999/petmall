@@ -111,7 +111,8 @@
             CREATED_AT,
             STATUS,
             DEPTH,
-            GROUP_NO
+            GROUP_NO,
+            CHECK_FLAG
         ) VALUES (
             #{userDto.userNo},
             #{qnaNo}, 
@@ -119,7 +120,8 @@
             TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'),
             1,
             #{depth},
-            #{groupNo}
+            #{groupNo},
+            1
         )  
     </insert>
     
@@ -158,7 +160,7 @@
 	</select>	  
  
     <select id="getCommentList" parameterType="int" resultMap="QnaMap">
-        SELECT Q.QNA_NO, Q.CONTENTS, Q.STATUS, Q.GROUP_NO, Q.DEPTH, U.USER_NO, U.EMAIL, U.NAME
+        SELECT Q.QNA_NO, Q.CONTENTS, Q.STATUS, Q.GROUP_NO, Q.DEPTH, U.USER_NO, U.EMAIL, U.NAME 
         FROM USER_T U, QNA_T Q
         WHERE U.USER_NO = Q.USER_NO       
         AND Q.GROUP_NO = #{groupNo}
