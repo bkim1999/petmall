@@ -33,7 +33,7 @@
     <div class="collapse navbar-collapse" id="navbarColor03">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link active" href="${contextPath}/admin/product_list.go">제품 재고 관리하로가기
+          <a class="nav-link active" href="${contextPath}/admin/event_list.go">이벤트 현황보로가기
             <span class="visually-hidden">(current)</span>
           </a>
         </li>
@@ -43,17 +43,17 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="${contextPath}/admin/event_list.go">이벤트 현황보로가기
+          <a class="nav-link active" href="${contextPath}/admin/product_list.go">제품 재고 관리하로가기
+            <span class="visually-hidden">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="${contextPath}/admin/partner_list.go">파트너십 제안 관리하로가기
             <span class="visually-hidden">(current)</span>
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link active" href="#">총 주문현황 관리하로가기
-            <span class="visually-hidden">(current)</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="#">파트너십 제안 관리하로가기
             <span class="visually-hidden">(current)</span>
           </a>
         </li>

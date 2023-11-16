@@ -79,7 +79,11 @@ const fnadd = () =>{
   </style>
 
   <div class="btn_admin">재고 관리 페이지에 오신것을 환영합니다.</div>
-
+  <div>
+   <a href="${contextPath}/product/addProduct.form">
+    <input type="button" value="제품추가하기">
+   </a>
+  </div>
   
   <div class="table">
     <table border=1>

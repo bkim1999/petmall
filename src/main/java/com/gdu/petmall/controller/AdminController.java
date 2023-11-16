@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gdu.petmall.service.AdminService;
+import com.gdu.petmall.service.InquiryService;
 import com.gdu.petmall.service.ProductService;
 
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class AdminController {
   
   private final AdminService adminService;
   private final ProductService productService;
+  private final InquiryService inquiryService;
   
   
   @GetMapping("/admin.go")
@@ -57,6 +59,11 @@ public class AdminController {
     return adminService.getEvent();
   }
   
+  @GetMapping(value="/partner_list.go")
+  public String partnerList(HttpServletRequest request, Model model) {
+    inquiryService.getInquiryList(request, model);
+    return "admin/partner_list";
+  }
   
 
 }

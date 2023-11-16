@@ -49,7 +49,7 @@ public class AdminServiceImpl implements AdminService {
     List<EventDto> eventList = eventMapper.getTotalList();
     
     return Map.of("eventList",eventList);
-  }  
+  }
     
   
 }
