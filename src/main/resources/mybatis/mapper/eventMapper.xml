@@ -110,6 +110,17 @@
      WHERE EVENT_NO = #{eventNo}
   </update>
   
+   <update id="changeDiscountPercent" parameterType="Map" >
+    UPDATE EVENT_T
+       SET DISCOUNT_PERCENT = #{discountPercent}
+     WHERE EVENT_NO = #{eventNo}
+  </update>
+  
+   <update id="changeDiscountPrice" parameterType="Map" >
+    UPDATE EVENT_T
+       SET DISCOUNT_PRICE = #{discountPrice}
+     WHERE EVENT_NO = #{eventNo}
+  </update>
  
   
 </mapper>

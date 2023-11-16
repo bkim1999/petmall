@@ -68,10 +68,23 @@ public class EventController {
   public Map<String, Object> eventEnd(HttpServletRequest request) {
     return eventService.endEvent(request);
   }
+  
   @ResponseBody
   @GetMapping(value="/eventStart.do", produces = "application/json")
   public Map<String, Object> eventStart(HttpServletRequest request) {
     return eventService.startEvent(request);
+  }
+  
+  @ResponseBody
+  @GetMapping(value="/changePercent.do", produces = "application/json")
+  public Map<String, Object> changePercent(HttpServletRequest request) {
+    return eventService.changePercent(request);
+  }
+  
+  @ResponseBody
+  @GetMapping(value="/changePrice.do", produces = "application/json")
+  public Map<String, Object> changePrice(HttpServletRequest request) {
+    return eventService.changePrice(request);
   }
   
   

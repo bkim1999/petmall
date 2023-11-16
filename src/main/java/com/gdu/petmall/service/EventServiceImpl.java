@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -29,7 +30,6 @@ import com.gdu.petmall.util.MyFileUtils;
 import com.gdu.petmall.util.MyPageUtils;
 
 import lombok.RequiredArgsConstructor;
-import net.coobird.thumbnailator.ThumbnailParameter;
 import net.coobird.thumbnailator.Thumbnails;
 
 @Service
@@ -235,10 +235,36 @@ public class EventServiceImpl implements EventService {
     return Map.of("startResult",startResult);
   }
   
+  
+  @Override
+  public Map<String, Object> changePercent(HttpServletRequest request) {
+    
+    int discountPercent = Integer.parseInt(request.getParameter("discountPercent"));
+    int eventNo = Integer.parseInt(request.getParameter("eventNo"));
+    
+    Map<String, Object> map = Map.of("discountPercent", discountPercent, "eventNo", eventNo);
+   
+    
+    int PercentResult = eventMapper.changeDiscountPercent(map);
+    
+    return Map.of("PercentResult",PercentResult);
+  }
       
       
       
-      
+  @Override
+   public Map<String, Object> changePrice(HttpServletRequest request) {
+    
+    int discountPrice = Integer.parseInt(request.getParameter("discountPrice"));
+    int eventNo = Integer.parseInt(request.getParameter("eventNo"));
+    
+    Map<String, Object> map = Map.of("discountPrice", discountPrice, "eventNo", eventNo);
+   
+    
+    int PriceResult = eventMapper.changeDiscountPrice(map);
+    
+    return Map.of("PriceResult",PriceResult);
+   }    
       
       
       

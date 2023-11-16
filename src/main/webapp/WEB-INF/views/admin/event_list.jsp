@@ -54,15 +54,23 @@
     	   str +='<td>'+event.startAt+'</td>';
     	   str +='<td>'+event.endAt+'</td>';
     	   str +='<td>';
-    	   str +='<input id="change_dp"type="text" value="'+event.discountPercent+'">';
+    	   str +='<input type="text" value="'+event.discountPercent+'" readonly>';
     	   str +='<div>';
-    	   str +='<input type="button" value="할인율 변경하기">';
+    	   str +='<form id="frm_changePercent">';
+    	   str +='<input type="text" name="discountPercent" placeholder="변경될할인율을 입력해주세요">';
+    	   str +='<input id="change_Percent" type="submit" value="할인율 변경하기">';
+    	   str +='<input type="hidden" name="eventNo" value="'+event.eventNo+'">';
+    	   str +='</form>';
     	   str +='</div>';
     	   str +='</td>';
     	   str +='<td>';
     	   str +='<input type="text" value="'+event.discountPrice+'">';
     	   str +='<div>';
-    	   str +='<input type="button" value="할인가 변경하기">';
+    	   str +='<form id="frm_changePrice">';
+    	   str +='<input type="text" name="discountPrice" placeholder="변경될할인가를 입력해주세요">';
+    	   str +='<input id="change_Price" type="button" value="할인가 변경하기">';
+    	   str +='<input type="hidden" name="eventNo" value="'+event.eventNo+'">';
+    	   str +='</form>';
     	   str +='</div>';
     	   str +='</td>';
 		   if(event.state === 1){
@@ -167,12 +175,64 @@
     	 location.href = '${contextPath}/event/write.do';
        })
      } 
+     
+     function fnChangePercent() {
+       $(document).on('click','#change_Percent',function(ev){
+       	if(!confirm('해당 할인율을 변경시키겠습니까?')){
+      	  return;
+         }
+       	$.ajax({
+       	  //요청
+       	  type:'get',
+          url: '${contextPath}/event/changePercent.do',
+          data: $('#frm_changePercent').serialize(),
+          // 응답
+      	  dataType: 'json',
+      	  success : (resData) => {
+      		if(resData.dpResult === 1){
+      		  alert('할인율이 변경되었습니다.');
+      		  fnReEventList();	
+      		} else {
+          	  alert('할인율이 변경되지않았습니다.');
+          	  return;	
+      		}
+      	  }
+       	})
+       })
+     }
+     
+     function fnChangePrice() {
+         $(document).on('click','#change_Price',function(ev){
+         	if(!confirm('해당 할인율을 변경시키겠습니까?')){
+        	  return;
+           }
+         	$.ajax({
+         	  //요청
+         	type:'get',
+            url: '${contextPath}/event/changePrice.do',
+            data: $('#frm_changePrice').serialize(),
+            // 응답
+        	  dataType: 'json',
+        	  success : (resData) => {
+        		if(resData.PercentResult === 1){
+        		  alert('할인가가 변경되었습니다.');
+        		  fnReEventList();	
+        		} else {
+            	  alert('할인가가 변경되지않았습니다.');
+            	  return;	
+        		}
+        	  }
+         	})
+         })
+       }
     
     fnReEventList();
     fnDetailEvent();
     fnEventEnd();
     fnEventStart();
     fnEventWrite();
+    fnChangePercent();
+    fnChangePrice();
  </script>
   
 
