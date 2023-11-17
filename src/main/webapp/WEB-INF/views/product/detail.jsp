@@ -33,33 +33,6 @@
 
 <div>
   
-  <table>
-    <tbody>
-      <tr>
-        <td colspan="2">
-          <div id="slideshow" class="carousel slide" data-bs-ride="carousel">
-            <div id="product_images" class="carousel-inner">
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#slideshow" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#slideshow" data-bs-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Next</span>
-            </button>
-          </div>
-         </td>
-      </tr>
-      
-    </tbody>
-  </table>
-  
-  <div>${product.productName}</div>
-  <div>${product.productDescription}</div>
-  <div>${product.productSize}</div>
-  <div>${product.productWarning}</div>
-  
   <div id="product_header" class="d-flex justify-content-center">
     <div id="slideshow" class="carousel slide" data-bs-ride="carousel">
       <div id="product_images" class="carousel-inner">
