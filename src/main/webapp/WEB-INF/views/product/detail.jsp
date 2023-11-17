@@ -23,12 +23,22 @@
   }
   #product_header{
     width: 100%;
-    height: 600px;
-    margin: 100px;
-  }
+    height: 500px;
+    margin: 20px;
+  }     
   #product_images img {
     height: 100%;
   }
+  #contents {
+    width: 800px;
+    margin: 10px auto;
+    text-align: center;
+  }
+  #contents >.image > img {
+    width: 800px;
+    height: 100%;
+  }
+  
 </style>
 
 <div>
@@ -49,6 +59,7 @@
     
     <div id="product_explanation">
       <div>${product.productName}</div>
+      <div>${product.productPrice} 원</div>
       <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item" role="presentation">
           <a class="nav-link" data-bs-toggle="tab" href="#description" aria-selected="false" role="tab" tabindex="-1">설명</a>
@@ -102,10 +113,11 @@
   <form method="post" action="${contextPath}/order/addCart.do">
     <input type="hidden" name="userNo" value="${sessionScope.user.userNo}">
     <div id="selected_option_list"></div>
+    <div id="total_price">0 원</div>
     <button type="submit" class="btn btn-success">장바구니 담기</button>
   </form>
   
-  <div>${product.productContents}</div>
+  <div id="contents">${product.productContents}</div>
   <div></div>
   
   
@@ -140,8 +152,9 @@
         str += '  <input type="hidden" class="option_no" value="' + optionNo + '">';
         str += '  <input type="text" class="count" value="1" readonly>';
         str += '  <button type="button" class="btn btn-link plus_count">+</button>';
-        str += '  <input type="text" class="option_price" value="' + (${product.productPrice} + addPrice) + '" readonly>원';
-        str += '  <p>' + (${product.productPrice} + addPrice) + '원</p>';
+        str += '  <p class="calculated_price">' + (${product.productPrice} + addPrice) + '</p>';
+        str += '  <input type="hidden" class="option_price" value="' + (${product.productPrice} + addPrice) + '">';
+        
         str += '</div>';
         $('#selected_option_list').append(str);
     });
@@ -155,6 +168,9 @@
         return;
       }
         count.val(parseInt(count.val()) - 1);
+        var calculated_price = $(this).siblings('.calculated_price');
+        var option_price = $(this).siblings('.option_price');
+        calculated_price.text(parseInt(calculated_price.text()) - parseInt(option_price.val()));
     });
   }
   
@@ -166,8 +182,23 @@
           return;
         }
           count.val(parseInt(count.val()) + 1);
+          var calculated_price = $(this).siblings('.calculated_price');
+          var option_price = $(this).siblings('.option_price');
+          calculated_price.text(parseInt(calculated_price.text()) + parseInt(option_price.val()));
     });
   }
+  
+  const fnTotalCount = () => {
+	    $(document).on('change', '.calculated_price', function(){
+	    	  console.log('chagne')
+	    	  var total = 0;
+	        $.each($('.calculated_count'), (i, price) => {
+	        	total += parseInt($(price).text());
+	        });
+	        $('#total_price').text(total + ' 원');
+	    });
+	  }
+  
   
   const fnGetProductOrderList = () => {
       if('${sessionScope.user.userNo}' === ''){
@@ -256,41 +287,6 @@
   }
   
   const fnGetProductImageList = () => {
-	    $.ajax({
-	      // 요청
-	      type: 'get',
-	      url: '${contextPath}/product/getProductImageList.do',
-	      data: {'productNo' : '${product.productNo}'},
-	      // 응답
-	      dataType: 'json',
-	      success: (resData) => {  // resData = {"productImageList": []}
-	        console.log(resData);
-	        if(resData.productImageList === null){
-	          alert('이미지 목록 불러오기 실패');
-	          return;
-	        }
-	        if(resData.productImageList.length === 0){
-	        	let str = '<div class="carousel-item active">';
-            str += '  <img class="d-block w-100" src="#" alt="아직 사진이 없습니다.">';
-            str += '</div>';
-            $('#product_images').append(str);
-	          return;
-	        }
-	        
-	        $.each(resData.productImageList, (i, image) => {
-	          let str = '';
-	          if(i === 1){
-	        	  str += '<div class="carousel-item active">';
-	          }
-	          else{
-	            str += '<div class="carousel-item">';
-	          }
-	          str += '  <img class="d-block w-100" src="${contextPath}' + image.path + '/' + image.filesystemName +  '">';
-	          str += '</div>';
-	          $('#product_images').append(str);
-	        });
-	      }
-	    })
       $.ajax({
         // 요청
         type: 'get',
@@ -299,7 +295,6 @@
         // 응답
         dataType: 'json',
         success: (resData) => {  // resData = {"productImageList": []}
-          console.log(resData);
           if(resData.productImageList === null){
             alert('이미지 목록 불러오기 실패');
             return;
