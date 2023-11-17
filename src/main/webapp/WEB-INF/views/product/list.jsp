@@ -85,7 +85,6 @@
           if(product.productImageDto === null){
               str += '썸네일 없음';
           } else {
-            str += '    <img src="${contextPath}' + product.productImageDto.path + '/' + product.productImageDto.filesystemName + '">';
             str += '    <img class= "col-md-11" src="${contextPath}' + product.productImageDto.path + '/' + product.productImageDto.filesystemName + '">';
           }
           str += '  </div>';
